@@ -8,8 +8,8 @@ export enum AttemptState {
 
 export interface AttemptResult {
     time: number; // seconds
-    penalty: number; // seconds
-    didNotFinish: boolean;
+    penalty?: number; // seconds
+    didNotFinish?: boolean;
 }
 
 export class Attempt {
