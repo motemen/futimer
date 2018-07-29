@@ -9,19 +9,55 @@ import Records from './containers/Records';
 import { reducer } from './reducers';
 import { StoreState } from './types';
 
+import './App.css';
 import './index.css';
 import registerServiceWorker from './registerServiceWorker';
 
-const initialState: StoreState = { attempts: [] };
+import { GoogleAPI } from './gateways/GoogleAPI';
+
+import { AppBar, createMuiTheme, MuiThemeProvider, Toolbar, Typography } from '@material-ui/core';
+import { amber } from '@material-ui/core/colors'
+
+const googleAPI = new GoogleAPI({
+  clientId: '757485369026-rvig0ollgq7h2jkc4sjae6pdc53affgf.apps.googleusercontent.com',
+  discoveryDocs: [
+    'https://sheets.googleapis.com/$discovery/rest?version=v4',
+    'https://www.googleapis.com/discovery/v1/apis/drive/v3/rest',
+  ],
+  scope: 'https://www.googleapis.com/auth/drive.file',
+});
+
+const initialState: StoreState = {
+  googleAPI,
+  results: [],
+};
+
 const store = createStore<StoreState, Actions, {}, {}>(reducer, initialState);
 
+(window as any).store = store;
+
+const theme = createMuiTheme({
+  palette: {
+    primary: amber,
+  },
+});
+
 ReactDOM.render(
-  <Provider store={store}>
-    <div>
-      <Measurer />
-      <Records />
-    </div>
-  </Provider>,
+  <MuiThemeProvider theme={theme}>
+    <Provider store={store}>
+      <div>
+        <AppBar position="static">
+          <Toolbar>
+            <Typography variant="title" color="inherit">
+              Cube Timer
+            </Typography>
+          </Toolbar>
+        </AppBar>
+        <Measurer />
+        <Records />
+      </div>
+    </Provider>
+  </MuiThemeProvider>,
   document.getElementById('root') as HTMLElement
 );
 

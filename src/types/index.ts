@@ -1,6 +1,14 @@
-import { Attempt } from '../models/Attempt';
+import { GoogleAPI } from '../gateways/GoogleAPI';
+import { Attempt, Result } from '../models/Attempt';
 
 export interface StoreState {
     currentAttempt?: Attempt;
-    attempts: Attempt[];
+    results: Result[];
+    googleAPI: GoogleAPI;
+}
+
+export enum SyncState {
+    NOT_LOGGED_IN,
+    READY,
+    IN_PROGRESS,
 }

@@ -40,8 +40,12 @@ class Measurer extends React.Component<Props, State> {
   public render() {
     return (
       <div>
-        <pre>{ this.state && this.state.scramble || 'Scrambling...' }</pre>
-        <pre ref={this.timerRef} />
+        <div style={{ fontSize: 36, padding: '1em' }}>
+          <code>{this.state && this.state.scramble || 'Scrambling...'}</code>
+        </div>
+        <div style={{ fontSize: 72, textAlign: 'center' }}>
+          <pre ref={this.timerRef}>{' '}</pre>
+        </div>
       </div>
     );
   }
@@ -64,8 +68,7 @@ class Measurer extends React.Component<Props, State> {
     } else if (this.animTimer) {
       const elapsed = Math.floor(performance.now() - this.startTime) / 1000;
       window.cancelAnimationFrame(this.animTimer);
-      // TODO: update attempt record
-      this.props.dispatch(Actions.recordAttempt({ time: elapsed }));
+      this.props.dispatch(Actions.recordAttempt({ time: elapsed, timestamp: performance.timing.navigationStart + this.startTime }));
     }
   }
 
@@ -76,7 +79,7 @@ class Measurer extends React.Component<Props, State> {
 
     if (attempt) {
         this.setState({ scramble: attempt.scramble });
-        attempt.doneScramble.then((scramble) => this.setState({ scramble }));
+        attempt.getScramble().then((scramble) => this.setState({ scramble }));
     } else {
         this.props.dispatch(Actions.resetAttempt());
     }
@@ -84,7 +87,7 @@ class Measurer extends React.Component<Props, State> {
 
   private formatNumber(n: number) {
     const [ x, y ] = n.toString().split(/\./);
-    return x + '.' + ((y || '') + '000').substring(0, 3);
+    return (x.length === 1 ? ` ${x}` : x) + '.' + ((y || '') + '000').substring(0, 3);
   }
 }
 

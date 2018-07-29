@@ -1,40 +1,41 @@
 import { generateScramble } from '../TNoodle';
 
 export enum AttemptState {
-    SCRAMBLING,
-    READY,
-    DONE,
+  SCRAMBLING = 'SCRAMBLING',
+  READY = 'READY',
+  STARTED = 'STARTED',
 }
 
-export interface AttemptResult {
-    time: number; // seconds
-    penalty?: number; // seconds
-    didNotFinish?: boolean;
+export interface Result {
+  scramble: string;
+  time: number;
+  timestamp: number;
 }
 
 export class Attempt {
-    public scramble: string | null;
-    public result: AttemptResult | null;
+  public scramble: string | null;
 
-    public doneScramble: Promise<string>;
+  private getScrambleP?: Promise<string>;
 
-    get state(): AttemptState {
-        if (this.scramble === null) {
-            return AttemptState.SCRAMBLING;
-        } else if (this.result === null) {
-            return AttemptState.READY;
-        } else {
-            return AttemptState.DONE;
-        }
-    }
+  constructor() {
+    this.getScramble();
+  }
 
-    constructor() {
-        this.doneScramble = generateScramble().then((scramble) => {
-            return this.scramble = scramble;
-        });
-    }
+  public getScramble(): Promise<string> {
+    return (this.getScrambleP = this.getScrambleP || generateScramble().then((scramble) => {
+      return this.scramble = scramble;
+    }));
+  }
+
+  public createResult({ time, timestamp } : { time: number, timestamp: number }): Result {
+    return {
+      scramble: this.scramble!,
+      time,
+      timestamp,
+    };
+  }
 }
 
 export function createAttempt(): Attempt {
-    return new Attempt();
+  return new Attempt();
 }
