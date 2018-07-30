@@ -2,24 +2,31 @@
   "name": "cubing-timer",
   "version": "0.1.0",
   "private": true,
+  "homepage": "https://motemen.github.io/cubing-timer",
   "dependencies": {
     "@material-ui/core": "^1.4.1",
     "@material-ui/icons": "^2.0.0",
+    "classnames": "^2.2.6",
+    "gh-pages": "^1.2.0",
     "googleapis": "^32.0.0",
     "react": "^16.4.1",
     "react-dom": "^16.4.1",
     "react-redux": "^5.0.7",
     "react-scripts-ts": "2.16.0",
     "redux": "^4.0.0",
+    "redux-thunk": "^2.3.0",
     "tnoodle": "thewca/tnoodle"
   },
   "scripts": {
+    "predeploy": "yarn run build",
+    "deploy": "gh-pages -d build",
     "start": "react-scripts-ts start",
     "build": "react-scripts-ts build",
     "test": "react-scripts-ts test --env=jsdom",
     "eject": "react-scripts-ts eject"
   },
   "devDependencies": {
+    "@types/classnames": "^2.2.6",
     "@types/jest": "^23.3.0",
     "@types/node": "^10.5.3",
     "@types/react": "^16.4.7",

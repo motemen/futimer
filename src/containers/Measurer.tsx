@@ -3,7 +3,7 @@ import * as React from 'react';
 import { connect, DispatchProp } from 'react-redux';
 
 import { Actions } from '../actions';
-import { Attempt } from '../models/Attempt';
+import { Attempt, formatDuration } from '../models';
 import { StoreState } from '../types';
 
 interface OwnProps {
@@ -50,10 +50,13 @@ class Measurer extends React.Component<Props, State> {
     );
   }
 
+  // TODO: be keydown & keyup (touchstart & touchend)
   private keyPressHandler = (ev: KeyboardEvent) => {
     if (ev.key !== ' ') {
       return;
     }
+
+    ev.preventDefault();
 
     if (this.startTime === null) {
       const step = () => {
@@ -61,13 +64,15 @@ class Measurer extends React.Component<Props, State> {
           this.startTime = performance.now();
         }
         const elapsed = Math.floor(performance.now() - this.startTime) / 1000;
-        this.timerRef.current!.innerText = this.formatNumber(elapsed);
+        this.timerRef.current!.innerText = formatDuration(elapsed);
         this.animTimer = window.requestAnimationFrame(step);
       };
       step();
     } else if (this.animTimer) {
       const elapsed = Math.floor(performance.now() - this.startTime) / 1000;
+        this.timerRef.current!.innerText = formatDuration(elapsed);
       window.cancelAnimationFrame(this.animTimer);
+
       this.props.dispatch(Actions.recordAttempt({ time: elapsed, timestamp: performance.timing.navigationStart + this.startTime }));
     }
   }
@@ -83,11 +88,6 @@ class Measurer extends React.Component<Props, State> {
     } else {
         this.props.dispatch(Actions.resetAttempt());
     }
-  }
-
-  private formatNumber(n: number) {
-    const [ x, y ] = n.toString().split(/\./);
-    return (x.length === 1 ? ` ${x}` : x) + '.' + ((y || '') + '000').substring(0, 3);
   }
 }
 

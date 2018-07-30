@@ -1,7 +1,8 @@
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
-import { createStore } from 'redux';
+import { applyMiddleware, compose, createStore } from 'redux';
+import thunkMiddleware from 'redux-thunk';
 
 import { Actions } from './actions';
 import Measurer from './containers/Measurer';
@@ -19,7 +20,7 @@ import { AppBar, createMuiTheme, MuiThemeProvider, Toolbar, Typography } from '@
 import { amber } from '@material-ui/core/colors'
 
 const googleAPI = new GoogleAPI({
-  clientId: '757485369026-rvig0ollgq7h2jkc4sjae6pdc53affgf.apps.googleusercontent.com',
+  clientId: '757485369026-rvig0ollgq7h2jkc4sjae6pdc53affgf.apps.googleusercontent.com', // TODO make configurable
   discoveryDocs: [
     'https://sheets.googleapis.com/$discovery/rest?version=v4',
     'https://www.googleapis.com/discovery/v1/apis/drive/v3/rest',
@@ -30,9 +31,16 @@ const googleAPI = new GoogleAPI({
 const initialState: StoreState = {
   googleAPI,
   results: [],
+  sync: {
+    isSyncing: false,
+  },
 };
 
-const store = createStore<StoreState, Actions, {}, {}>(reducer, initialState);
+const store = createStore<StoreState, Actions, {}, {}>(
+  reducer,
+  initialState,
+  (((window as any).__REDUX_DEVTOOLS_EXTENSION_COMPOSE__) || compose)(applyMiddleware(thunkMiddleware)),
+);
 
 (window as any).store = store;
 
@@ -49,7 +57,7 @@ ReactDOM.render(
         <AppBar position="static">
           <Toolbar>
             <Typography variant="title" color="inherit">
-              Cube Timer
+              CubeTimer
             </Typography>
           </Toolbar>
         </AppBar>

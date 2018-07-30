@@ -1,12 +1,13 @@
 import { GoogleAPI } from "../gateways/GoogleAPI";
-import { Result } from "./Attempt";
+import { Result } from "../models";
 
 /**
  * Implements records synchronization with Google Spreadsheet.
  */
-export class RecordsSynchronizer {
+export class SyncRecords {
   // private lastSynced: number | undefined;
 
+  // TODO
   private spreadsheetId: string = '1OEI5qUMDAT6z17FZkrGznS23uW7tQelLFhO0uGiruXA';
 
   constructor(private readonly googleAPI: GoogleAPI) {
@@ -19,15 +20,15 @@ export class RecordsSynchronizer {
     console.log(files); // tslint:disable-line
     const values = results.map(({ scramble, time, timestamp }) => {
       return [
-        timestamp,
-        time,
+        new Date(timestamp).toString(),
+        time, // TODO format to duration: "mmmm:ss.000"
         scramble,
       ];
     });
     await (gapi.client.sheets.spreadsheets.values.append as any)({
       range: 'A1',
       spreadsheetId: this.spreadsheetId,
-      valueInputOption: 'RAW'
+      valueInputOption: 'USER_ENTERED',
     }, { values });
   }
 }
