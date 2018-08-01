@@ -1,2 +1,0 @@
-@-webkit-keyframes spin-l{0%{-webkit-transform:rotate(0deg);transform:rotate(0deg)}to{-webkit-transform:rotate(-1turn);transform:rotate(-1turn)}}@keyframes spin-l{0%{-webkit-transform:rotate(0deg);transform:rotate(0deg)}to{-webkit-transform:rotate(-1turn);transform:rotate(-1turn)}}.isSyncing{-webkit-animation:spin-l 1.5s linear infinite;animation:spin-l 1.5s linear infinite}body{margin:0;padding:0;font-family:sans-serif}
-/*# sourceMappingURL=main.142d5e35.css.map*/
