@@ -5,9 +5,14 @@ export interface StoreState {
   currentAttempt?: Attempt;
   results: Result[];
 
+  auth: {
+    isAuthed?: boolean;
+  };
+
   sync: {
     isSyncing: boolean;
     lastSynced?: number;
+    spreadsheetId?: string;
   };
 
   googleAPI: GoogleAPI;

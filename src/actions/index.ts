@@ -9,6 +9,8 @@ export enum ActionTypes {
   RECORD_ATTEMPT = 'RECORD_ATTEMPT',
   START_RECORDS_UPLOAD = 'START_RECORDS_UPLOAD',
   FINISH_RECORDS_UPLOAD = 'FINISH_RECORDS_UPLOAD',
+  UPDATE_SYNC_SPREADSHEET_ID = 'SET_SYNC_SPREADSHEET_ID',
+  UPDATE_IS_AUTHED = 'UPDATE_IS_AUTHED',
 }
 
 export const Actions = {
@@ -17,13 +19,25 @@ export const Actions = {
 
   finishRecordsUpload: (payload: { lastSynced?: number }) => createAction(ActionTypes.FINISH_RECORDS_UPLOAD, payload),
   startRecordsUpload: () => createAction(ActionTypes.START_RECORDS_UPLOAD),
+  updateSyncSpreadsheetId: (payload: { spreadsheetId: string }) => createAction(ActionTypes.UPDATE_SYNC_SPREADSHEET_ID, payload),
+
+  updateIsAuthed: (payload: { isAuthed: boolean }) => createAction(ActionTypes.UPDATE_IS_AUTHED, payload),
 };
 
 export const AsyncActions = {
-  syncRecords: () => (dispatch: Dispatch<Actions>, getState: () => StoreState) => {
+  syncRecords: () => async (dispatch: Dispatch<Actions>, getState: () => StoreState) => {
     const { googleAPI, sync, results } = getState();
     if (sync.isSyncing) {
       return;
+    }
+
+    const service = new SyncRecords(googleAPI);
+
+    let spreadsheetId = sync.spreadsheetId;
+    if (!spreadsheetId) {
+      const file = await service.getFile();
+      spreadsheetId = file.id!;
+      dispatch(Actions.updateSyncSpreadsheetId({ spreadsheetId }));
     }
 
     const resultsToSync = results.filter((result) => result.timestamp > (sync.lastSynced || 0));
@@ -33,15 +47,14 @@ export const AsyncActions = {
 
     dispatch(Actions.startRecordsUpload());
 
-    const broker = new SyncRecords(googleAPI);
-    broker.uploadRecords(resultsToSync).then(() => {
+    try {
+      await service.uploadRecords(spreadsheetId, resultsToSync);
       dispatch(Actions.finishRecordsUpload({ lastSynced: resultsToSync[resultsToSync.length - 1].timestamp }));
-    }).catch((err) => {
+    } catch (err) {
       // tslint:disable-next-line:no-console
       console.error('syncRecords', err);
-
       dispatch(Actions.finishRecordsUpload({ lastSynced: sync.lastSynced }));
-    });
+    }
   },
 }
 

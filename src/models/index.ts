@@ -96,6 +96,8 @@ export function formatDuration(n: number | undefined) {
 export class Attempt {
   public scramble: string | null;
 
+  // TODO: puzzleType e.g. '333'
+
   private getScrambleP?: Promise<string>;
 
   constructor() {

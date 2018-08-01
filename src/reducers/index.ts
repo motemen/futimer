@@ -48,5 +48,24 @@ export const reducer: Reducer = (state: StoreState, action: Actions): StoreState
     };
   }
 
+  if (action.type === ActionTypes.UPDATE_SYNC_SPREADSHEET_ID) {
+    return {
+      ...state,
+      sync: {
+        ...state.sync,
+        spreadsheetId: action.payload.spreadsheetId,
+      },
+    };
+  }
+
+  if (action.type === ActionTypes.UPDATE_IS_AUTHED) {
+    return {
+      ...state,
+      auth: {
+        isAuthed: action.payload.isAuthed,
+      },
+    };
+  }
+
   return state;
 };

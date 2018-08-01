@@ -2,39 +2,9 @@
 // - https://developers.google.com/drive/v3/web/quickstart/js
 // - https://developers.google.com/api-client-library/javascript/reference/referencedocs
 
-import { drive_v3, sheets_v4 } from 'googleapis';
+import { EventEmitter } from 'events';
 
-declare var gapi: GAPI | undefined;
-
-export interface GoogleUser {
-  getBasicProfile(): {
-    getImageUrl(): string;
-  } | undefined;
-}
-
-export interface GAPI {
-  auth2: {
-    getAuthInstance(): {
-      isSignedIn: {
-        get(): any;
-        listen(cb: any): void;
-      };
-      currentUser: {
-        get(): any;
-        listen(cb: any): void;
-      };
-      signIn(): any;
-      signOut(): any;
-    };
-  };
-  client: {
-    init: (opts: {}) => void;
-    sheets: sheets_v4.Sheets;
-    drive: drive_v3.Drive;
-  };
-  load(l: string, f: () => void): void;
-}
-
+// tslint:disable-next-line:no-namespace
 export interface GoogleAPIOptions {
   apiKey?: string;
   discoveryDocs: string[];
@@ -42,24 +12,32 @@ export interface GoogleAPIOptions {
   scope: string;
 }
 
-export class GoogleAPI {
+type GAPI = typeof gapi;
+
+export enum GoogleAPIEvents {
+  UPDATE_SIGNED_IN = 'updateSignedIn'
+}
+export class GoogleAPI extends EventEmitter {
   private readonly SCRIPT_SOURCE = 'https://apis.google.com/js/api.js';
 
+  private loadP?: Promise<GAPI>;
   private loadScriptP?: Promise<GAPI>;
 
   constructor(private readonly opts: GoogleAPIOptions) {
+    super();
     this.load();
   }
 
-  public load(): Promise<GAPI> {
-    return this.loadScript()
-      .then((g) => new Promise<GAPI>((resolve, reject) => {
-        g.load('client:auth2', () => resolve(g));
-      }))
-      .then((g) => {
-        g.client.init(this.opts)
-        return g;
-      });
+  public load(): Promise<GAPI> { 
+    return this.loadP || (this.loadP = (async () => {
+      const g = await this.loadScript();
+      await new Promise((resolve) => g.load('client:auth2', resolve));
+      await g.client.init(this.opts);
+      const auth = g.auth2.getAuthInstance();
+      this.emit(GoogleAPIEvents.UPDATE_SIGNED_IN, auth.isSignedIn.get());
+      auth.isSignedIn.listen((signedIn) => this.emit(GoogleAPIEvents.UPDATE_SIGNED_IN, signedIn));
+      return g;
+    })());
   }
 
   public signIn(): Promise<void> {
@@ -93,12 +71,19 @@ export class GoogleAPI {
       return this.loadScriptP;
     }
 
-    return this.loadScriptP = new Promise((resolve, reject) => {
+    return this.loadScriptP = new Promise<GAPI>((resolve, reject) => {
       const script = document.createElement('script');
       script.setAttribute('src', this.SCRIPT_SOURCE);
       script.addEventListener('load', () => {
         this.loadScriptP = undefined;
-        resolve(gapi);
+        const poll = () => {
+          if (typeof gapi !== 'undefined') {
+            resolve(gapi);
+            return;
+          }
+          setTimeout(poll, 50);
+        };
+        poll();
       });
       script.addEventListener('error', (ev: ErrorEvent) => {
         this.loadScriptP = undefined;

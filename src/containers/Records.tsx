@@ -3,11 +3,9 @@ import * as React from 'react';
 import { connect } from 'react-redux';
 
 import { createStyles, Hidden, IconButton, Paper, Table, TableBody, TableCell, TableHead, TableRow, Theme, Toolbar, Typography, withStyles, WithStyles } from '@material-ui/core';
-import { CloudDone, OpenInNew, Sync } from '@material-ui/icons';
+import { CloudDone, CloudOff, OpenInNew, Sync } from '@material-ui/icons';
 
 import classNames from 'classnames';
-
-import './Records.css'; // TODO use css-modules
 
 import { Actions, AsyncActions } from '../actions';
 import { calcStats, formatDuration, Result, ResultStats } from '../models';
@@ -16,8 +14,10 @@ import { StoreState } from '../types';
 import { ThunkDispatch } from 'redux-thunk';
 
 interface OwnProps {
+  isAuthed?: boolean;
   isSyncing: boolean;
   results: Result[];
+  spreadsheetId?: string;
   stats: ResultStats;
   syncDone: boolean;
 }
@@ -25,6 +25,13 @@ interface OwnProps {
 type Props = OwnProps & { dispatch: ThunkDispatch<StoreState, undefined, Actions> } & WithStyles<typeof RecordsStyles>;
 
 const RecordsStyles = (theme: Theme) => createStyles({
+  '@keyframes spin-l': {
+    from: { transform: 'rotate(0deg)' },
+    to: { transform: 'rotate(-360deg)' },
+  },
+  isSyncing: {
+    animation: 'spin-l 1.5s linear infinite',
+  },
   root: {
     margin: theme.spacing.unit * 2,
   },
@@ -33,6 +40,8 @@ const RecordsStyles = (theme: Theme) => createStyles({
   },
   summary: {
     color: theme.palette.text.secondary,
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
     whiteSpace: 'nowrap',
   },
   title: {
@@ -57,22 +66,28 @@ class Records extends React.Component<Props> {
             Last ao5: {formatDuration((this.props.stats.averageOf[5] || {}).last) || 'N/A'}
           </Typography>
           <div className={this.props.classes.spacer} />
-          <IconButton><OpenInNew /></IconButton>
-          <IconButton onClick={this.handleSyncClick}>
-            {
-              /* TODO: state:
-                 - authLoading .. grayed-out CloudOff
-                 - notAuthed .. CloudOff
-                 - authed
-                   - syncDone .. CloudDone
-                   - notSynced .. Sync
-                   - isSyncing .. rorating Sync
-              */
-              this.props.syncDone
-              ? <CloudDone />
-              : <Sync className={classNames({ isSyncing: this.props.isSyncing })} />
-            }
-          </IconButton>
+          {
+            this.props.spreadsheetId
+              ? <IconButton onClick={this.handleOpenSheetClick}><OpenInNew /></IconButton>
+              : null
+          }
+          {
+            this.props.isAuthed
+              ? <IconButton onClick={this.handleSyncClick}>
+                  {
+                    this.props.syncDone
+                      ? <CloudDone />
+                      : <Sync className={classNames({ [this.props.classes.isSyncing]: this.props.isSyncing })} />
+                  }
+                </IconButton>
+              : <IconButton>
+                  {
+                    this.props.isAuthed === false
+                      ? <CloudOff />
+                      : <CloudOff color="disabled" />
+                  }
+                </IconButton>
+          }
         </Toolbar>
         <Table>
           <TableHead>
@@ -104,15 +119,22 @@ class Records extends React.Component<Props> {
     this.props.dispatch(AsyncActions.syncRecords());
   }
 
+  private handleOpenSheetClick = () => {
+    const url = `https://docs.google.com/spreadsheets/d/${this.props.spreadsheetId}/edit`;
+    window.open(url);
+  }
+
   private formatTimestamp(t: number) {
     return new Date(t).toLocaleString();
   }
 }
 
-function mapStateToProps({ results, sync: { isSyncing, lastSynced } }: StoreState) {
+function mapStateToProps({ results, auth: { isAuthed }, sync: { isSyncing, lastSynced, spreadsheetId } }: StoreState) {
   return {
+    isAuthed,
     isSyncing,
     results,
+    spreadsheetId,
     stats: calcStats(results),
     syncDone: results.length === 0 || results[results.length-1].timestamp === lastSynced,
   };

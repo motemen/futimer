@@ -5,19 +5,14 @@ import { Result } from "../models";
  * Implements records synchronization with Google Spreadsheet.
  */
 export class SyncRecords {
-  // private lastSynced: number | undefined;
-
-  // TODO
-  private spreadsheetId: string = '1OEI5qUMDAT6z17FZkrGznS23uW7tQelLFhO0uGiruXA';
+  private getFileP?: Promise<gapi.client.drive.File>;
 
   constructor(private readonly googleAPI: GoogleAPI) {
   }
 
-  public async uploadRecords(results: Result[]) {
+  public async uploadRecords(spreadsheetId: string, results: Result[]) {
     await this.googleAPI.signIn();
     const gapi = await this.googleAPI.load();
-    const files = await gapi.client.drive.files.list()
-    console.log(files); // tslint:disable-line
     const values = results.map(({ scramble, time, timestamp }) => {
       return [
         new Date(timestamp).toString(),
@@ -27,8 +22,25 @@ export class SyncRecords {
     });
     await (gapi.client.sheets.spreadsheets.values.append as any)({
       range: 'A1',
-      spreadsheetId: this.spreadsheetId,
+      spreadsheetId,
       valueInputOption: 'USER_ENTERED',
     }, { values });
+  }
+
+  public async getFile(): Promise<gapi.client.drive.File> {
+    if (this.getFileP) {
+      return this.getFileP;
+    }
+
+    return this.getFileP = (async () => {
+      const gapi = await this.googleAPI.load();
+      const listResp = await gapi.client.drive.files.list({ orderBy: 'createdTime desc' });
+      if (listResp.result.files && listResp.result.files.length > 0) {
+        return listResp.result.files[0];
+      }
+
+      const createResp = await gapi.client.drive.files.create({});
+      return createResp.result;
+    })();
   }
 }

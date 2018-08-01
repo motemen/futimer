@@ -14,10 +14,11 @@ import './App.css';
 import './index.css';
 import registerServiceWorker from './registerServiceWorker';
 
-import { GoogleAPI } from './gateways/GoogleAPI';
+import { GoogleAPI, GoogleAPIEvents } from './gateways/GoogleAPI';
 
 import { AppBar, createMuiTheme, MuiThemeProvider, Toolbar, Typography } from '@material-ui/core';
 import { amber } from '@material-ui/core/colors'
+import { SyncRecords } from './services/SyncRecords';
 
 const googleAPI = new GoogleAPI({
   clientId: '757485369026-rvig0ollgq7h2jkc4sjae6pdc53affgf.apps.googleusercontent.com', // TODO make configurable
@@ -28,7 +29,22 @@ const googleAPI = new GoogleAPI({
   scope: 'https://www.googleapis.com/auth/drive.file',
 });
 
+googleAPI.on(
+  GoogleAPIEvents.UPDATE_SIGNED_IN, async (signedIn) => {
+    store.dispatch(Actions.updateIsAuthed({ isAuthed: signedIn }))
+
+    const { sync } = store.getState();
+    if (!sync.spreadsheetId) {
+      const syncRecords = new SyncRecords(googleAPI);
+      const file = await syncRecords.getFile()
+      store.dispatch(Actions.updateSyncSpreadsheetId({ spreadsheetId: file.id! }));
+    }
+  },
+);
+
 const initialState: StoreState = {
+  auth: {
+  },
   googleAPI,
   results: [],
   sync: {

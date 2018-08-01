@@ -28,7 +28,13 @@ class Measurer extends React.Component<Props, State> {
 
   public componentWillMount() {
     this.invalidateAttempt();
-    document.body.addEventListener('keypress', this.keyPressHandler);
+    document.body.addEventListener('keyup', this.handleKeyUp);
+    document.body.addEventListener('touchend', this.handleTouchEnd);
+  }
+
+  public componentWillUnmount() {
+    document.body.removeEventListener('keyup', this.handleKeyUp);
+    document.body.removeEventListener('touchend', this.handleTouchEnd);
   }
 
   public componentDidUpdate(prevProps: Props) {
@@ -50,13 +56,25 @@ class Measurer extends React.Component<Props, State> {
     );
   }
 
-  // TODO: be keydown & keyup (touchstart & touchend)
-  private keyPressHandler = (ev: KeyboardEvent) => {
+  private handleKeyUp = (ev: KeyboardEvent) => {
     if (ev.key !== ' ') {
       return;
     }
 
-    ev.preventDefault();
+    this.handleHandUp(ev);
+  }
+
+  private handleTouchEnd = (ev: TouchEvent) => {
+    this.handleHandUp(ev);
+  }
+
+  // TODO: be keydown & keyup (touchstart & touchend)
+  private handleHandUp = (ev: Event) => {
+    for (let el = ev.srcElement; el; el = el.parentElement) {
+      if ('tabIndex' in el && (el as any).tabIndex !== -1) {
+        return;
+      }
+    }
 
     if (this.startTime === null) {
       const step = () => {
