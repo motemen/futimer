@@ -76,8 +76,6 @@ class Measurer extends React.Component<Props, State> {
       }
     }
 
-    ev.preventDefault();
-
     if (this.startTime === null) {
       const step = () => {
         if (!this.startTime) {

@@ -26,6 +26,16 @@ export const reducer: Reducer = (state: StoreState, action: Actions): StoreState
     };
   }
 
+  if (action.type === ActionTypes.DELETE_RESULT) {
+    const results = state.results.slice();
+    results.splice(action.payload.index, 1);
+
+    return {
+      ...state,
+      results,
+    };
+  }
+
   // TODO: split to sync dedicated reducer and combine
   if (action.type === ActionTypes.START_RECORDS_UPLOAD) {
     return {

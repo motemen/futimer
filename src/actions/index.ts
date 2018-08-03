@@ -7,6 +7,7 @@ import { ThunkAction } from 'redux-thunk';
 export enum ActionTypes {
   RESET_ATTEMPT = 'RESET_ATTEMPT',
   RECORD_ATTEMPT = 'RECORD_ATTEMPT',
+  DELETE_RESULT = 'DELETE_RESULT',
   START_RECORDS_UPLOAD = 'START_RECORDS_UPLOAD',
   FINISH_RECORDS_UPLOAD = 'FINISH_RECORDS_UPLOAD',
   UPDATE_SYNC_SPREADSHEET_ID = 'SET_SYNC_SPREADSHEET_ID',
@@ -16,6 +17,8 @@ export enum ActionTypes {
 export const Actions = {
   recordAttempt: (payload: { time: number, timestamp: number }) => createAction(ActionTypes.RECORD_ATTEMPT, payload),
   resetAttempt: () => createAction(ActionTypes.RESET_ATTEMPT),
+
+  deleteResult: (payload: { index: number }) => createAction(ActionTypes.DELETE_RESULT, payload),
 
   finishRecordsUpload: (payload: { lastSynced?: number }) => createAction(ActionTypes.FINISH_RECORDS_UPLOAD, payload),
   startRecordsUpload: () => createAction(ActionTypes.START_RECORDS_UPLOAD),

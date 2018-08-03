@@ -2,7 +2,7 @@ import * as React from 'react';
 
 import { connect } from 'react-redux';
 
-import { createStyles, Hidden, Icon, IconButton, Paper, Table, TableBody, TableCell, TableHead, TableRow, Theme, Toolbar, Typography, withStyles, WithStyles } from '@material-ui/core';
+import { ClickAwayListener, createStyles, Hidden, Icon, IconButton, Menu, MenuItem, Paper, Table, TableBody, TableCell, TableHead, TableRow, Theme, Toolbar, Typography, withStyles, WithStyles } from '@material-ui/core';
 
 import classNames from 'classnames';
 
@@ -23,6 +23,11 @@ interface OwnProps {
 
 type Props = OwnProps & { dispatch: ThunkDispatch<StoreState, undefined, Actions> } & WithStyles<typeof RecordsStyles>;
 
+interface State {
+  recordMenuAnchor?: HTMLElement;
+  activeRecordIndex?: number;
+}
+
 const RecordsStyles = (theme: Theme) => createStyles({
   '@keyframes spin-l': {
     from: { transform: 'rotate(0deg)' },
@@ -35,6 +40,11 @@ const RecordsStyles = (theme: Theme) => createStyles({
     margin: theme.spacing.unit * 2,
     overflowX: 'auto',
   },
+  scramble: {
+    [theme.breakpoints.down('xs')]: {
+      display: 'none',
+    },
+  },
   spacer: {
     flex: '1',
   },
@@ -44,6 +54,8 @@ const RecordsStyles = (theme: Theme) => createStyles({
     textOverflow: 'ellipsis',
     whiteSpace: 'nowrap',
   },
+  timestamp: {
+  },
   title: {
     flexBasis: '20%',
   },
@@ -52,7 +64,9 @@ const RecordsStyles = (theme: Theme) => createStyles({
   },
 });
 
-class Records extends React.Component<Props> {
+class Records extends React.Component<Props, State> {
+  public state: Readonly<State> = {};
+
   public render() {
     return (
       <Paper className={this.props.classes.root}>
@@ -88,25 +102,38 @@ class Records extends React.Component<Props> {
         <Table>
           <TableHead>
             <TableRow>
-              <TableCell>Timestamp</TableCell>
-              <TableCell>Scramble</TableCell>
+              <TableCell className={this.props.classes.timestamp}>Timestamp</TableCell>
+              <TableCell className={this.props.classes.scramble}>Scramble</TableCell>
               <TableCell>Time</TableCell>
+              <TableCell />
             </TableRow>
           </TableHead>
           <TableBody>
             {
-              this.props.results.map((result, i) => {
+              this.props.results.slice().reverse().map((result, i) => {
                 return (
                   <TableRow key={i}>
-                    <TableCell>{this.formatTimestamp(result.timestamp)}</TableCell>
-                    <TableCell><code>{result.scramble}</code></TableCell>
-                    <TableCell><code>{formatDuration(result.time)}</code></TableCell>
+                    <TableCell className={this.props.classes.timestamp}>{this.formatTimestamp(result.timestamp)}</TableCell>
+                    <TableCell className={this.props.classes.scramble}><code>{result.scramble}</code></TableCell>
+                    <TableCell numeric={true}><code>{formatDuration(result.time)}</code></TableCell>
+                    <TableCell padding="checkbox">
+                      <IconButton onClick={this.handleRecordMoreClick(this.props.results.length - (i+1))}>
+                        <Icon>more_vert</Icon>
+                      </IconButton>
+                    </TableCell>
                   </TableRow>
                 );
               })
             }
           </TableBody>
         </Table>
+        <ClickAwayListener onClickAway={this.handleRecordMenuClose}>
+          <div>{ /* XXX required for ClickAwayListener to work! */ }
+            <Menu anchorEl={this.state.recordMenuAnchor} open={Boolean(this.state.recordMenuAnchor)}>
+              <MenuItem onClick={this.handleDeleteRecordClick}>Delete</MenuItem>
+            </Menu>
+          </div>
+        </ClickAwayListener>
       </Paper>
     );
   }
@@ -123,6 +150,18 @@ class Records extends React.Component<Props> {
   private handleOpenSheetClick = () => {
     const url = `https://docs.google.com/spreadsheets/d/${this.props.spreadsheetId}/edit`;
     window.open(url);
+  }
+
+  private handleDeleteRecordClick = () => {
+    this.props.dispatch(Actions.deleteResult({ index: this.state.activeRecordIndex! }));
+  }
+
+  private handleRecordMoreClick = (i: number) => (ev: React.MouseEvent<HTMLElement>) => {
+    this.setState({ recordMenuAnchor: ev.currentTarget, activeRecordIndex: i });
+  }
+
+  private handleRecordMenuClose = () => {
+    this.setState({ recordMenuAnchor: undefined });
   }
 
   private formatTimestamp(t: number) {
