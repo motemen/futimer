@@ -2,6 +2,9 @@ import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import { applyMiddleware, compose, createStore } from 'redux';
+import { persistReducer, persistStore } from 'redux-persist'
+import { PersistGate } from 'redux-persist/integration/react'
+import persistStorage from 'redux-persist/lib/storage'
 import thunkMiddleware from 'redux-thunk';
 
 import { Actions } from './actions';
@@ -52,11 +55,24 @@ const initialState: StoreState = {
   },
 };
 
+const persistConfig = {
+  debug: process.env.NODE_ENV !== 'production',
+  key: 'root',
+  storage: persistStorage,
+  transforms: [
+  ],
+  whitelist: [ 'results', 'sync' ],
+};
+
+const rootReducer = persistReducer(persistConfig, reducer);
+
 const store = createStore<StoreState, Actions, {}, {}>(
-  reducer,
+  rootReducer,
   initialState,
   (((window as any).__REDUX_DEVTOOLS_EXTENSION_COMPOSE__) || compose)(applyMiddleware(thunkMiddleware)),
 );
+
+const persister = persistStore(store);
 
 (window as any).store = store;
 
@@ -69,7 +85,7 @@ const theme = createMuiTheme({
 ReactDOM.render(
   <MuiThemeProvider theme={theme}>
     <Provider store={store}>
-      <div>
+      <PersistGate persistor={persister}>
         <AppBar position="static">
           <Toolbar>
             <Typography variant="title" color="inherit">
@@ -79,7 +95,7 @@ ReactDOM.render(
         </AppBar>
         <Measurer />
         <Records />
-      </div>
+      </PersistGate>
     </Provider>
   </MuiThemeProvider>,
   document.getElementById('root') as HTMLElement

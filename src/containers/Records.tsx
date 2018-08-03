@@ -2,8 +2,7 @@ import * as React from 'react';
 
 import { connect } from 'react-redux';
 
-import { createStyles, Hidden, IconButton, Paper, Table, TableBody, TableCell, TableHead, TableRow, Theme, Toolbar, Typography, withStyles, WithStyles } from '@material-ui/core';
-import { CloudDone, CloudOff, OpenInNew, Sync } from '@material-ui/icons';
+import { createStyles, Hidden, Icon, IconButton, Paper, Table, TableBody, TableCell, TableHead, TableRow, Theme, Toolbar, Typography, withStyles, WithStyles } from '@material-ui/core';
 
 import classNames from 'classnames';
 
@@ -34,6 +33,7 @@ const RecordsStyles = (theme: Theme) => createStyles({
   },
   root: {
     margin: theme.spacing.unit * 2,
+    overflowX: 'auto',
   },
   spacer: {
     flex: '1',
@@ -63,30 +63,26 @@ class Records extends React.Component<Props> {
           <Typography variant="subheading" className={this.props.classes.summary}>
             Best ao5: {formatDuration((this.props.stats.averageOf[5] || {}).best) || 'N/A'}
             {' '}
-            Last ao5: {formatDuration((this.props.stats.averageOf[5] || {}).last) || 'N/A'}
+            Curr ao5: {formatDuration((this.props.stats.averageOf[5] || {}).current) || 'N/A'}
           </Typography>
           <div className={this.props.classes.spacer} />
           {
-            this.props.spreadsheetId
-              ? <IconButton onClick={this.handleOpenSheetClick}><OpenInNew /></IconButton>
+            this.props.isAuthed && this.props.spreadsheetId
+              ? <IconButton onClick={this.handleOpenSheetClick}><Icon>open_in_new</Icon></IconButton>
               : null
           }
           {
-            this.props.isAuthed
-              ? <IconButton onClick={this.handleSyncClick}>
-                  {
-                    this.props.syncDone
-                      ? <CloudDone />
-                      : <Sync className={classNames({ [this.props.classes.isSyncing]: this.props.isSyncing })} />
-                  }
-                </IconButton>
-              : <IconButton>
-                  {
-                    this.props.isAuthed === false
-                      ? <CloudOff />
-                      : <CloudOff color="disabled" />
-                  }
-                </IconButton>
+            <IconButton onClick={this.handleSyncClick}>
+              {
+                this.props.isAuthed
+                  ? this.props.syncDone
+                    ? <Icon>cloud_done</Icon>
+                    : <Icon className={classNames({ [this.props.classes.isSyncing]: this.props.isSyncing })}>sync</Icon>
+                  : this.props.isAuthed === false
+                    ? <Icon>cloud_off</Icon>
+                    : <Icon color="disabled">cloud_off</Icon>
+              }
+            </IconButton>
           }
         </Toolbar>
         <Table>
@@ -116,6 +112,11 @@ class Records extends React.Component<Props> {
   }
 
   private handleSyncClick = () => {
+    if (this.props.isAuthed === undefined) {
+      // loading. do not try to sync yet
+      return;
+    }
+
     this.props.dispatch(AsyncActions.syncRecords());
   }
 

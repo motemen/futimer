@@ -40,25 +40,26 @@ export class GoogleAPI extends EventEmitter {
     })());
   }
 
-  public signIn(): Promise<void> {
-    return new Promise((resolve, reject) => {
-      this.load().then((g) => {
-        const auth = g.auth2.getAuthInstance();
-        if (auth.isSignedIn.get()) {
-          resolve();
-          return;
-        }
+  public async signIn(): Promise<void> {
+    const g = await this.load();
+    return new Promise<void>((resolve, reject) => {
+      const auth = g.auth2.getAuthInstance();
+      if (auth.isSignedIn.get()) {
+        resolve();
+        return;
+      }
 
-        auth.signIn();
-
-        auth.isSignedIn.listen((signedIn: boolean) => {
+      this.once(
+        GoogleAPIEvents.UPDATE_SIGNED_IN, (signedIn: boolean) => {
           if (signedIn) {
             resolve();
           } else {
             reject();
           }
-        });
-      });
+        },
+      );
+
+      auth.signIn();
     });
   }
 

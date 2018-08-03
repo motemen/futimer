@@ -31,6 +31,8 @@ export const AsyncActions = {
       return;
     }
 
+    await googleAPI.signIn();
+
     const service = new SyncRecords(googleAPI);
 
     let spreadsheetId = sync.spreadsheetId;

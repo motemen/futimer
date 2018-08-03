@@ -1,8 +1,0 @@
-@keyframes spin-l {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(-360deg); }
-}
-
-.isSyncing {
-    animation: spin-l 1.5s linear infinite;
-}

@@ -5,7 +5,6 @@
   "homepage": "https://motemen.github.io/cubing-timer",
   "dependencies": {
     "@material-ui/core": "^1.4.1",
-    "@material-ui/icons": "^2.0.0",
     "classnames": "^2.2.6",
     "gh-pages": "^1.2.0",
     "googleapis": "^32.0.0",
@@ -14,6 +13,7 @@
     "react-redux": "^5.0.7",
     "react-scripts-ts": "2.16.0",
     "redux": "^4.0.0",
+    "redux-persist": "^5.10.0",
     "redux-thunk": "^2.3.0",
     "tnoodle": "thewca/tnoodle"
   },

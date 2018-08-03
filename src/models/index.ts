@@ -21,7 +21,7 @@ export interface ResultStats {
 
 interface ResultStatsEntry {
   best: number;
-  last: number;
+  current: number;
   worst: number;
 }
 
@@ -40,7 +40,7 @@ export function calcStats(results: Result[]): ResultStats {
     }, {}),
     single: {
       best: Math.min(...scores),
-      last: scores[scores.length - 1],
+      current: scores[scores.length - 1],
       worst: Math.max(...scores),
     },
   };
@@ -67,7 +67,7 @@ export function variousAveragesOf(n: number, scores: number[]): ResultStatsEntry
 
   return {
     best,
-    last: averageOf(scores.slice(-5)),
+    current: averageOf(scores.slice(-5)),
     worst,
   };
 }
@@ -101,10 +101,14 @@ export class Attempt {
   private getScrambleP?: Promise<string>;
 
   constructor() {
-    this.getScramble();
+    setTimeout(() => this.getScramble(), 50);
   }
 
   public getScramble(): Promise<string> {
+    if (this.scramble) {
+      return Promise.resolve(this.scramble);
+    }
+
     return (this.getScrambleP = this.getScrambleP || generateScramble().then((scramble) => {
       return this.scramble = scramble;
     }));

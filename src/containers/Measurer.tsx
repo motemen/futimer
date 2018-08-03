@@ -46,10 +46,10 @@ class Measurer extends React.Component<Props, State> {
   public render() {
     return (
       <div>
-        <div style={{ fontSize: 36, padding: '1em' }}>
+        <div style={{ fontSize: 20, padding: '2em 1em', textAlign: 'center' }}>
           <code>{this.state && this.state.scramble || 'Scrambling...'}</code>
         </div>
-        <div style={{ fontSize: 72, textAlign: 'center' }}>
+        <div style={{ fontSize: 64, textAlign: 'center' }}>
           <pre ref={this.timerRef}>{' '}</pre>
         </div>
       </div>
@@ -76,6 +76,8 @@ class Measurer extends React.Component<Props, State> {
       }
     }
 
+    ev.preventDefault();
+
     if (this.startTime === null) {
       const step = () => {
         if (!this.startTime) {
@@ -87,9 +89,10 @@ class Measurer extends React.Component<Props, State> {
       };
       step();
     } else if (this.animTimer) {
-      const elapsed = Math.floor(performance.now() - this.startTime) / 1000;
-        this.timerRef.current!.innerText = formatDuration(elapsed);
       window.cancelAnimationFrame(this.animTimer);
+
+      const elapsed = Math.floor(performance.now() - this.startTime) / 1000;
+      this.timerRef.current!.innerText = formatDuration(elapsed);
 
       this.props.dispatch(Actions.recordAttempt({ time: elapsed, timestamp: performance.timing.navigationStart + this.startTime }));
     }
