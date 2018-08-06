@@ -89,7 +89,7 @@ ReactDOM.render(
         <AppBar position="static">
           <Toolbar>
             <Typography variant="title" color="inherit">
-              CubeTimer
+              fuTimer
             </Typography>
           </Toolbar>
         </AppBar>

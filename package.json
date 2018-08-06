@@ -1,13 +1,14 @@
 {
-  "name": "cubing-timer",
+  "name": "fuTimer",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://motemen.github.io/cubing-timer",
+  "homepage": "https://motemen.github.io/futimer",
   "dependencies": {
     "@material-ui/core": "^1.4.1",
     "classnames": "^2.2.6",
     "gh-pages": "^1.2.0",
     "googleapis": "^32.0.0",
+    "keycode": "^2.2.0",
     "react": "^16.4.1",
     "react-dom": "^16.4.1",
     "react-redux": "^5.0.7",

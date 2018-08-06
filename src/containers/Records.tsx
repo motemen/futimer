@@ -2,7 +2,7 @@ import * as React from 'react';
 
 import { connect } from 'react-redux';
 
-import { ClickAwayListener, createStyles, Hidden, Icon, IconButton, Menu, MenuItem, Paper, Table, TableBody, TableCell, TableHead, TableRow, Theme, Toolbar, Typography, withStyles, WithStyles } from '@material-ui/core';
+import { ClickAwayListener, createStyles, ExpansionPanel, ExpansionPanelDetails, ExpansionPanelSummary, Hidden, Icon, IconButton, Menu, MenuItem, Paper, Table, TableBody, TableCell, TableHead, TableRow, Theme, Toolbar, Typography, withStyles, WithStyles } from '@material-ui/core';
 
 import classNames from 'classnames';
 
@@ -69,71 +69,82 @@ class Records extends React.Component<Props, State> {
 
   public render() {
     return (
-      <Paper className={this.props.classes.root}>
-        <Toolbar className={this.props.classes.toolbar}>
-          <Hidden smDown={true}>
-            <Typography variant="headline" className={this.props.classes.title}>Results</Typography>
-          </Hidden>
-          <Typography variant="subheading" className={this.props.classes.summary}>
-            Best ao5: {formatDuration((this.props.stats.averageOf[5] || {}).best) || 'N/A'}
-            {' '}
-            Curr ao5: {formatDuration((this.props.stats.averageOf[5] || {}).current) || 'N/A'}
-          </Typography>
+      <Paper>
+        <Toolbar>
+          <Typography variant="headline">Results</Typography>
           <div className={this.props.classes.spacer} />
           {
             this.props.isAuthed && this.props.spreadsheetId
               ? <IconButton onClick={this.handleOpenSheetClick}><Icon>open_in_new</Icon></IconButton>
               : null
           }
-          {
-            <IconButton onClick={this.handleSyncClick}>
-              {
-                this.props.isAuthed
-                  ? this.props.syncDone
-                    ? <Icon>cloud_done</Icon>
-                    : <Icon className={classNames({ [this.props.classes.isSyncing]: this.props.isSyncing })}>sync</Icon>
-                  : this.props.isAuthed === false
-                    ? <Icon>cloud_off</Icon>
-                    : <Icon color="disabled">cloud_off</Icon>
-              }
-            </IconButton>
-          }
+          <IconButton><Icon>add</Icon></IconButton>
         </Toolbar>
-        <Table>
-          <TableHead>
-            <TableRow>
-              <TableCell className={this.props.classes.timestamp}>Timestamp</TableCell>
-              <TableCell className={this.props.classes.scramble}>Scramble</TableCell>
-              <TableCell>Time</TableCell>
-              <TableCell />
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {
-              this.props.results.slice().reverse().map((result, i) => {
-                return (
-                  <TableRow key={i}>
-                    <TableCell className={this.props.classes.timestamp}>{this.formatTimestamp(result.timestamp)}</TableCell>
-                    <TableCell className={this.props.classes.scramble}><code>{result.scramble}</code></TableCell>
-                    <TableCell numeric={true}><code>{formatDuration(result.time)}</code></TableCell>
-                    <TableCell padding="checkbox">
-                      <IconButton onClick={this.handleRecordMoreClick(this.props.results.length - (i+1))}>
-                        <Icon>more_vert</Icon>
-                      </IconButton>
-                    </TableCell>
-                  </TableRow>
-                );
-              })
-            }
-          </TableBody>
-        </Table>
-        <ClickAwayListener onClickAway={this.handleRecordMenuClose}>
-          <div>{ /* XXX required for ClickAwayListener to work! */ }
-            <Menu anchorEl={this.state.recordMenuAnchor} open={Boolean(this.state.recordMenuAnchor)}>
-              <MenuItem onClick={this.handleDeleteRecordClick}>Delete</MenuItem>
-            </Menu>
-          </div>
-        </ClickAwayListener>
+        <ExpansionPanel>
+          <ExpansionPanelSummary>
+            <Hidden smDown={true}>
+              <Typography className={this.props.classes.title}>Session #1</Typography>
+            </Hidden>
+            <Typography className={this.props.classes.summary}>
+              Best ao5: {formatDuration((this.props.stats.averageOf[5] || {}).best) || 'N/A'}
+              {' '}
+              Curr ao5: {formatDuration((this.props.stats.averageOf[5] || {}).current) || 'N/A'}
+            </Typography>
+            <div className={this.props.classes.spacer} />
+            <div style={{ marginBottom: -12, marginTop: -12 }}>
+              {
+                <IconButton onClick={this.handleSyncClick}>
+                  {
+                    this.props.isAuthed
+                      ? this.props.syncDone
+                        ? <Icon>cloud_done</Icon>
+                        : <Icon className={classNames({ [this.props.classes.isSyncing]: this.props.isSyncing })}>sync</Icon>
+                      : this.props.isAuthed === false
+                        ? <Icon>cloud_off</Icon>
+                        : <Icon color="disabled">cloud_off</Icon>
+                  }
+                </IconButton>
+              }
+            </div>
+          </ExpansionPanelSummary>
+          <ExpansionPanelDetails>
+            <Table>
+              <TableHead>
+                <TableRow>
+                  <TableCell className={this.props.classes.timestamp}>Timestamp</TableCell>
+                  <TableCell className={this.props.classes.scramble}>Scramble</TableCell>
+                  <TableCell>Time</TableCell>
+                  <TableCell />
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {
+                  this.props.results.slice().reverse().map((result, i) => {
+                    return (
+                      <TableRow key={i}>
+                        <TableCell className={this.props.classes.timestamp}>{this.formatTimestamp(result.timestamp)}</TableCell>
+                        <TableCell className={this.props.classes.scramble}><code>{result.scramble}</code></TableCell>
+                        <TableCell numeric={true}><code>{formatDuration(result.time)}</code></TableCell>
+                        <TableCell padding="checkbox">
+                          <IconButton onClick={this.handleRecordMoreClick(this.props.results.length - (i + 1))}>
+                            <Icon>more_vert</Icon>
+                          </IconButton>
+                        </TableCell>
+                      </TableRow>
+                    );
+                  })
+                }
+              </TableBody>
+            </Table>
+            <ClickAwayListener onClickAway={this.handleRecordMenuClose}>
+              <div>{ /* XXX required for ClickAwayListener to work! */}
+                <Menu anchorEl={this.state.recordMenuAnchor} open={Boolean(this.state.recordMenuAnchor)}>
+                  <MenuItem onClick={this.handleDeleteRecordClick}>Delete</MenuItem>
+                </Menu>
+              </div>
+            </ClickAwayListener>
+          </ExpansionPanelDetails>
+        </ExpansionPanel>
       </Paper>
     );
   }
@@ -176,7 +187,7 @@ function mapStateToProps({ results, auth: { isAuthed }, sync: { isSyncing, lastS
     results,
     spreadsheetId,
     stats: calcStats(results),
-    syncDone: results.length === 0 || results[results.length-1].timestamp === lastSynced,
+    syncDone: results.length === 0 || results[results.length - 1].timestamp === lastSynced,
   };
 }
 

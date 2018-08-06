@@ -101,7 +101,7 @@ export class Attempt {
   private getScrambleP?: Promise<string>;
 
   constructor() {
-    setTimeout(() => this.getScramble(), 50);
+    this.getScramble();
   }
 
   public getScramble(): Promise<string> {
