@@ -6,7 +6,7 @@ export enum AttemptState {
   STARTED = 'STARTED',
 }
 
-export interface Result {
+export interface Record {
   scramble: string;
   time: number;
   timestamp: number;
@@ -19,14 +19,21 @@ export interface ResultStats {
   single?: ResultStatsEntry;
 }
 
+export interface Session {
+  name?: string;
+  records: Record[];
+}
+
+export type GameType = '333';
+
 interface ResultStatsEntry {
   best: number;
   current: number;
   worst: number;
 }
 
-export function calcStats(results: Result[]): ResultStats {
-  if (results.length === 0) {
+export function calcStats(results?: Record[]): ResultStats {
+  if (!results || results.length === 0) {
     return {
       averageOf: {},
     };
@@ -114,7 +121,7 @@ export class Attempt {
     }));
   }
 
-  public createResult({ time, timestamp } : { time: number, timestamp: number }): Result {
+  public createResult({ time, timestamp } : { time: number, timestamp: number }): Record {
     return {
       scramble: this.scramble!,
       time,

@@ -21,7 +21,7 @@ type Props = OwnProps & DispatchProp<Actions> & WithStyles<typeof Styles>;
 
 interface State {
   scramble: string | null;
-  isHolding?: boolean;
+  holdStarted?: number;
 }
 
 const HOLD_DURATION = 550;
@@ -43,12 +43,29 @@ const Styles = (theme: Theme) => createStyles({
   isHolding: {
     animation: `${HOLD_DURATION}ms step-end holding-color-change both`,
   },
+  scramble: {
+    fontSize: theme.typography.headline.fontSize,
+    marginTop: theme.spacing.unit * 3,
+    textAlign: 'center',
+  },
+  timer: {
+    [theme.breakpoints.down('xs')]: {
+      fontSize: theme.typography.display3.fontSize,
+    },
+    fontSize: theme.typography.display4.fontSize,
+    padding: theme.spacing.unit * 2,
+    margin: `${theme.spacing.unit * 3}pt 0`,
+    textAlign: 'center',
+    width: '100%',
+  },
 });
 
 class Measurer extends React.Component<Props, State> {
   private startTime: number | null = null;
   private animTimer: number | null = null;
   private timerRef: React.RefObject<HTMLPreElement>;
+
+  private focusVisible?: () => void;
 
   constructor(props: Props) {
     super(props);
@@ -74,22 +91,25 @@ class Measurer extends React.Component<Props, State> {
   public render() {
     return (
       <div>
-        <div style={{ fontSize: 20, margin: '2em 1em', textAlign: 'center' }}>
+        <div className={this.props.classes.scramble}>
           <code>{this.state && this.state.scramble || 'Scrambling...'}</code>
         </div>
         <ButtonBase
           action={this.handleButtonMount}
-          onKeyDown={this.handleHoldStart}
           onTouchStart={this.handleHoldStart}
           onTouchEnd={this.handleHoldEnd}
+          onKeyDown={this.handleHoldStart}
           onKeyUp={this.handleHoldEnd}
+          onMouseDown={this.handleHoldStart}
+          onMouseUp={this.handleHoldEnd}
           component="button"
           focusRipple={true}
-          style={{ fontSize: 64, padding: 40, textAlign: 'center', width: '100%' }}
           classes={{
-            root: classNames({
-              [this.props.classes.isHolding]: this.state && this.state.isHolding,
-            }, this.props.classes.button)
+            root: classNames(
+              { [this.props.classes.isHolding]: this.state && Boolean(this.state.holdStarted), },
+              this.props.classes.button,
+              this.props.classes.timer,
+            )
           }}
           TouchRippleProps={{
             classes: {
@@ -105,64 +125,93 @@ class Measurer extends React.Component<Props, State> {
 
   private handleButtonMount = (actions: ButtonBaseActions) => {
     actions.focusVisible();
+    this.focusVisible = actions.focusVisible;
   }
 
   // TODO: be keydown & keyup (touchstart & touchend)
   private handleHoldStart = (ev: React.SyntheticEvent) => {
+    if (this.startTime) {
+      // any key is accepted
+      this.stopTimer();
+      return;
+    }
+
     if (ev.type === 'keydown') {
       if (keycode(ev.nativeEvent) !== 'space') {
         return;
       }
     }
 
-    if (this.startTime === null) {
-      this.setState({ isHolding: true });
+    if (!this.startTime && !this.state.holdStarted) {
+      this.setState({ holdStarted: performance.now() });
     }
   }
 
   private handleHoldEnd = (ev: React.SyntheticEvent) => {
-    this.setState({ isHolding: false });
-
     if (ev.type === 'keyup') {
       if (keycode(ev.nativeEvent) !== 'space') {
         return;
       }
     }
 
-    if (this.startTime === null) {
-      const step = () => {
-        if (!this.startTime) {
-          this.startTime = performance.now();
-        }
-        const elapsed = Math.floor(performance.now() - this.startTime) / 1000;
-        this.timerRef.current!.innerText = formatDuration(elapsed);
-        this.animTimer = window.requestAnimationFrame(step);
-      };
-      step();
-    } else if (this.animTimer) {
-      window.cancelAnimationFrame(this.animTimer);
+    const { holdStarted } = this.state;
 
+    this.setState({ holdStarted: undefined });
+
+    if (!holdStarted) {
+      return;
+    }
+    console.log(performance.now(), holdStarted, performance.now() - holdStarted);
+    if (performance.now() - holdStarted <= HOLD_DURATION) {
+      return;
+    }
+
+    if (this.startTime === null) {
+      this.startTimer();
+    }
+  }
+
+  private startTimer() {
+    const step = () => {
+      if (!this.startTime) {
+        this.startTime = performance.now();
+      }
       const elapsed = Math.floor(performance.now() - this.startTime) / 1000;
       this.timerRef.current!.innerText = formatDuration(elapsed);
+      this.animTimer = window.requestAnimationFrame(step);
+    };
+    step();
+  }
 
-      // this dispatch could be heavy (as it involves generating scrambles),
-      // we prefer rendering elapsed time by delaying dispatch
-      const startTime = this.startTime;
-      setTimeout(
-        () => {
-          this.props.dispatch(
-            Actions.recordAttempt({
-              time: elapsed,
-              timestamp: performance.timing.navigationStart + startTime,
-            })
-          );
-        },
-        50,
-      );
-
-      this.animTimer = null;
-      this.startTime = null;
+  private stopTimer() {
+    if (!this.animTimer || !this.startTime) {
+      throw new Error('stopTimer: invalid state');
     }
+
+    window.cancelAnimationFrame(this.animTimer);
+
+    const elapsed = Math.floor(performance.now() - this.startTime) / 1000;
+    this.timerRef.current!.innerText = formatDuration(elapsed);
+
+    // this dispatch could be heavy (as it involves generating scrambles),
+    // we prefer rendering elapsed time by delaying dispatch
+    const startTime = this.startTime;
+    setTimeout(
+      () => {
+        this.focusVisible!();
+
+        this.props.dispatch(
+          Actions.recordAttempt({
+            time: elapsed,
+            timestamp: performance.timing.navigationStart + startTime,
+          })
+        );
+      },
+      50,
+    );
+
+    this.animTimer = null;
+    this.startTime = null;
   }
 
   private invalidateAttempt() {
@@ -179,9 +228,9 @@ class Measurer extends React.Component<Props, State> {
   }
 }
 
-function mapStateToProps({ currentAttempt }: StoreState) {
+function mapStateToProps({ current: { attempt } }: StoreState) {
   return {
-    attempt: currentAttempt,
+    attempt,
   };
 }
 

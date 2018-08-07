@@ -1,7 +1,7 @@
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
-import { applyMiddleware, compose, createStore } from 'redux';
+import { applyMiddleware, compose, createStore, Reducer } from 'redux';
 import { persistReducer, persistStore } from 'redux-persist'
 import { PersistGate } from 'redux-persist/integration/react'
 import persistStorage from 'redux-persist/lib/storage'
@@ -9,7 +9,7 @@ import thunkMiddleware from 'redux-thunk';
 
 import { Actions } from './actions';
 import Measurer from './containers/Measurer';
-import Records from './containers/Records';
+import Results from './containers/Results';
 import { reducer } from './reducers';
 import { StoreState } from './types';
 
@@ -17,20 +17,11 @@ import './App.css';
 import './index.css';
 import registerServiceWorker from './registerServiceWorker';
 
-import { GoogleAPI, GoogleAPIEvents } from './gateways/GoogleAPI';
+import { googleAPI, GoogleAPIEvents } from './gateways/GoogleAPI';
 
 import { AppBar, createMuiTheme, MuiThemeProvider, Toolbar, Typography } from '@material-ui/core';
 import { amber } from '@material-ui/core/colors'
 import { SyncRecords } from './services/SyncRecords';
-
-const googleAPI = new GoogleAPI({
-  clientId: '757485369026-rvig0ollgq7h2jkc4sjae6pdc53affgf.apps.googleusercontent.com', // TODO make configurable
-  discoveryDocs: [
-    'https://sheets.googleapis.com/$discovery/rest?version=v4',
-    'https://www.googleapis.com/discovery/v1/apis/drive/v3/rest',
-  ],
-  scope: 'https://www.googleapis.com/auth/drive.file',
-});
 
 googleAPI.on(
   GoogleAPIEvents.UPDATE_SIGNED_IN, async (signedIn) => {
@@ -45,30 +36,19 @@ googleAPI.on(
   },
 );
 
-const initialState: StoreState = {
-  auth: {
-  },
-  googleAPI,
-  results: [],
-  sync: {
-    isSyncing: false,
-  },
-};
-
 const persistConfig = {
   debug: process.env.NODE_ENV !== 'production',
   key: 'root',
   storage: persistStorage,
   transforms: [
   ],
-  whitelist: [ 'results', 'sync' ],
+  whitelist: [ 'results' ],
 };
 
-const rootReducer = persistReducer(persistConfig, reducer);
+const rootReducer: Reducer<StoreState> = persistReducer(persistConfig, reducer);
 
 const store = createStore<StoreState, Actions, {}, {}>(
   rootReducer,
-  initialState,
   (((window as any).__REDUX_DEVTOOLS_EXTENSION_COMPOSE__) || compose)(applyMiddleware(thunkMiddleware)),
 );
 
@@ -94,7 +74,7 @@ ReactDOM.render(
           </Toolbar>
         </AppBar>
         <Measurer />
-        <Records />
+        <Results />
       </PersistGate>
     </Provider>
   </MuiThemeProvider>,

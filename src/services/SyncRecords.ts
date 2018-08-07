@@ -1,5 +1,5 @@
 import { GoogleAPI } from "../gateways/GoogleAPI";
-import { Result } from "../models";
+import { Record } from "../models";
 
 /**
  * Implements records synchronization with Google Spreadsheet.
@@ -10,12 +10,12 @@ export class SyncRecords {
   constructor(private readonly googleAPI: GoogleAPI) {
   }
 
-  public async uploadRecords(spreadsheetId: string, results: Result[]) {
+  public async uploadRecords(spreadsheetId: string, results: Record[]) {
     await this.googleAPI.signIn();
     const gapi = await this.googleAPI.load();
     const values = results.map(({ scramble, time, timestamp }) => {
       return [
-        new Date(timestamp).toString(),
+        new Date(timestamp).toLocaleString(),
         time, // TODO format to duration: "mmmm:ss.000"
         scramble,
       ];

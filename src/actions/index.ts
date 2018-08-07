@@ -1,5 +1,6 @@
 import { SyncRecords } from '../services/SyncRecords';
 import { StoreState } from '../types';
+import { googleAPI } from '../gateways/GoogleAPI';
 
 import { Dispatch } from 'redux';
 import { ThunkAction } from 'redux-thunk';
@@ -7,21 +8,26 @@ import { ThunkAction } from 'redux-thunk';
 export enum ActionTypes {
   RESET_ATTEMPT = 'RESET_ATTEMPT',
   RECORD_ATTEMPT = 'RECORD_ATTEMPT',
-  DELETE_RESULT = 'DELETE_RESULT',
+  DELETE_RECORD = 'DELETE_RECORD',
   START_RECORDS_UPLOAD = 'START_RECORDS_UPLOAD',
   FINISH_RECORDS_UPLOAD = 'FINISH_RECORDS_UPLOAD',
   UPDATE_SYNC_SPREADSHEET_ID = 'SET_SYNC_SPREADSHEET_ID',
   UPDATE_IS_AUTHED = 'UPDATE_IS_AUTHED',
+  CREATE_NEW_SESSION = 'CREATE_NEW_SESSION',
+  UPDATE_SESSION_IS_SYNCED = 'UPDATE_SESSION_IS_SYNCED',
 }
 
 export const Actions = {
   recordAttempt: (payload: { time: number, timestamp: number }) => createAction(ActionTypes.RECORD_ATTEMPT, payload),
   resetAttempt: () => createAction(ActionTypes.RESET_ATTEMPT),
 
-  deleteResult: (payload: { index: number }) => createAction(ActionTypes.DELETE_RESULT, payload),
+  deleteRecord: (payload: { sessionIndex: number; recordIndex: number; }) => createAction(ActionTypes.DELETE_RECORD, payload),
 
-  finishRecordsUpload: (payload: { lastSynced?: number }) => createAction(ActionTypes.FINISH_RECORDS_UPLOAD, payload),
+  createNewSession: () => createAction(ActionTypes.CREATE_NEW_SESSION),
+
   startRecordsUpload: () => createAction(ActionTypes.START_RECORDS_UPLOAD),
+  finishRecordsUpload: () => createAction(ActionTypes.FINISH_RECORDS_UPLOAD),
+  updateSessionIsSynced: (payload: { index: number, isSynced: boolean }) => createAction(ActionTypes.UPDATE_SESSION_IS_SYNCED, payload),
   updateSyncSpreadsheetId: (payload: { spreadsheetId: string }) => createAction(ActionTypes.UPDATE_SYNC_SPREADSHEET_ID, payload),
 
   updateIsAuthed: (payload: { isAuthed: boolean }) => createAction(ActionTypes.UPDATE_IS_AUTHED, payload),
@@ -29,7 +35,7 @@ export const Actions = {
 
 export const AsyncActions = {
   syncRecords: () => async (dispatch: Dispatch<Actions>, getState: () => StoreState) => {
-    const { googleAPI, sync, results } = getState();
+    const { sync, results } = getState();
     if (sync.isSyncing) {
       return;
     }
@@ -45,21 +51,21 @@ export const AsyncActions = {
       dispatch(Actions.updateSyncSpreadsheetId({ spreadsheetId }));
     }
 
-    const resultsToSync = results.filter((result) => result.timestamp > (sync.lastSynced || 0));
-    if (resultsToSync.length === 0) {
+    const sessionsToSync = results.map(
+      ({ session, isSynced }, index) => ({ records: session.records, isSynced, index })
+    ).filter(({ isSynced }) => !isSynced);
+    if (sessionsToSync.length === 0) {
       return;
     }
 
     dispatch(Actions.startRecordsUpload());
 
-    try {
-      await service.uploadRecords(spreadsheetId, resultsToSync);
-      dispatch(Actions.finishRecordsUpload({ lastSynced: resultsToSync[resultsToSync.length - 1].timestamp }));
-    } catch (err) {
-      // tslint:disable-next-line:no-console
-      console.error('syncRecords', err);
-      dispatch(Actions.finishRecordsUpload({ lastSynced: sync.lastSynced }));
+    for (const session of sessionsToSync) {
+      await service.uploadRecords(spreadsheetId, session.records);
+      dispatch(Actions.updateSessionIsSynced({ index: session.index, isSynced: true }));
     }
+
+    dispatch(Actions.finishRecordsUpload());
   },
 }
 

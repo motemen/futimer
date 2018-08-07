@@ -1,9 +1,15 @@
-import { GoogleAPI } from '../gateways/GoogleAPI';
-import { Attempt, Result } from '../models';
+import { Attempt, Session } from '../models';
 
 export interface StoreState {
-  currentAttempt?: Attempt;
-  results: Result[];
+  current: {
+    attempt?: Attempt; // TODO simply scramble?
+    session: Session;
+  }
+
+  results: Array<{
+    isSynced: boolean;
+    session: Session;
+  }>;
 
   auth: {
     isAuthed?: boolean;
@@ -11,15 +17,6 @@ export interface StoreState {
 
   sync: {
     isSyncing: boolean;
-    lastSynced?: number;
     spreadsheetId?: string;
   };
-
-  googleAPI: GoogleAPI;
-}
-
-export enum SyncState {
-  NOT_LOGGED_IN,
-  READY,
-  IN_PROGRESS,
 }
