@@ -1,11 +1,5 @@
 import { generateScramble } from '../TNoodle';
 
-export enum AttemptState {
-  SCRAMBLING = 'SCRAMBLING',
-  READY = 'READY',
-  STARTED = 'STARTED',
-}
-
 export interface Record {
   scramble: string;
   time: number;
@@ -21,10 +15,9 @@ export interface ResultStats {
 
 export interface Session {
   name?: string;
+  game: GameType;
   records: Record[];
 }
-
-export type GameType = '333';
 
 interface ResultStatsEntry {
   best: number;
@@ -133,3 +126,11 @@ export class Attempt {
 export function createAttempt(): Attempt {
   return new Attempt();
 }
+
+export type GameType = keyof typeof GAME_CONFIGURATION;
+
+export const GAME_CONFIGURATION = {
+  '333': {
+    longName: '3x3x3',
+  },
+};

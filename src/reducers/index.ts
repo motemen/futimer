@@ -5,7 +5,7 @@ import { Actions, ActionTypes } from '../actions';
 import { createAttempt } from '../models';
 import { StoreState } from '../types';
 
-export const current: Reducer = (state: StoreState['current'] = { session: { records: [] } }, action: Actions): StoreState['current'] => {
+export const current: Reducer = (state: StoreState['current'] = { game: '333', session: { game: '333', records: [] } }, action: Actions): StoreState['current'] => {
   if (action.type === ActionTypes.RESET_ATTEMPT) {
     return {
       ...state,
@@ -110,6 +110,7 @@ export const root: Reducer = (state: StoreState, action: Actions): StoreState =>
       current: {
         ...state.current,
         session: {
+          game: state.current.game,
           records: [],
         }
       },

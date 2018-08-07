@@ -4,6 +4,7 @@ import { googleAPI } from '../gateways/GoogleAPI';
 
 import { Dispatch } from 'redux';
 import { ThunkAction } from 'redux-thunk';
+import { GameType } from '../models';
 
 export enum ActionTypes {
   RESET_ATTEMPT = 'RESET_ATTEMPT',
@@ -15,6 +16,7 @@ export enum ActionTypes {
   UPDATE_IS_AUTHED = 'UPDATE_IS_AUTHED',
   CREATE_NEW_SESSION = 'CREATE_NEW_SESSION',
   UPDATE_SESSION_IS_SYNCED = 'UPDATE_SESSION_IS_SYNCED',
+  CHANGE_GAME_TYPE = 'CHANGE_GAME_TYPE',
 }
 
 export const Actions = {
@@ -31,6 +33,8 @@ export const Actions = {
   updateSyncSpreadsheetId: (payload: { spreadsheetId: string }) => createAction(ActionTypes.UPDATE_SYNC_SPREADSHEET_ID, payload),
 
   updateIsAuthed: (payload: { isAuthed: boolean }) => createAction(ActionTypes.UPDATE_IS_AUTHED, payload),
+
+  changeGameType: (payload: { game: GameType }) => createAction(ActionTypes.CHANGE_GAME_TYPE, payload),
 };
 
 export const AsyncActions = {
@@ -52,7 +56,7 @@ export const AsyncActions = {
     }
 
     const sessionsToSync = results.map(
-      ({ session, isSynced }, index) => ({ records: session.records, isSynced, index })
+      ({ session, isSynced }, index) => ({ game: session.game, records: session.records, isSynced, index })
     ).filter(({ isSynced }) => !isSynced);
     if (sessionsToSync.length === 0) {
       return;
@@ -61,7 +65,7 @@ export const AsyncActions = {
     dispatch(Actions.startRecordsUpload());
 
     for (const session of sessionsToSync) {
-      await service.uploadRecords(spreadsheetId, session.records);
+      await service.uploadSession(spreadsheetId, session);
       dispatch(Actions.updateSessionIsSynced({ index: session.index, isSynced: true }));
     }
 

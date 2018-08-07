@@ -1,5 +1,5 @@
 import { GoogleAPI } from "../gateways/GoogleAPI";
-import { Record } from "../models";
+import { GAME_CONFIGURATION, Session } from "../models";
 
 /**
  * Implements records synchronization with Google Spreadsheet.
@@ -10,18 +10,20 @@ export class SyncRecords {
   constructor(private readonly googleAPI: GoogleAPI) {
   }
 
-  public async uploadRecords(spreadsheetId: string, results: Record[]) {
+  public async uploadSession(spreadsheetId: string, { game, records }: Session) {
     await this.googleAPI.signIn();
     const gapi = await this.googleAPI.load();
-    const values = results.map(({ scramble, time, timestamp }) => {
+    const values = records.map(({ scramble, time, timestamp }) => {
       return [
         new Date(timestamp).toLocaleString(),
         time, // TODO format to duration: "mmmm:ss.000"
         scramble,
       ];
     });
+    const gameLongName = GAME_CONFIGURATION[game].longName;
+    await this.ensureSheet(spreadsheetId, gameLongName);
     await (gapi.client.sheets.spreadsheets.values.append as any)({
-      range: 'A1',
+      range: `'${gameLongName}'!A1`,
       spreadsheetId,
       valueInputOption: 'USER_ENTERED',
     }, { values });
@@ -39,8 +41,25 @@ export class SyncRecords {
         return listResp.result.files[0];
       }
 
-      const createResp = await gapi.client.drive.files.create({});
+      const createResp = await (gapi.client.drive.files.create as any)({}, { mimeType: 'application/vnd.google-apps.spreadsheet', name: 'fuTimer records' });
       return createResp.result;
     })();
+  }
+
+  private async ensureSheet(spreadsheetId: string, name: string) {
+    const gapi = await this.googleAPI.load();
+    const sheetInfo = await gapi.client.sheets.spreadsheets.get({ spreadsheetId });
+    if (sheetInfo.result.sheets!.some(sheet => sheet.properties!.title === name)) {
+      return;
+    }
+
+    await (gapi.client.sheets.spreadsheets.batchUpdate as any)(
+      { spreadsheetId },
+      {
+        requests: [
+          { addSheet: { properties: { title: name } } }
+        ]
+      },
+    );
   }
 }
