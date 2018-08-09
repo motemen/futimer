@@ -1,5 +1,5 @@
 import { GoogleAPI } from "../gateways/GoogleAPI";
-import { GAME_CONFIGURATION, Session } from "../models";
+import { PuzzleConfiguration, Session } from "../models";
 
 /**
  * Implements records synchronization with Google Spreadsheet.
@@ -10,7 +10,7 @@ export class SyncRecords {
   constructor(private readonly googleAPI: GoogleAPI) {
   }
 
-  public async uploadSession(spreadsheetId: string, { game, records }: Session) {
+  public async uploadSession(spreadsheetId: string, { puzzle, records }: Session) {
     await this.googleAPI.signIn();
     const gapi = await this.googleAPI.load();
     const values = records.map(({ scramble, time, timestamp }) => {
@@ -20,7 +20,7 @@ export class SyncRecords {
         scramble,
       ];
     });
-    const gameLongName = GAME_CONFIGURATION[game].longName;
+    const gameLongName = PuzzleConfiguration[puzzle].longName;
     await this.ensureSheet(spreadsheetId, gameLongName);
     await (gapi.client.sheets.spreadsheets.values.append as any)({
       range: `'${gameLongName}'!A1`,

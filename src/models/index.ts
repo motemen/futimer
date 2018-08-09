@@ -1,5 +1,3 @@
-import { generateScramble } from '../TNoodle';
-
 export interface Record {
   scramble: string;
   time: number;
@@ -15,7 +13,7 @@ export interface ResultStats {
 
 export interface Session {
   name?: string;
-  game: GameType;
+  puzzle: PuzzleType;
   records: Record[];
 }
 
@@ -93,43 +91,9 @@ export function formatDuration(n: number | undefined) {
   return (mins ? `${mins}:` : '') + padLeft(secs.toString(), mins ? '0' : ' ') + '.' + (subsecs + '000').substring(0, 3);
 }
 
-export class Attempt {
-  public scramble: string | null;
+export type PuzzleType = keyof typeof PuzzleConfiguration;
 
-  // TODO: puzzleType e.g. '333'
-
-  private getScrambleP?: Promise<string>;
-
-  constructor() {
-    this.getScramble();
-  }
-
-  public getScramble(): Promise<string> {
-    if (this.scramble) {
-      return Promise.resolve(this.scramble);
-    }
-
-    return (this.getScrambleP = this.getScrambleP || generateScramble().then((scramble) => {
-      return this.scramble = scramble;
-    }));
-  }
-
-  public createResult({ time, timestamp } : { time: number, timestamp: number }): Record {
-    return {
-      scramble: this.scramble!,
-      time,
-      timestamp,
-    };
-  }
-}
-
-export function createAttempt(): Attempt {
-  return new Attempt();
-}
-
-export type GameType = keyof typeof GAME_CONFIGURATION;
-
-export const GAME_CONFIGURATION = {
+export const PuzzleConfiguration = {
   '333': {
     longName: '3x3x3',
   },

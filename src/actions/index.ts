@@ -3,11 +3,12 @@ import { StoreState } from '../types';
 import { googleAPI } from '../gateways/GoogleAPI';
 
 import { Dispatch } from 'redux';
-import { ThunkAction } from 'redux-thunk';
-import { GameType } from '../models';
+import { ThunkAction, ThunkDispatch } from 'redux-thunk';
+import { PuzzleType, Record } from '../models';
+import { generateScramble } from '../TNoodle';
 
 export enum ActionTypes {
-  RESET_ATTEMPT = 'RESET_ATTEMPT',
+  UPDATE_SCRAMBLE = 'UPDATE_SCRAMBLE',
   RECORD_ATTEMPT = 'RECORD_ATTEMPT',
   DELETE_RECORD = 'DELETE_RECORD',
   START_RECORDS_UPLOAD = 'START_RECORDS_UPLOAD',
@@ -16,12 +17,13 @@ export enum ActionTypes {
   UPDATE_IS_AUTHED = 'UPDATE_IS_AUTHED',
   CREATE_NEW_SESSION = 'CREATE_NEW_SESSION',
   UPDATE_SESSION_IS_SYNCED = 'UPDATE_SESSION_IS_SYNCED',
-  CHANGE_GAME_TYPE = 'CHANGE_GAME_TYPE',
+  CHANGE_PUZZLE_TYPE = 'CHANGE_PUZZLE_TYPE',
 }
 
 export const Actions = {
-  recordAttempt: (payload: { time: number, timestamp: number }) => createAction(ActionTypes.RECORD_ATTEMPT, payload),
-  resetAttempt: () => createAction(ActionTypes.RESET_ATTEMPT),
+  recordAttempt: (payload: { record: Record }) => createAction(ActionTypes.RECORD_ATTEMPT, payload),
+
+  updateScramble: (payload: { scramble: string }) => createAction(ActionTypes.UPDATE_SCRAMBLE, payload),
 
   deleteRecord: (payload: { sessionIndex: number; recordIndex: number; }) => createAction(ActionTypes.DELETE_RECORD, payload),
 
@@ -34,7 +36,7 @@ export const Actions = {
 
   updateIsAuthed: (payload: { isAuthed: boolean }) => createAction(ActionTypes.UPDATE_IS_AUTHED, payload),
 
-  changeGameType: (payload: { game: GameType }) => createAction(ActionTypes.CHANGE_GAME_TYPE, payload),
+  changePuzzleType: (payload: { puzzle: PuzzleType }) => createAction(ActionTypes.CHANGE_PUZZLE_TYPE, payload),
 };
 
 export const AsyncActions = {
@@ -56,7 +58,7 @@ export const AsyncActions = {
     }
 
     const sessionsToSync = results.map(
-      ({ session, isSynced }, index) => ({ game: session.game, records: session.records, isSynced, index })
+      ({ session, isSynced }, index) => ({ ...session, isSynced, index })
     ).filter(({ isSynced }) => !isSynced);
     if (sessionsToSync.length === 0) {
       return;
@@ -71,6 +73,19 @@ export const AsyncActions = {
 
     dispatch(Actions.finishRecordsUpload());
   },
+
+  resetScramble: () => (dispatch: Dispatch<Actions>) => {
+    setImmediate(() => {
+      generateScramble().then((scramble) => {
+        dispatch(Actions.updateScramble({ scramble }));
+      });
+    });
+  },
+  
+  commitRecord: (payload: { record: Record }) => (dispatch: Dispatch<Actions> & ThunkDispatch<StoreState, {}, Actions>, getState: () => StoreState) => {
+    dispatch(Actions.recordAttempt(payload));
+    dispatch(AsyncActions.resetScramble());
+  }
 }
 
 export type Actions = ReturnType<typeof Actions[keyof typeof Actions]>;

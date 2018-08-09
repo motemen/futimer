@@ -8,8 +8,9 @@ import persistStorage from 'redux-persist/lib/storage'
 import thunkMiddleware from 'redux-thunk';
 
 import { Actions } from './actions';
-import Measurer from './containers/Measurer';
-import Results from './containers/Results';
+import Bar from './components/Bar';
+import Measurer from './components/Measurer';
+import Results from './components/Results';
 import { reducer } from './reducers';
 import { StoreState } from './types';
 
@@ -19,8 +20,7 @@ import registerServiceWorker from './registerServiceWorker';
 
 import { googleAPI, GoogleAPIEvents } from './gateways/GoogleAPI';
 
-import { AppBar, createMuiTheme, MuiThemeProvider, Toolbar, Typography } from '@material-ui/core';
-import { amber } from '@material-ui/core/colors'
+import { createMuiTheme, MuiThemeProvider } from '@material-ui/core';
 import { SyncRecords } from './services/SyncRecords';
 
 googleAPI.on(
@@ -58,7 +58,7 @@ const persister = persistStore(store);
 
 const theme = createMuiTheme({
   palette: {
-    primary: amber,
+    primary: { main: '#ef0' }
   },
 });
 
@@ -66,13 +66,7 @@ ReactDOM.render(
   <MuiThemeProvider theme={theme}>
     <Provider store={store}>
       <PersistGate persistor={persister}>
-        <AppBar position="static">
-          <Toolbar>
-            <Typography variant="title" color="inherit">
-              fuTimer
-            </Typography>
-          </Toolbar>
-        </AppBar>
+        <Bar />
         <Measurer />
         <Results />
       </PersistGate>

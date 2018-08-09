@@ -13,6 +13,7 @@ interface OwnProps {
   resultIndex: number;
   session: Session;
   expanded?: boolean;
+  actionButton?: React.ReactNode;
 }
 
 interface State {
@@ -32,6 +33,11 @@ const Styles = (theme: Theme) => createStyles({
     textOverflow: 'ellipsis',
     whiteSpace: 'nowrap',
   },
+  summaryContent: {
+    '& > :last-child': {
+      paddingRight: 0,
+    },
+  },
   timestamp: {
   },
   title: {
@@ -50,8 +56,8 @@ class SessionRecords extends React.Component<OwnProps & { dispatch: ThunkDispatc
 
     const stats = calcStats(session.records);
 
-    return <ExpansionPanel defaultExpanded={this.props.expanded}>
-      <ExpansionPanelSummary>
+    return <ExpansionPanel expanded={this.props.expanded}>
+      <ExpansionPanelSummary classes={{ content: this.props.classes.summaryContent}}>
         <Hidden xsDown={true}>
           <Typography className={this.props.classes.title}>
             {resultIndex === -1 ? "Current Session" : session.name}
@@ -62,6 +68,8 @@ class SessionRecords extends React.Component<OwnProps & { dispatch: ThunkDispatc
           {' '}
           Curr ao5: {formatDuration((stats.averageOf[5] || {}).current) || 'N/A'}
         </Typography>
+        <div style={{ flex: 1 }} />
+        { this.props.actionButton }
       </ExpansionPanelSummary>
       <ExpansionPanelDetails>
         <Table>

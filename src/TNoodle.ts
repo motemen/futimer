@@ -1,5 +1,3 @@
-import 'tnoodle/tnoodle';
-
 interface TNoodlePuzzles {
   '333': TNoodlePuzzle;
 }
@@ -10,13 +8,15 @@ interface TNoodlePuzzle {
 
 const TNOODLE_LOAD_TIMEOUT = 30;
 
-const puzzlesLoaded: Promise<TNoodlePuzzles> = new Promise((resolve, reject) => {
+const puzzlesLoaded: Promise<TNoodlePuzzles> = new Promise<TNoodlePuzzles>((resolve, reject) => {
   (window as any).puzzlesLoaded = resolve;
 
   setTimeout(
     () => reject(`TNoodle load timeout after ${TNOODLE_LOAD_TIMEOUT}s`),
     TNOODLE_LOAD_TIMEOUT * 1000
   );
+
+  import('tnoodle/tnoodle');
 });
 
 export function generateScramble(puzzleType: keyof TNoodlePuzzles = '333'): Promise<string> {

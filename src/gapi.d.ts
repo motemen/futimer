@@ -3,3 +3,6 @@ declare namespace gapi {
     export var sheets: { spreadsheets: typeof gapi.client.spreadsheets; };
   }
 }
+
+declare module 'tnoodle/tnoodle' {
+}

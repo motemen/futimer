@@ -25,14 +25,14 @@ interface OwnProps {
   session: Session;
 }
 
-type Props = OwnProps & { dispatch: ThunkDispatch<StoreState, undefined, Actions> } & WithStyles<typeof RecordsStyles>;
+type Props = OwnProps & { dispatch: ThunkDispatch<StoreState, undefined, Actions> } & WithStyles<typeof Styles>;
 
 interface State {
   recordMenuAnchor?: HTMLElement;
   activeRecordIndex?: number;
 }
 
-const RecordsStyles = (theme: Theme) => createStyles({
+const Styles = (theme: Theme) => createStyles({
   '@keyframes spin-l': {
     from: { transform: 'rotate(0deg)' },
     to: { transform: 'rotate(-360deg)' },
@@ -43,6 +43,9 @@ const RecordsStyles = (theme: Theme) => createStyles({
   root: {
     margin: theme.spacing.unit * 2,
     overflowX: 'auto',
+    [theme.breakpoints.down('sm')]: {
+      margin: 0,
+    },
   },
   spacer: {
     flex: '1',
@@ -56,8 +59,12 @@ class Results extends React.Component<Props, State> {
   public state: Readonly<State> = {};
 
   public render() {
-    return (
-      <Paper>
+    return <div>
+      <Paper className={this.props.classes.root}>
+        <SessionRecords session={this.props.session} resultIndex={-1} expanded={true}
+          actionButton={ <IconButton onClick={this.handleNewSessionClick}><Icon>save</Icon></IconButton> } />
+      </Paper>,
+      <Paper className={this.props.classes.root}>
         <Toolbar>
           <Typography variant="headline">Results</Typography>
           <div className={this.props.classes.spacer} />
@@ -77,16 +84,14 @@ class Results extends React.Component<Props, State> {
                   : <Icon color="disabled">cloud_off</Icon>
             }
           </IconButton>
-          <IconButton onClick={this.handleNewSessionClick}><Icon>add</Icon></IconButton>
         </Toolbar>
-        <SessionRecords session={this.props.session} resultIndex={-1} expanded={true} />
         {
           this.props.results.map(({ session, stats }, resultIndex) => {
             return <SessionRecords session={session} resultIndex={resultIndex} key={resultIndex} />
           })
         }
       </Paper>
-    );
+    </div>;
   }
 
   private handleSyncClick = () => {
@@ -119,4 +124,4 @@ function mapStateToProps({ current: { session }, results, auth: { isAuthed }, sy
   };
 }
 
-export default connect(mapStateToProps)(withStyles(RecordsStyles)(Results));
+export default connect(mapStateToProps)(withStyles(Styles)(Results));

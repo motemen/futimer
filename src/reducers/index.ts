@@ -2,30 +2,27 @@ import { Reducer, combineReducers } from 'redux';
 import reduceReducers from 'reduce-reducers';
 
 import { Actions, ActionTypes } from '../actions';
-import { createAttempt } from '../models';
 import { StoreState } from '../types';
 
-export const current: Reducer = (state: StoreState['current'] = { game: '333', session: { game: '333', records: [] } }, action: Actions): StoreState['current'] => {
-  if (action.type === ActionTypes.RESET_ATTEMPT) {
+export const current: Reducer = (state: StoreState['current'] = { session: { puzzle: '333', records: [] } }, action: Actions): StoreState['current'] => {
+  if (action.type === ActionTypes.UPDATE_SCRAMBLE) { 
     return {
       ...state,
-      attempt: createAttempt(),
+      scramble: action.payload.scramble,
     };
   }
 
   if (action.type === ActionTypes.RECORD_ATTEMPT) {
-    const { attempt } = state;
-
-    if (!attempt) {
+    if (!state.scramble) {
       return state;
     }
 
     return {
       ...state,
-      attempt: createAttempt(),
+      scramble: undefined,
       session: {
         ...state.session,
-        records: [...state.session.records, attempt.createResult(action.payload)]
+        records: [ ...state.session.records, action.payload.record ]
       },
     };
   }
@@ -102,26 +99,50 @@ export const auth: Reducer = (state: StoreState['auth'] = {}, action: Actions): 
 };
 
 export const root: Reducer = (state: StoreState, action: Actions): StoreState => {
-  console.log(state, action);
-
   if (action.type === ActionTypes.CREATE_NEW_SESSION) {
+    const currentSession = state.current.session;
+
     return {
       ...state,
       current: {
         ...state.current,
         session: {
-          game: state.current.game,
+          puzzle: currentSession.puzzle,
+          records: [],
+        }
+      },
+      results: currentSession.records.length ? [
+        {
+          isSynced: false,
+          session: {
+            ...currentSession,
+            name: new Date(currentSession.records[0].timestamp).toLocaleString(),
+          },
+        },
+        ...state.results,
+      ] : state.results,
+    };
+  }
+
+  if (action.type === ActionTypes.CHANGE_PUZZLE_TYPE) {
+    return {
+      ...state,
+      current: {
+        ...state.current,
+        session: {
+          puzzle: action.payload.puzzle,
           records: [],
         }
       },
       results: [
-        ...state.results,
         {
           isSynced: false,
           session: state.current.session,
         },
+        ...state.results,
       ]
     };
+
   }
 
   return state;
