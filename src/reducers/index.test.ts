@@ -1,5 +1,5 @@
 import { reducer } from '.';
-import { Actions } from '../actions';
+import { Action } from '../actions';
 
 test('createNewSession', () => {
   let state = {
@@ -12,7 +12,7 @@ test('createNewSession', () => {
     auth: {},
     results: [],
   }
-  state = reducer(state, Actions.createNewSession());
+  state = reducer(state, Action.createNewSession());
   expect(state).toEqual(
     {
       current: {

@@ -1,6 +1,6 @@
-interface TNoodlePuzzles {
-  '333': TNoodlePuzzle;
-}
+import { PuzzleConfiguration } from './models';
+
+type TNoodlePuzzles = Record<keyof typeof PuzzleConfiguration, TNoodlePuzzle>;
 
 interface TNoodlePuzzle {
   generateScramble(): string;
@@ -19,6 +19,6 @@ const puzzlesLoaded: Promise<TNoodlePuzzles> = new Promise<TNoodlePuzzles>((reso
   import('tnoodle/tnoodle');
 });
 
-export function generateScramble(puzzleType: keyof TNoodlePuzzles = '333'): Promise<string> {
+export function generateScramble(puzzleType: keyof TNoodlePuzzles): Promise<string> {
   return puzzlesLoaded.then((puzzle) => puzzle[puzzleType].generateScramble());
 };

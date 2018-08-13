@@ -7,8 +7,8 @@ import { PersistGate } from 'redux-persist/integration/react'
 import persistStorage from 'redux-persist/lib/storage'
 import thunkMiddleware from 'redux-thunk';
 
-import { Actions } from './actions';
-import Bar from './components/Bar';
+import { Action } from './actions';
+import NavBar from './components/NavBar';
 import Measurer from './components/Measurer';
 import Results from './components/Results';
 import { reducer } from './reducers';
@@ -25,13 +25,13 @@ import { SyncRecords } from './services/SyncRecords';
 
 googleAPI.on(
   GoogleAPIEvents.UPDATE_SIGNED_IN, async (signedIn) => {
-    store.dispatch(Actions.updateIsAuthed({ isAuthed: signedIn }))
+    store.dispatch(Action.updateIsAuthed({ isAuthed: signedIn }))
 
     const { sync } = store.getState();
     if (!sync.spreadsheetId) {
       const syncRecords = new SyncRecords(googleAPI);
       const file = await syncRecords.getFile()
-      store.dispatch(Actions.updateSyncSpreadsheetId({ spreadsheetId: file.id! }));
+      store.dispatch(Action.updateSyncSpreadsheetId({ spreadsheetId: file.id! }));
     }
   },
 );
@@ -42,12 +42,12 @@ const persistConfig = {
   storage: persistStorage,
   transforms: [
   ],
-  whitelist: [ 'results' ],
+  whitelist: [ 'current', 'results' ],
 };
 
 const rootReducer: Reducer<StoreState> = persistReducer(persistConfig, reducer);
 
-const store = createStore<StoreState, Actions, {}, {}>(
+const store = createStore<StoreState, Action, {}, {}>(
   rootReducer,
   (((window as any).__REDUX_DEVTOOLS_EXTENSION_COMPOSE__) || compose)(applyMiddleware(thunkMiddleware)),
 );
@@ -66,7 +66,7 @@ ReactDOM.render(
   <MuiThemeProvider theme={theme}>
     <Provider store={store}>
       <PersistGate persistor={persister}>
-        <Bar />
+        <NavBar />
         <Measurer />
         <Results />
       </PersistGate>

@@ -20,7 +20,7 @@ export enum ActionTypes {
   CHANGE_PUZZLE_TYPE = 'CHANGE_PUZZLE_TYPE',
 }
 
-export const Actions = {
+export const Action = {
   recordAttempt: (payload: { record: Record }) => createAction(ActionTypes.RECORD_ATTEMPT, payload),
 
   updateScramble: (payload: { scramble: string }) => createAction(ActionTypes.UPDATE_SCRAMBLE, payload),
@@ -39,8 +39,8 @@ export const Actions = {
   changePuzzleType: (payload: { puzzle: PuzzleType }) => createAction(ActionTypes.CHANGE_PUZZLE_TYPE, payload),
 };
 
-export const AsyncActions = {
-  syncRecords: () => async (dispatch: Dispatch<Actions>, getState: () => StoreState) => {
+export const AsyncAction = {
+  syncRecords: () => async (dispatch: Dispatch<Action>, getState: () => StoreState) => {
     const { sync, results } = getState();
     if (sync.isSyncing) {
       return;
@@ -54,7 +54,7 @@ export const AsyncActions = {
     if (!spreadsheetId) {
       const file = await service.getFile();
       spreadsheetId = file.id!;
-      dispatch(Actions.updateSyncSpreadsheetId({ spreadsheetId }));
+      dispatch(Action.updateSyncSpreadsheetId({ spreadsheetId }));
     }
 
     const sessionsToSync = results.map(
@@ -64,42 +64,50 @@ export const AsyncActions = {
       return;
     }
 
-    dispatch(Actions.startRecordsUpload());
+    dispatch(Action.startRecordsUpload());
 
     for (const session of sessionsToSync) {
       await service.uploadSession(spreadsheetId, session);
-      dispatch(Actions.updateSessionIsSynced({ index: session.index, isSynced: true }));
+      dispatch(Action.updateSessionIsSynced({ index: session.index, isSynced: true }));
     }
 
-    dispatch(Actions.finishRecordsUpload());
+    dispatch(Action.finishRecordsUpload());
   },
 
-  resetScramble: () => (dispatch: Dispatch<Actions>) => {
+  resetScramble: () => (dispatch: Dispatch<Action>, getState: () => StoreState) => {
+    const { current: { session: { puzzleType } } } = getState();
     setImmediate(() => {
-      generateScramble().then((scramble) => {
-        dispatch(Actions.updateScramble({ scramble }));
+      generateScramble(puzzleType).then((scramble) => {
+        dispatch(Action.updateScramble({ scramble }));
       });
     });
   },
   
-  commitRecord: (payload: { record: Record }) => (dispatch: Dispatch<Actions> & ThunkDispatch<StoreState, {}, Actions>, getState: () => StoreState) => {
-    dispatch(Actions.recordAttempt(payload));
-    dispatch(AsyncActions.resetScramble());
+  commitRecord: (payload: { record: Record }) => (dispatch: ThunkDispatch<StoreState, never, Action>, getState: () => StoreState) => {
+    dispatch(Action.recordAttempt(payload));
+    dispatch(AsyncAction.resetScramble());
+  },
+
+  changePuzzleType: (payload: { puzzle: PuzzleType }) => (dispatch: ThunkDispatch<StoreState, never, Action>) => {
+    dispatch(Action.changePuzzleType(payload));
+    dispatch(AsyncAction.resetScramble());
   }
 }
 
-export type Actions = ReturnType<typeof Actions[keyof typeof Actions]>;
+export type Action = ReturnType<typeof Action[keyof typeof Action]>;
 
-export type AsyncActions = ThunkAction<void, StoreState, undefined, Actions>;
+export type AsyncAction = ThunkAction<void, StoreState, never, Action>;
 
-export type PayloadType<A extends typeof Actions[keyof typeof Actions]> = ReturnType<A> extends { payload: infer P } ? P : never;
+export type Dispatch = ThunkDispatch<StoreState, never, Action>;
 
-function createAction<T extends string>(type: T): Action<T, never>
-function createAction<T extends string, P>(type: T, payload: P): Action<T, P>;
+export type PayloadType<A extends typeof Action[keyof typeof Action]> = ReturnType<A> extends { payload: infer P } ? P : never;
+
+function createAction<T extends string>(type: T): ActionBase<T, never>
+function createAction<T extends string, P>(type: T, payload: P): ActionBase<T, P>;
 function createAction<T extends string, P>(type: T, payload?: P) {
   return payload ? { type, payload } : { type };
 }
-export interface Action<T, P> {
+export interface ActionBase<T, P> {
   type: T;
   payload: P;
 }

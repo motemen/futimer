@@ -1,18 +1,16 @@
 import * as React from 'react';
 
 import { connect } from 'react-redux';
-import { ThunkDispatch } from 'redux-thunk';
 
 import { ClickAwayListener, createStyles, ExpansionPanel, ExpansionPanelDetails, ExpansionPanelSummary, Hidden, Icon, IconButton, Menu, MenuItem, Table, TableBody, TableCell, TableHead, TableRow, Theme, Typography, withStyles, WithStyles } from '@material-ui/core';
 
-import { Actions } from '../actions';
-import { calcStats, formatDuration, Session } from '../models';
-import { StoreState } from '../types';
+import { Action, Dispatch } from '../actions';
+import { calcStats, formatDuration, Session, PuzzleConfiguration } from '../models';
 
 interface OwnProps {
   resultIndex: number;
   session: Session;
-  expanded?: boolean;
+  defaultExpanded?: boolean;
   actionButton?: React.ReactNode;
 }
 
@@ -39,34 +37,49 @@ const Styles = (theme: Theme) => createStyles({
     },
   },
   timestamp: {
+    [theme.breakpoints.down('xs')]: {
+      display: 'none',
+    },
+  },
+  number: {
+
   },
   title: {
     flexBasis: '20%',
   },
 });
 
-class SessionRecords extends React.Component<OwnProps & { dispatch: ThunkDispatch<StoreState, undefined, Actions> } & WithStyles<typeof Styles>, State> {
+class SessionRecords extends React.Component<OwnProps & { dispatch: Dispatch } & WithStyles<typeof Styles>, State> {
   public state: Readonly<State> = {};
 
   public render() {
-    const {
-      resultIndex,
-      session,
-    } = this.props;
+    const stats = calcStats(this.props.session.records);
 
-    const stats = calcStats(session.records);
-
-    return <ExpansionPanel expanded={this.props.expanded}>
+    return <ExpansionPanel expanded={this.props.defaultExpanded}>
       <ExpansionPanelSummary classes={{ content: this.props.classes.summaryContent}}>
         <Hidden xsDown={true}>
           <Typography className={this.props.classes.title}>
-            {resultIndex === -1 ? "Current Session" : session.name}
+            {this.props.resultIndex === -1 ? "Current Session" : this.props.session.name}
+            {' '}
+            ({PuzzleConfiguration[this.props.session.puzzleType].longName})
           </Typography>
         </Hidden>
-        <Typography className={this.props.classes.summary}>
-          Best ao5: {formatDuration((stats.averageOf[5] || {}).best) || 'N/A'}
-          {' '}
-          Curr ao5: {formatDuration((stats.averageOf[5] || {}).current) || 'N/A'}
+        <Typography className={this.props.classes.summary} component="div">
+          {
+            [100, 12, 5].map(n => {
+              const st = stats.averageOf[n];
+              if (!st) {
+                return null;
+              }
+
+              return <div key={n}>
+                <Hidden xsDown={true}>Best ao{n}: {formatDuration(st.best) || 'N/A'}</Hidden>
+                {' '}
+                <Hidden xsDown={true}>Curr </Hidden>
+                <span>ao{n}: {formatDuration(st.current) || 'N/A'}</span>
+              </div>;
+            })
+          }
         </Typography>
         <div style={{ flex: 1 }} />
         { this.props.actionButton }
@@ -75,6 +88,7 @@ class SessionRecords extends React.Component<OwnProps & { dispatch: ThunkDispatc
         <Table>
           <TableHead>
             <TableRow>
+              <TableCell className={this.props.classes.number}>#</TableCell>
               <TableCell className={this.props.classes.timestamp}>Timestamp</TableCell>
               <TableCell className={this.props.classes.scramble}>Scramble</TableCell>
               <TableCell>Time</TableCell>
@@ -83,14 +97,15 @@ class SessionRecords extends React.Component<OwnProps & { dispatch: ThunkDispatc
           </TableHead>
           <TableBody>
             {
-              session.records.slice().reverse().map((record, recordIndex) => {
+              this.props.session.records.slice().reverse().map((record, recordIndex) => {
                 return (
                   <TableRow key={recordIndex}>
+                    <TableCell className={this.props.classes.number}>{this.props.session.records.length - recordIndex}</TableCell>
                     <TableCell className={this.props.classes.timestamp}>{this.formatTimestamp(record.timestamp)}</TableCell>
                     <TableCell className={this.props.classes.scramble}><code>{record.scramble}</code></TableCell>
                     <TableCell numeric={true}><code>{formatDuration(record.time)}</code></TableCell>
                     <TableCell padding="checkbox">
-                      <IconButton onClick={this.handleRecordMoreClick(session.records.length - (recordIndex + 1))}>
+                      <IconButton onClick={this.handleRecordMoreClick(this.props.session.records.length - (recordIndex + 1))}>
                         <Icon>more_vert</Icon>
                       </IconButton>
                     </TableCell>
@@ -121,7 +136,7 @@ class SessionRecords extends React.Component<OwnProps & { dispatch: ThunkDispatc
 
   private handleDeleteRecordClick = () => {
     this.props.dispatch(
-      Actions.deleteRecord({
+      Action.deleteRecord({
         sessionIndex: this.props.resultIndex,
         recordIndex: this.state.activeRecordIndex!,
       }),

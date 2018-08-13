@@ -10,17 +10,18 @@ export class SyncRecords {
   constructor(private readonly googleAPI: GoogleAPI) {
   }
 
-  public async uploadSession(spreadsheetId: string, { puzzle, records }: Session) {
+  public async uploadSession(spreadsheetId: string, { name, puzzleType, records }: Session) {
     await this.googleAPI.signIn();
     const gapi = await this.googleAPI.load();
     const values = records.map(({ scramble, time, timestamp }) => {
       return [
+        name,
         new Date(timestamp).toLocaleString(),
-        time, // TODO format to duration: "mmmm:ss.000"
+        time,
         scramble,
       ];
     });
-    const gameLongName = PuzzleConfiguration[puzzle].longName;
+    const gameLongName = PuzzleConfiguration[puzzleType].longName;
     await this.ensureSheet(spreadsheetId, gameLongName);
     await (gapi.client.sheets.spreadsheets.values.append as any)({
       range: `'${gameLongName}'!A1`,
@@ -41,7 +42,10 @@ export class SyncRecords {
         return listResp.result.files[0];
       }
 
-      const createResp = await (gapi.client.drive.files.create as any)({}, { mimeType: 'application/vnd.google-apps.spreadsheet', name: 'fuTimer records' });
+      const createResp = await (gapi.client.drive.files.create as any)({}, {
+        mimeType: 'application/vnd.google-apps.spreadsheet',
+        name: 'Speedcubing records',
+      });
       return createResp.result;
     })();
   }

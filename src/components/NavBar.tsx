@@ -2,21 +2,28 @@ import * as React from 'react';
 import { connect } from 'react-redux';
 
 import { AppBar, Toolbar, Typography, Select } from '@material-ui/core';
+
 import { PuzzleType, PuzzleConfiguration } from '../models';
 import { StoreState } from '../types';
+import { AsyncAction, Dispatch } from '../actions';
 
-interface Props {
+import Logo from '../favicon.png';
+
+interface OwnProps {
   puzzleType: PuzzleType;
 }
 
-class Bar extends React.Component<Props> {
+type Props = OwnProps & { dispatch: Dispatch };
+
+class NavBar extends React.Component<Props> {
   public render() {
     return <AppBar position="static" elevation={0}>
       <Toolbar>
         <Typography variant="title" color="inherit" style={{ textTransform: 'uppercase', marginRight: 20 }}>
-          &#x25F3; fuTimer
+          <img src={Logo} width="16" height="16" style={{ marginRight: 4 }} />
+          fuTimer
         </Typography>
-        <Select value={this.props.puzzleType} native={true}>
+        <Select value={this.props.puzzleType} native={true} onChange={this.handlePuzzleTypeChange}>
           {
             Object.keys(PuzzleConfiguration).sort().map((key) => {
               return <option value={key} key={key}>{PuzzleConfiguration[key].longName}</option>;
@@ -26,12 +33,16 @@ class Bar extends React.Component<Props> {
       </Toolbar>
     </AppBar>;
   }
+
+  private handlePuzzleTypeChange = (ev: React.ChangeEvent<HTMLSelectElement>) => {
+    this.props.dispatch(AsyncAction.changePuzzleType({ puzzle: ev.target.value as PuzzleType }));
+  }
 }
 
-function mapStateToProps({ current: { session: { puzzle } } }: StoreState) {
+function mapStateToProps({ current: { session: { puzzleType } } }: StoreState) {
   return {
-    puzzleType: puzzle
+    puzzleType,
   };
 }
 
-export default connect(mapStateToProps)(Bar);
+export default connect(mapStateToProps)(NavBar);

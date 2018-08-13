@@ -2,22 +2,21 @@ import * as React from 'react';
 import { connect } from 'react-redux';
 
 import * as keycode from 'keycode';
-
 import classNames from 'classnames';
 
 import { ButtonBase, createStyles, Theme, WithStyles, withStyles } from '@material-ui/core';
 import { green, red } from '@material-ui/core/colors';
 
 import { ButtonBaseActions } from '@material-ui/core/ButtonBase';
-import { AsyncActions } from '../actions';
-import { formatDuration } from '../models';
+import { AsyncAction, Dispatch } from '../actions';
+import { formatDuration, Record } from '../models';
 import { StoreState } from '../types';
 
 interface OwnProps {
   scramble?: string;
 }
 
-type Props = OwnProps & { dispatch: any; } & WithStyles<typeof Styles>;
+type Props = OwnProps & { dispatch: Dispatch } & WithStyles<typeof Styles>;
 
 interface State {
   holdStarted?: number;
@@ -31,8 +30,11 @@ const Styles = (theme: Theme) => createStyles({
     to: { color: green.A700 },
   },
   button: {
+    color: theme.palette.grey["300"],
+    transition: 'color 0.25s',
     '&:focus': {
       backgroundColor: '#eee',
+      color: theme.palette.text.primary,
     },
   },
   buttonChildPulsate: {
@@ -45,6 +47,8 @@ const Styles = (theme: Theme) => createStyles({
   scramble: {
     fontSize: theme.typography.headline.fontSize,
     marginTop: theme.spacing.unit * 3,
+    marginLeft: theme.spacing.unit,
+    marginRight: theme.spacing.unit,
     textAlign: 'center',
     transition: 'color 0.5s',
   },
@@ -70,6 +74,7 @@ class Measurer extends React.Component<Props, State> {
   private animTimer: number | null = null;
   private timerRef: React.RefObject<HTMLPreElement>;
   private prevScramble?: string;
+  private record: Record | null;
 
   private focusVisible?: () => void;
 
@@ -78,12 +83,21 @@ class Measurer extends React.Component<Props, State> {
     this.timerRef = React.createRef();
   }
 
+  public handleWindowFocus = () => {
+    this.focusVisible!();
+  }
+
   public componentWillMount() {
-    this.props.dispatch(AsyncActions.resetScramble());
+    this.props.dispatch(AsyncAction.resetScramble());
+  }
+
+  public componentWillUnmount() {
+    window.removeEventListener('focus', this.handleWindowFocus);
   }
 
   public componentDidMount() {
     this.timerRef.current!.innerText = formatDuration(0);
+    window.addEventListener('focus', this.handleWindowFocus, { passive: true });
   }
 
   public componentWillReceiveProps() {
@@ -137,6 +151,10 @@ class Measurer extends React.Component<Props, State> {
       return;
     }
 
+    if (this.record) {
+      return;
+    }
+
     if (ev.type === 'keydown') {
       if (keycode(ev.nativeEvent) !== 'space') {
         return;
@@ -153,6 +171,13 @@ class Measurer extends React.Component<Props, State> {
       if (keycode(ev.nativeEvent) !== 'space') {
         return;
       }
+    }
+
+    if (this.record) {
+      const record = { ...this.record };
+      this.props.dispatch(AsyncAction.commitRecord({ record }));
+      this.record = null;
+      return;
     }
 
     const { holdStarted } = this.state;
@@ -172,6 +197,8 @@ class Measurer extends React.Component<Props, State> {
   }
 
   private startTimer() {
+    this.record = null;
+
     const step = () => {
       if (!this.startTime) {
         this.startTime = performance.now();
@@ -195,23 +222,11 @@ class Measurer extends React.Component<Props, State> {
 
     // this dispatch could be heavy (as it involves generating scrambles),
     // we prefer rendering elapsed time by delaying dispatch
-    const startTime = this.startTime;
-    setTimeout(
-      () => {
-        this.focusVisible!();
-
-        this.props.dispatch(
-          AsyncActions.commitRecord({
-            record: {
-              scramble: this.props.scramble!,
-              time: elapsed,
-              timestamp: performance.timing.navigationStart + startTime,
-            }
-          })
-        );
-      },
-      550,
-    );
+    this.record = {
+      scramble: this.props.scramble!,
+      time: elapsed,
+      timestamp: performance.timing.navigationStart + this.startTime,
+    };
 
     this.animTimer = null;
     this.startTime = null;

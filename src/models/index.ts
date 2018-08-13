@@ -13,7 +13,7 @@ export interface ResultStats {
 
 export interface Session {
   name?: string;
-  puzzle: PuzzleType;
+  puzzleType: PuzzleType;
   records: Record[];
 }
 
@@ -33,7 +33,7 @@ export function calcStats(results?: Record[]): ResultStats {
   const scores = results.map((result) => result.time);
   return {
     averageOf: [5, 12, 100].reduce((a, n) => {
-      const aa = scores.length >= n ? variousAveragesOf(n, scores) : {};
+      const aa = scores.length >= n ? variousAveragesOf(n, scores) : null;
       return { ...a, [n]: aa };
     }, {}),
     single: {
@@ -88,13 +88,17 @@ export function formatDuration(n: number | undefined) {
     return c + s;
   };
   
-  return (mins ? `${mins}:` : '') + padLeft(secs.toString(), mins ? '0' : ' ') + '.' + (subsecs + '000').substring(0, 3);
+  return (mins ? `${mins}:` : '') + padLeft(secs.toString(), mins ? '0' : ' ') + '.' + (subsecs + '00').substring(0, 2);
 }
 
 export type PuzzleType = keyof typeof PuzzleConfiguration;
 
 export const PuzzleConfiguration = {
-  '333': {
-    longName: '3x3x3',
-  },
+  '222': { longName: '2x2x2' },
+  '333': { longName: '3x3x3' },
+  '444': { longName: '4x4x4' },
+  'minx': { longName: 'Megaminx' },
+  'pyram': { longName: 'Pyraminx' },
+  'skewb': { longName: 'Skewb' },
+  'sq1': { longName: 'Square-1' },
 };

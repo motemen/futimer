@@ -1,13 +1,12 @@
 import * as React from 'react';
 
 import { connect } from 'react-redux';
-import { ThunkDispatch } from 'redux-thunk';
 
 import { createStyles, Icon, IconButton, Paper, Theme, Toolbar, Typography, withStyles, WithStyles } from '@material-ui/core';
 
 import classNames from 'classnames';
 
-import { Actions, AsyncActions } from '../actions';
+import { Action, AsyncAction, Dispatch } from '../actions';
 import { calcStats, ResultStats, Session } from '../models';
 import { StoreState } from '../types';
 import SessionRecords from './SessionRecords';
@@ -25,7 +24,7 @@ interface OwnProps {
   session: Session;
 }
 
-type Props = OwnProps & { dispatch: ThunkDispatch<StoreState, undefined, Actions> } & WithStyles<typeof Styles>;
+type Props = OwnProps & { dispatch: Dispatch; } & WithStyles<typeof Styles>;
 
 interface State {
   recordMenuAnchor?: HTMLElement;
@@ -61,12 +60,12 @@ class Results extends React.Component<Props, State> {
   public render() {
     return <div>
       <Paper className={this.props.classes.root}>
-        <SessionRecords session={this.props.session} resultIndex={-1} expanded={true}
-          actionButton={ <IconButton onClick={this.handleNewSessionClick}><Icon>save</Icon></IconButton> } />
-      </Paper>,
+        <SessionRecords session={this.props.session} resultIndex={-1} defaultExpanded={true}
+          actionButton={<IconButton onClick={this.handleNewSessionClick} disabled={this.props.session.records.length === 0}><Icon>save</Icon></IconButton> } />
+      </Paper>
       <Paper className={this.props.classes.root}>
         <Toolbar>
-          <Typography variant="headline">Results</Typography>
+          <Typography variant="headline">History</Typography>
           <div className={this.props.classes.spacer} />
           {
             this.props.isAuthed && this.props.spreadsheetId
@@ -100,11 +99,11 @@ class Results extends React.Component<Props, State> {
       return;
     }
 
-    this.props.dispatch(AsyncActions.syncRecords());
+    this.props.dispatch(AsyncAction.syncRecords());
   }
 
   private handleNewSessionClick = () => {
-    this.props.dispatch(Actions.createNewSession());
+    this.props.dispatch(Action.createNewSession());
   }
 
   private handleOpenSheetClick = () => {

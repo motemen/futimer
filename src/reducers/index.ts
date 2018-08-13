@@ -1,10 +1,34 @@
 import { Reducer, combineReducers } from 'redux';
 import reduceReducers from 'reduce-reducers';
 
-import { Actions, ActionTypes } from '../actions';
+import { Action, ActionTypes } from '../actions';
 import { StoreState } from '../types';
+import { PuzzleType, Session } from '../models';
 
-export const current: Reducer = (state: StoreState['current'] = { session: { puzzle: '333', records: [] } }, action: Actions): StoreState['current'] => {
+const initialSession: Session = {
+  puzzleType: '333',
+  records: [],
+};
+
+const deleteRecord = (session: Session, index: number): Session => {
+  const records = session.records;
+  records.splice(index, 1)
+  return {
+    ...session,
+    records,
+  };
+}
+
+export const current: Reducer = (state: StoreState['current'] = { session: initialSession }, action: Action): StoreState['current'] => {
+  if (action.type === ActionTypes.DELETE_RECORD) {
+    if (action.payload.sessionIndex === -1) {
+      return {
+        ...state,
+        session: deleteRecord(state.session, action.payload.recordIndex),
+      };
+    }
+  }
+
   if (action.type === ActionTypes.UPDATE_SCRAMBLE) { 
     return {
       ...state,
@@ -30,7 +54,7 @@ export const current: Reducer = (state: StoreState['current'] = { session: { puz
   return state;
 }
 
-export const sync: Reducer = (state: StoreState['sync'] = { isSyncing: false }, action: Actions): StoreState['sync'] => {
+export const sync: Reducer = (state: StoreState['sync'] = { isSyncing: false }, action: Action): StoreState['sync'] => {
   if (action.type === ActionTypes.START_RECORDS_UPLOAD) {
     return {
       ...state,
@@ -55,19 +79,19 @@ export const sync: Reducer = (state: StoreState['sync'] = { isSyncing: false }, 
   return state;
 };
 
-const results: Reducer = (state: StoreState['results'] = [], action: Actions): StoreState['results'] => {
+const results: Reducer = (state: StoreState['results'] = [], action: Action): StoreState['results'] => {
   if (action.type === ActionTypes.DELETE_RECORD) {
     return state.map((result, i) => {
       if (i === action.payload.sessionIndex) {
-        const records = result.session.records;
-        records.splice(action.payload.recordIndex, 1);
         return {
           ...result,
-          records,
+          session: deleteRecord(result.session, action.payload.recordIndex),
         };
       }
 
       return result;
+    }).filter(({ session: { records } }) => {
+      return records.length > 0;
     });
   }
 
@@ -87,7 +111,7 @@ const results: Reducer = (state: StoreState['results'] = [], action: Actions): S
   return state;
 };
 
-export const auth: Reducer = (state: StoreState['auth'] = {}, action: Actions): StoreState['auth'] => {
+export const auth: Reducer = (state: StoreState['auth'] = {}, action: Action): StoreState['auth'] => {
   if (action.type === ActionTypes.UPDATE_IS_AUTHED) {
     return {
       ...state,
@@ -98,20 +122,20 @@ export const auth: Reducer = (state: StoreState['auth'] = {}, action: Actions): 
   return state;
 };
 
-export const root: Reducer = (state: StoreState, action: Actions): StoreState => {
-  if (action.type === ActionTypes.CREATE_NEW_SESSION) {
+function saveSession(state: StoreState, puzzleType?: PuzzleType): StoreState {
     const currentSession = state.current.session;
 
     return {
       ...state,
       current: {
         ...state.current,
+        scramble: (puzzleType || currentSession.puzzleType) === currentSession.puzzleType ? state.current.scramble : undefined,
         session: {
-          puzzle: currentSession.puzzle,
+          puzzleType: puzzleType || currentSession.puzzleType,
           records: [],
         }
       },
-      results: currentSession.records.length ? [
+      results: currentSession.records.length === 0 ? state.results : [
         {
           isSynced: false,
           session: {
@@ -120,29 +144,17 @@ export const root: Reducer = (state: StoreState, action: Actions): StoreState =>
           },
         },
         ...state.results,
-      ] : state.results,
+      ],
     };
+}
+
+export const root: Reducer = (state: StoreState, action: Action): StoreState => {
+  if (action.type === ActionTypes.CREATE_NEW_SESSION) {
+    return saveSession(state);
   }
 
   if (action.type === ActionTypes.CHANGE_PUZZLE_TYPE) {
-    return {
-      ...state,
-      current: {
-        ...state.current,
-        session: {
-          puzzle: action.payload.puzzle,
-          records: [],
-        }
-      },
-      results: [
-        {
-          isSynced: false,
-          session: state.current.session,
-        },
-        ...state.results,
-      ]
-    };
-
+    return saveSession(state, action.payload.puzzle);
   }
 
   return state;
