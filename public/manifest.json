@@ -3,13 +3,13 @@
   "name": "fuTimer: Speedcubing timer",
   "icons": [
     {
-      "src": "favicon.png",
-      "sizes": "64x64 32x32 24x24 16x16",
+      "src": "app.png",
+      "sizes": "256x256 64x64 32x32 24x24 16x16",
       "type": "image/x-icon"
     }
   ],
   "start_url": "./index.html",
   "display": "standalone",
-  "theme_color": "#000000",
+  "theme_color": "#eeff00",
   "background_color": "#ffffff"
 }

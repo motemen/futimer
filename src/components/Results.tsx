@@ -2,7 +2,7 @@ import * as React from 'react';
 
 import { connect } from 'react-redux';
 
-import { createStyles, Icon, IconButton, Paper, Theme, Toolbar, Typography, withStyles, WithStyles } from '@material-ui/core';
+import { createStyles, Icon, IconButton, Paper, Theme, Toolbar, Typography, withStyles, WithStyles, Tooltip } from '@material-ui/core';
 
 import classNames from 'classnames';
 
@@ -43,7 +43,9 @@ const Styles = (theme: Theme) => createStyles({
     margin: theme.spacing.unit * 2,
     overflowX: 'auto',
     [theme.breakpoints.down('sm')]: {
-      margin: 0,
+      marginLeft: 0,
+      marginRight: 0,
+      borderRadius: 0,
     },
   },
   spacer: {
@@ -59,25 +61,25 @@ class Results extends React.Component<Props, State> {
 
   public render() {
     return <div>
-      <Paper className={this.props.classes.root}>
+      <Paper className={this.props.classes.root} elevation={1}>
         <SessionRecords session={this.props.session} resultIndex={-1} defaultExpanded={true}
-          actionButton={<IconButton onClick={this.handleNewSessionClick} disabled={this.props.session.records.length === 0}><Icon>save</Icon></IconButton> } />
+          actionButton={ <Tooltip title="Save records"><IconButton style={{marginTop: -16, marginBottom: -16}} onClick={this.handleNewSessionClick} disabled={this.props.session.records.length === 0}><Icon>save</Icon></IconButton></Tooltip> } />
       </Paper>
-      <Paper className={this.props.classes.root}>
+      <Paper className={this.props.classes.root} elevation={1}>
         <Toolbar>
           <Typography variant="headline">History</Typography>
           <div className={this.props.classes.spacer} />
           {
             this.props.isAuthed && this.props.spreadsheetId
-              ? <IconButton onClick={this.handleOpenSheetClick}><Icon>open_in_new</Icon></IconButton>
+              ? <Tooltip title="Open spreadsheet"><IconButton onClick={this.handleOpenSheetClick}><Icon>open_in_new</Icon></IconButton></Tooltip>
               : null
           }
           <IconButton onClick={this.handleSyncClick}>
             {
               this.props.isAuthed
                 ? this.props.syncDone
-                  ? <Icon>cloud_done</Icon>
-                  : <Icon className={classNames({ [this.props.classes.isSyncing]: this.props.isSyncing })}>sync</Icon>
+                  ? <Tooltip title="Synced all records"><Icon>cloud_done</Icon></Tooltip>
+                  : <Tooltip title="Sync records"><Icon className={classNames({ [this.props.classes.isSyncing]: this.props.isSyncing })}>sync</Icon></Tooltip>
                 : this.props.isAuthed === false
                   ? <Icon>cloud_off</Icon>
                   : <Icon color="disabled">cloud_off</Icon>

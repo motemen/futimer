@@ -42,10 +42,15 @@ const Styles = (theme: Theme) => createStyles({
     },
   },
   number: {
-
   },
   title: {
     flexBasis: '20%',
+  },
+  root: {
+    paddingRight: '16px !important',
+    [theme.breakpoints.up('sm')]: {
+      paddingRight: '24px !important',
+    },
   },
 });
 
@@ -55,8 +60,8 @@ class SessionRecords extends React.Component<OwnProps & { dispatch: Dispatch } &
   public render() {
     const stats = calcStats(this.props.session.records);
 
-    return <ExpansionPanel expanded={this.props.defaultExpanded}>
-      <ExpansionPanelSummary classes={{ content: this.props.classes.summaryContent}}>
+    return <ExpansionPanel defaultExpanded={this.props.defaultExpanded}>
+      <ExpansionPanelSummary classes={{ content: this.props.classes.summaryContent, root: this.props.classes.root }}>
         <Hidden xsDown={true}>
           <Typography className={this.props.classes.title}>
             {this.props.resultIndex === -1 ? "Current Session" : this.props.session.name}
@@ -82,9 +87,9 @@ class SessionRecords extends React.Component<OwnProps & { dispatch: Dispatch } &
           }
         </Typography>
         <div style={{ flex: 1 }} />
-        { this.props.actionButton }
+        {this.props.actionButton}
       </ExpansionPanelSummary>
-      <ExpansionPanelDetails>
+      <ExpansionPanelDetails style={{ padding: 0 }}>
         <Table>
           <TableHead>
             <TableRow>

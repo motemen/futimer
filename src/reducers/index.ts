@@ -1,9 +1,10 @@
 import { Reducer, combineReducers } from 'redux';
-import reduceReducers from 'reduce-reducers';
 
 import { Action, ActionTypes } from '../actions';
 import { StoreState } from '../types';
 import { PuzzleType, Session } from '../models';
+
+import reduceReducers from 'reduce-reducers';
 
 const initialSession: Session = {
   puzzleType: '333',

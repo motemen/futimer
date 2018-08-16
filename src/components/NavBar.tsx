@@ -7,7 +7,7 @@ import { PuzzleType, PuzzleConfiguration } from '../models';
 import { StoreState } from '../types';
 import { AsyncAction, Dispatch } from '../actions';
 
-import Logo from '../favicon.png';
+import Logo from '../app.png';
 
 interface OwnProps {
   puzzleType: PuzzleType;
