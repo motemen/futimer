@@ -102,15 +102,16 @@ class SessionRecords extends React.Component<OwnProps & { dispatch: Dispatch } &
           </TableHead>
           <TableBody>
             {
-              this.props.session.records.slice().reverse().map((record, recordIndex) => {
+              this.props.session.records.slice().reverse().map((record, i) => {
+                const recordIndex = this.props.session.records.length - (i + 1);
                 return (
                   <TableRow key={recordIndex}>
-                    <TableCell className={this.props.classes.number}>{this.props.session.records.length - recordIndex}</TableCell>
+                    <TableCell className={this.props.classes.number}>{recordIndex + 1}</TableCell>
                     <TableCell className={this.props.classes.timestamp}>{this.formatTimestamp(record.timestamp)}</TableCell>
                     <TableCell className={this.props.classes.scramble}><code>{record.scramble}</code></TableCell>
                     <TableCell numeric={true}><code>{formatDuration(record.time)}</code></TableCell>
                     <TableCell padding="checkbox">
-                      <IconButton onClick={this.handleRecordMoreClick(this.props.session.records.length - (recordIndex + 1))}>
+                      <IconButton onClick={this.handleRecordMoreClick(recordIndex)}>
                         <Icon>more_vert</Icon>
                       </IconButton>
                     </TableCell>

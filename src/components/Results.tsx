@@ -41,6 +41,7 @@ const Styles = (theme: Theme) => createStyles({
   },
   root: {
     margin: theme.spacing.unit * 2,
+    marginTop: 0,
     overflowX: 'auto',
     [theme.breakpoints.down('sm')]: {
       marginLeft: 0,

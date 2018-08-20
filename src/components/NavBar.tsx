@@ -23,7 +23,7 @@ class NavBar extends React.Component<Props> {
           <img src={Logo} width="16" height="16" style={{ marginRight: 4 }} />
           fuTimer
         </Typography>
-        <Select value={this.props.puzzleType} native={true} onChange={this.handlePuzzleTypeChange}>
+        <Select native value={this.props.puzzleType} onChange={this.handlePuzzleTypeChange}>
           {
             Object.keys(PuzzleConfiguration).sort().map((key) => {
               return <option value={key} key={key}>{PuzzleConfiguration[key].longName}</option>;

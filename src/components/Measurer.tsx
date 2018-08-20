@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { SyntheticEvent } from 'react';
 import { connect } from 'react-redux';
 
 import * as keycode from 'keycode';
@@ -61,6 +62,9 @@ const Styles = (theme: Theme) => createStyles({
     margin: `${theme.spacing.unit * 3}px 0`,
     textAlign: 'center',
     width: '100%',
+    touchAction: 'none',
+    WebkitTouchCallout: 'none',
+    userSelect: 'none',
   },
   isLoading: {
     color: theme.palette.grey["300"]
@@ -132,11 +136,16 @@ class Measurer extends React.Component<Props, State> {
               childPulsate: this.props.classes.buttonChildPulsate
             }
           }}
+          onContextMenuCapture={this.handleTimerContextMenu}
         >
           <pre ref={this.timerRef}>{' '}</pre>
         </ButtonBase>
       </div>
     );
+  }
+
+  private handleTimerContextMenu = (ev: SyntheticEvent) => {
+    ev.preventDefault();
   }
 
   private handleButtonMount = (actions: ButtonBaseActions) => {

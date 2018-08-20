@@ -65,7 +65,7 @@ export function variousAveragesOf(n: number, scores: number[]): ResultStatsEntry
 
   return {
     best,
-    current: averageOf(scores.slice(-5)),
+    current: averageOf(scores.slice(-n)),
     worst,
   };
 }
@@ -94,11 +94,11 @@ export function formatDuration(n: number | undefined) {
 export type PuzzleType = keyof typeof PuzzleConfiguration;
 
 export const PuzzleConfiguration = {
-  '222': { longName: '2x2x2' },
-  '333': { longName: '3x3x3' },
-  '444': { longName: '4x4x4' },
-  'minx': { longName: 'Megaminx' },
-  'pyram': { longName: 'Pyraminx' },
-  'skewb': { longName: 'Skewb' },
-  'sq1': { longName: 'Square-1' },
+  '222':   { longName: '2x2x2',    tnoodleImpl: 'TwoByTwoCubePuzzle' },
+  '333':   { longName: '3x3x3',    tnoodleImpl: 'ThreeByThreeCubePuzzle' },
+  '444':   { longName: '4x4x4',    tnoodleImpl: 'FourByFourCubePuzzle' },
+  'minx':  { longName: 'Megaminx', tnoodleImpl: 'MegaminxPuzzle' },
+  'pyram': { longName: 'Pyraminx', tnoodleImpl: 'PyraminxPuzzle' },
+  'skewb': { longName: 'Skewb',    tnoodleImpl: 'SkewbPuzzle' },
+  'sq1':   { longName: 'Square-1', tnoodleImpl: 'SquareOnePuzzle' },
 };

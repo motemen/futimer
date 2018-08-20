@@ -20,8 +20,9 @@ import registerServiceWorker from './registerServiceWorker';
 
 import { googleAPI, GoogleAPIEvents } from './gateways/GoogleAPI';
 
-import { createMuiTheme, MuiThemeProvider } from '@material-ui/core';
+import { createMuiTheme, MuiThemeProvider, Grid, Hidden } from '@material-ui/core';
 import { SyncRecords } from './services/SyncRecords';
+import Tools from './components/Tools';
 
 googleAPI.on(
   GoogleAPIEvents.UPDATE_SIGNED_IN, async (signedIn) => {
@@ -68,7 +69,16 @@ ReactDOM.render(
       <PersistGate persistor={persister}>
         <NavBar />
         <Measurer />
-        <Results />
+        <Grid container>
+          <Grid item xs={12} md={8}>
+            <Results />
+          </Grid>
+          <Hidden smDown>
+            <Grid item md={4}>
+              <Tools />
+            </Grid>
+          </Hidden>
+        </Grid>
       </PersistGate>
     </Provider>
   </MuiThemeProvider>,
