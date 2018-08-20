@@ -2,7 +2,7 @@ import { Reducer, combineReducers } from 'redux';
 
 import { Action, ActionTypes } from '../actions';
 import { StoreState } from '../types';
-import { PuzzleType, Session } from '../models';
+import { PuzzleType, Session, ToolType } from '../models';
 
 import reduceReducers from 'reduce-reducers';
 
@@ -149,6 +149,17 @@ function saveSession(state: StoreState, puzzleType?: PuzzleType): StoreState {
     };
 }
 
+export const tool: Reducer = (state: StoreState['tool'] = { selected: ToolType.Stats }, action: Action): StoreState['tool'] => {
+  if (action.type === ActionTypes.CHANGE_TOOL_TYPE) {
+    return {
+      ...state,
+      selected: action.payload.toolType,
+    };
+  }
+
+  return state;
+};
+
 export const root: Reducer = (state: StoreState, action: Action): StoreState => {
   if (action.type === ActionTypes.CREATE_NEW_SESSION) {
     return saveSession(state);
@@ -163,5 +174,5 @@ export const root: Reducer = (state: StoreState, action: Action): StoreState => 
 
 export const reducer = reduceReducers(
   root,
-  combineReducers({ current, sync, auth, results }),
+  combineReducers({ current, sync, auth, results, tool }),
 );

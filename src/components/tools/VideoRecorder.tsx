@@ -15,6 +15,10 @@ export default class VideoRecorder extends React.Component {
     this.start();
   }
 
+  public componentWillUnmount() {
+    this.stop();
+  }
+
   public async open() {
     this.stream = await navigator.mediaDevices.getUserMedia({ video: true });
     this.videoRef.current!.src = URL.createObjectURL(this.stream);

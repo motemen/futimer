@@ -4,7 +4,7 @@ import { googleAPI } from '../gateways/GoogleAPI';
 
 import { Dispatch } from 'redux';
 import { ThunkAction, ThunkDispatch } from 'redux-thunk';
-import { PuzzleType, Record } from '../models';
+import { PuzzleType, Record, ToolType } from '../models';
 import { generateScramble } from '../TNoodle';
 
 export enum ActionTypes {
@@ -18,6 +18,7 @@ export enum ActionTypes {
   CREATE_NEW_SESSION = 'CREATE_NEW_SESSION',
   UPDATE_SESSION_IS_SYNCED = 'UPDATE_SESSION_IS_SYNCED',
   CHANGE_PUZZLE_TYPE = 'CHANGE_PUZZLE_TYPE',
+  CHANGE_TOOL_TYPE = 'CHANGE_TOOL_TYPE',
 }
 
 export const Action = {
@@ -37,6 +38,8 @@ export const Action = {
   updateIsAuthed: (payload: { isAuthed: boolean }) => createAction(ActionTypes.UPDATE_IS_AUTHED, payload),
 
   changePuzzleType: (payload: { puzzle: PuzzleType }) => createAction(ActionTypes.CHANGE_PUZZLE_TYPE, payload),
+
+  changeToolType: (payload: { toolType: ToolType }) => createAction(ActionTypes.CHANGE_TOOL_TYPE, payload),
 };
 
 export const AsyncAction = {

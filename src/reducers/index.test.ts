@@ -1,6 +1,7 @@
 import { reducer } from '.';
 import { Action } from '../actions';
 import { StoreState } from '../types';
+import { ToolType } from '../models';
 
 test('createNewSession', () => {
   let state: StoreState = {
@@ -19,6 +20,7 @@ test('createNewSession', () => {
     sync: { isSyncing: false },
     auth: {},
     results: [],
+    tool: { selected: ToolType.Stats },
   };
   state = reducer(state, Action.createNewSession());
   expect(state).toEqual(

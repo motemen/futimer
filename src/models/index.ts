@@ -102,3 +102,9 @@ export const PuzzleConfiguration = {
   'skewb': { longName: 'Skewb',    tnoodleImpl: 'SkewbPuzzle' },
   'sq1':   { longName: 'Square-1', tnoodleImpl: 'SquareOnePuzzle' },
 };
+
+export enum ToolType {
+  Recorder = 'recorder',
+  Stats = 'stats',
+  Preview = 'preview',
+}

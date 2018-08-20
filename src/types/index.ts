@@ -1,4 +1,4 @@
-import { Session } from '../models';
+import { Session, ToolType } from '../models';
 
 export interface StoreState {
   current: {
@@ -18,5 +18,9 @@ export interface StoreState {
   sync: {
     isSyncing: boolean;
     spreadsheetId?: string;
+  };
+
+  tool: {
+    selected: ToolType;
   };
 }
