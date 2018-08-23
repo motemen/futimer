@@ -1,4 +1,4 @@
-import { Session, ToolType } from '../models';
+import { Session, ToolType } from "../models";
 
 export interface StoreState {
   current: {

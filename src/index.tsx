@@ -43,7 +43,7 @@ const persistConfig = {
   storage: persistStorage,
   transforms: [
   ],
-  whitelist: [ 'current', 'results' ],
+  whitelist: [ 'current', 'results', 'tool' ],
 };
 
 const rootReducer: Reducer<StoreState> = persistReducer(persistConfig, reducer);

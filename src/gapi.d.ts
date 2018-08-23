@@ -1,10 +1,11 @@
 declare namespace gapi {
   namespace client {
-    export var sheets: { spreadsheets: typeof gapi.client.spreadsheets; };
+    export var sheets: { spreadsheets: typeof gapi.client.spreadsheets };
   }
 }
 
-declare module 'tnoodle/tnoodle' {
+declare module "tnoodle/tnoodle" {
+
 }
 
 declare var tnoodlejs: any;
@@ -13,7 +14,7 @@ declare var puzzle: any;
 
 // https://developer.mozilla.org/en-US/docs/Web/API/MediaRecorder
 declare class MediaRecorder {
-  constructor(stream: MediaStream)
+  constructor(stream: MediaStream);
 
   public stop(): void;
 
@@ -23,5 +24,5 @@ declare class MediaRecorder {
   start(): void;
   stop(): void;
 
-  state: 'inactive' | 'recording' | 'paused';
+  state: "inactive" | "recording" | "paused";
 }
