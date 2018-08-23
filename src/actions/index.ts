@@ -19,6 +19,7 @@ export enum ActionTypes {
   UPDATE_SESSION_IS_SYNCED = 'UPDATE_SESSION_IS_SYNCED',
   CHANGE_PUZZLE_TYPE = 'CHANGE_PUZZLE_TYPE',
   CHANGE_TOOL_TYPE = 'CHANGE_TOOL_TYPE',
+  CHANGE_IS_PLAYING = 'CHANGE_IS_PLAYING',
 }
 
 export const Action = {
@@ -40,6 +41,8 @@ export const Action = {
   changePuzzleType: (payload: { puzzle: PuzzleType }) => createAction(ActionTypes.CHANGE_PUZZLE_TYPE, payload),
 
   changeToolType: (payload: { toolType: ToolType }) => createAction(ActionTypes.CHANGE_TOOL_TYPE, payload),
+
+  changeIsPlaying: (payload: { isPlaying: boolean }) => createAction(ActionTypes.CHANGE_IS_PLAYING, payload),
 };
 
 export const AsyncAction = {

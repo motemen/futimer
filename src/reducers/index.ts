@@ -161,6 +161,13 @@ export const tool: Reducer = (state: StoreState['tool'] = { selected: ToolType.S
 };
 
 export const root: Reducer = (state: StoreState, action: Action): StoreState => {
+  if (action.type === ActionTypes.CHANGE_IS_PLAYING) {
+    return {
+      ...state,
+      isPlaying: action.payload.isPlaying,
+    };
+  }
+
   if (action.type === ActionTypes.CREATE_NEW_SESSION) {
     return saveSession(state);
   }

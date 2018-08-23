@@ -16,7 +16,7 @@ const puzzlesLoaded: Promise<TNoodlePuzzles> = new Promise<TNoodlePuzzles>((reso
     TNOODLE_LOAD_TIMEOUT * 1000
   );
 
-  import('tnoodle/tnoodle');
+  import('tnoodle/tnoodle').catch(reject);
 });
 
 export function generateScramble(puzzleType: keyof TNoodlePuzzles): Promise<string> {

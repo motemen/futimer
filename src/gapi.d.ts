@@ -18,7 +18,10 @@ declare class MediaRecorder {
   public stop(): void;
 
   ondataavailable?: (e: any) => void;
+  onstop?: (e: any) => void;
 
   start(): void;
   stop(): void;
+
+  state: 'inactive' | 'recording' | 'paused';
 }

@@ -4,7 +4,7 @@ export interface StoreState {
   current: {
     scramble?: string;
     session: Session;
-  }
+  };
 
   results: Array<{
     isSynced: boolean;
@@ -23,4 +23,6 @@ export interface StoreState {
   tool: {
     selected: ToolType;
   };
+
+  isPlaying?: boolean;
 }
