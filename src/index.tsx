@@ -7,7 +7,7 @@ import { PersistGate } from 'redux-persist/integration/react'
 import persistStorage from 'redux-persist/lib/storage'
 import thunkMiddleware from 'redux-thunk';
 
-import { Action } from './actions';
+import { Actions, Action } from './actions';
 import NavBar from './components/NavBar';
 import Measurer from './components/Measurer';
 import Results from './components/Results';
@@ -26,13 +26,13 @@ import Tools from './components/Tools';
 
 googleAPI.on(
   GoogleAPIEvents.UPDATE_SIGNED_IN, async (signedIn) => {
-    store.dispatch(Action.updateIsAuthed({ isAuthed: signedIn }))
+    store.dispatch(Actions.updateIsAuthed({ isAuthed: signedIn }))
 
     const { sync } = store.getState();
     if (!sync.spreadsheetId) {
       const syncRecords = new SyncRecords(googleAPI);
       const file = await syncRecords.getFile()
-      store.dispatch(Action.updateSyncSpreadsheetId({ spreadsheetId: file.id! }));
+      store.dispatch(Actions.updateSyncSpreadsheetId({ spreadsheetId: file.id! }));
     }
   },
 );

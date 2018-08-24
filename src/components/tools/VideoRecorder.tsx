@@ -4,9 +4,16 @@ import { StoreState } from "../../types";
 
 interface Props {
   isPlaying?: boolean;
+  scramble?: string;
 }
 
 class VideoRecorder extends React.Component<Props> {
+  public open = once(async () => {
+    this.stream = await navigator.mediaDevices.getUserMedia({ video: true });
+    this.videoRef.current!.src = URL.createObjectURL(this.stream);
+    this.videoRef.current!.play();
+  });
+
   private recorder?: MediaRecorder;
   private chunks?: BlobPart[];
   private videoRef: React.RefObject<HTMLVideoElement>;
@@ -34,17 +41,16 @@ class VideoRecorder extends React.Component<Props> {
   }
 
   public componentWillUnmount() {
-    this.stop();
-  }
-
-  public async open() {
-    this.stream = await navigator.mediaDevices.getUserMedia({ video: true });
-    this.videoRef.current!.src = URL.createObjectURL(this.stream);
-    this.videoRef.current!.play();
+    this.close();
   }
 
   public close() {
-    this.videoRef.current!.pause();
+    if (this.stream) {
+      for (const v of this.stream.getVideoTracks()) {
+        v.stop();
+      }
+      this.stream = undefined;
+    }
   }
 
   public async start() {
@@ -65,30 +71,36 @@ class VideoRecorder extends React.Component<Props> {
   public stop() {
     if (this.recorder) {
       this.recorder.stop();
-      this.close();
     }
   }
 
   public download() {
-    const blob = new Blob(this.chunks) //  type : 'video/webm'
+    const blob = new Blob(this.chunks);
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = 'record.webm'; // TODO: name
-    a.style.display = 'none';
-    document.body.appendChild(a);
+    a.download = `${this.props.scramble || 'record'}.webm`;
     a.click();
   }
 
   public render() {
     return <div>
-      <video ref={this.videoRef} style={{ maxWidth: '100%' }} />
+      <video muted ref={this.videoRef} style={{ maxWidth: '100%' }} />
     </div>
   }
 }
 
-function mapStateToProps({ isPlaying }: StoreState) {
-  return { isPlaying };
+function mapStateToProps({ isPlaying, current: { scramble } }: StoreState) {
+  return { isPlaying, scramble };
+}
+
+function once<T>(func: () => Promise<T>): () => Promise<T> {
+  let promise: Promise<T> | null = null;
+
+  return async () => {
+    promise = promise || func();
+    return await promise;
+  };
 }
 
 export default connect(mapStateToProps)(VideoRecorder);

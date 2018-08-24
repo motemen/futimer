@@ -9,7 +9,7 @@ import { ButtonBase, createStyles, Theme, WithStyles, withStyles } from '@materi
 import { green, red } from '@material-ui/core/colors';
 
 import { ButtonBaseActions } from '@material-ui/core/ButtonBase';
-import { AsyncAction, Dispatch, Action } from '../actions';
+import { Actions, AsyncAction, Dispatch } from '../actions';
 import { formatDuration, Record } from '../models';
 import { StoreState } from '../types';
 
@@ -218,7 +218,7 @@ class Measurer extends React.Component<Props, State> {
     };
     step();
 
-    this.props.dispatch(Action.changeIsPlaying({ isPlaying: true }));
+    this.props.dispatch(Actions.changeIsPlaying({ isPlaying: true }));
   }
 
   private stopTimer() {
@@ -242,7 +242,7 @@ class Measurer extends React.Component<Props, State> {
     this.animTimer = null;
     this.startTime = null;
 
-    this.props.dispatch(Action.changeIsPlaying({ isPlaying: false }));
+    this.props.dispatch(Actions.changeIsPlaying({ isPlaying: false }));
   }
 }
 

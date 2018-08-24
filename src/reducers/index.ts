@@ -1,6 +1,11 @@
 import { Reducer, combineReducers } from "redux";
 
-import { Action, ActionTypes } from "../actions";
+import {
+  reducerWithInitialState,
+  reducerWithoutInitialState
+} from "typescript-fsa-reducers";
+
+import { Actions } from "../actions";
 import { StoreState } from "../types";
 import { PuzzleType, Session, ToolType } from "../models";
 
@@ -20,27 +25,25 @@ const deleteRecord = (session: Session, index: number): Session => {
   };
 };
 
-export const current: Reducer = (
-  state: StoreState["current"] = { session: initialSession },
-  action: Action
-): StoreState["current"] => {
-  if (action.type === ActionTypes.DELETE_RECORD) {
-    if (action.payload.sessionIndex === -1) {
+export const current = reducerWithInitialState<StoreState["current"]>({
+  session: initialSession
+})
+  .case(Actions.deleteRecord, (state, { sessionIndex, recordIndex }) => {
+    if (sessionIndex === -1) {
       return {
         ...state,
-        session: deleteRecord(state.session, action.payload.recordIndex)
+        session: deleteRecord(state.session, recordIndex)
       };
     }
-  }
-
-  if (action.type === ActionTypes.UPDATE_SCRAMBLE) {
+    return state;
+  })
+  .case(Actions.updateScramble, (state, { scramble }) => {
     return {
       ...state,
-      scramble: action.payload.scramble
+      scramble
     };
-  }
-
-  if (action.type === ActionTypes.RECORD_ATTEMPT) {
+  })
+  .case(Actions.recordAttempt, (state, { record }) => {
     if (!state.scramble) {
       return state;
     }
@@ -50,53 +53,41 @@ export const current: Reducer = (
       scramble: undefined,
       session: {
         ...state.session,
-        records: [...state.session.records, action.payload.record]
+        records: [...state.session.records, record]
       }
     };
-  }
+  });
 
-  return state;
-};
-
-export const sync: Reducer = (
-  state: StoreState["sync"] = { isSyncing: false },
-  action: Action
-): StoreState["sync"] => {
-  if (action.type === ActionTypes.START_RECORDS_UPLOAD) {
+export const sync = reducerWithInitialState<StoreState["sync"]>({
+  isSyncing: false
+})
+  .case(Actions.startRecordsUpload, state => {
     return {
       ...state,
       isSyncing: true
     };
-  }
-
-  if (action.type === ActionTypes.FINISH_RECORDS_UPLOAD) {
+  })
+  .case(Actions.finishRecordsUpload, state => {
     return {
       ...state,
       isSyncing: false
     };
-  }
-
-  if (action.type === ActionTypes.UPDATE_SYNC_SPREADSHEET_ID) {
+  })
+  .case(Actions.updateSyncSpreadsheetId, (state, { spreadsheetId }) => {
     return {
       ...state,
-      spreadsheetId: action.payload.spreadsheetId
+      spreadsheetId
     };
-  }
+  });
 
-  return state;
-};
-
-const results: Reducer = (
-  state: StoreState["results"] = [],
-  action: Action
-): StoreState["results"] => {
-  if (action.type === ActionTypes.DELETE_RECORD) {
+const results = reducerWithInitialState<StoreState["results"]>([])
+  .case(Actions.deleteRecord, (state, { sessionIndex, recordIndex }) => {
     return state
       .map((result, i) => {
-        if (i === action.payload.sessionIndex) {
+        if (i === sessionIndex) {
           return {
             ...result,
-            session: deleteRecord(result.session, action.payload.recordIndex)
+            session: deleteRecord(result.session, recordIndex)
           };
         }
 
@@ -105,37 +96,29 @@ const results: Reducer = (
       .filter(({ session: { records } }) => {
         return records.length > 0;
       });
-  }
-
-  if (action.type === ActionTypes.UPDATE_SESSION_IS_SYNCED) {
+  })
+  .case(Actions.updateSessionIsSynced, (state, { index, isSynced }) => {
     return state.map((result, i) => {
-      if (i === action.payload.index) {
+      if (i === index) {
         return {
           ...result,
-          isSynced: action.payload.isSynced
+          isSynced
         };
       }
 
       return result;
     });
-  }
+  });
 
-  return state;
-};
-
-export const auth: Reducer = (
-  state: StoreState["auth"] = {},
-  action: Action
-): StoreState["auth"] => {
-  if (action.type === ActionTypes.UPDATE_IS_AUTHED) {
+export const auth = reducerWithInitialState<StoreState["auth"]>({}).case(
+  Actions.updateIsAuthed,
+  (state, { isAuthed }) => {
     return {
       ...state,
-      isAuthed: action.payload.isAuthed
+      isAuthed
     };
   }
-
-  return state;
-};
+);
 
 function saveSession(state: StoreState, puzzleType?: PuzzleType): StoreState {
   const currentSession = state.current.session;
@@ -171,43 +154,30 @@ function saveSession(state: StoreState, puzzleType?: PuzzleType): StoreState {
   };
 }
 
-export const tool: Reducer = (
-  state: StoreState["tool"] = { selected: ToolType.Stats },
-  action: Action
-): StoreState["tool"] => {
-  if (action.type === ActionTypes.CHANGE_TOOL_TYPE) {
+export const tool = reducerWithInitialState<StoreState["tool"]>({
+  selected: ToolType.Stats
+}).case(Actions.changeToolType, (state, { toolType }) => {
+  return {
+    ...state,
+    selected: toolType
+  };
+});
+
+export const root = reducerWithoutInitialState<StoreState>()
+  .case(Actions.changeIsPlaying, (state, { isPlaying }) => {
     return {
       ...state,
-      selected: action.payload.toolType
+      isPlaying
     };
-  }
-
-  return state;
-};
-
-export const root: Reducer = (
-  state: StoreState,
-  action: Action
-): StoreState => {
-  if (action.type === ActionTypes.CHANGE_IS_PLAYING) {
-    return {
-      ...state,
-      isPlaying: action.payload.isPlaying
-    };
-  }
-
-  if (action.type === ActionTypes.CREATE_NEW_SESSION) {
+  })
+  .case(Actions.createNewSession, state => {
     return saveSession(state);
-  }
-
-  if (action.type === ActionTypes.CHANGE_PUZZLE_TYPE) {
-    return saveSession(state, action.payload.puzzle);
-  }
-
-  return state;
-};
+  })
+  .case(Actions.changePuzzleType, (state, { puzzle }) => {
+    return saveSession(state, puzzle);
+  });
 
 export const reducer = reduceReducers(
   root,
   combineReducers({ current, sync, auth, results, tool })
-);
+) as Reducer<StoreState>;

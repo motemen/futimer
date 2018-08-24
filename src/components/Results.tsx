@@ -6,7 +6,7 @@ import { createStyles, Icon, IconButton, Paper, Theme, Toolbar, Typography, with
 
 import classNames from 'classnames';
 
-import { Action, AsyncAction, Dispatch } from '../actions';
+import { Actions, AsyncAction, Dispatch } from '../actions';
 import { calcStats, ResultStats, Session } from '../models';
 import { StoreState } from '../types';
 import SessionRecords from './SessionRecords';
@@ -64,7 +64,18 @@ class Results extends React.Component<Props, State> {
     return <div>
       <Paper className={this.props.classes.root} elevation={1}>
         <SessionRecords session={this.props.session} resultIndex={-1} defaultExpanded={true}
-          actionButton={ <Tooltip title="Save records"><IconButton style={{marginTop: -16, marginBottom: -16}} onClick={this.handleNewSessionClick} disabled={this.props.session.records.length === 0}><Icon>save</Icon></IconButton></Tooltip> } />
+          actionButton={
+            <Tooltip title="Save records">
+              <div>
+                <IconButton
+                  style={{ marginTop: -16, marginBottom: -16 }}
+                  onClick={this.handleNewSessionClick}
+                  disabled={this.props.session.records.length === 0}>
+                  <Icon>save</Icon>
+                </IconButton>
+              </div>
+            </Tooltip>
+          } />
       </Paper>
       <Paper className={this.props.classes.root} elevation={1}>
         <Toolbar>
@@ -106,7 +117,7 @@ class Results extends React.Component<Props, State> {
   }
 
   private handleNewSessionClick = () => {
-    this.props.dispatch(Action.createNewSession());
+    this.props.dispatch(Actions.createNewSession());
   }
 
   private handleOpenSheetClick = () => {

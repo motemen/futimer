@@ -8,7 +8,7 @@ import VideoRecorder from './tools/VideoRecorder';
 import ScramblePreview from './tools/ScramblePreview';
 import Stats from './tools/Stats';
 import { ToolType } from '../models';
-import { Dispatch, Action } from '../actions';
+import { Dispatch, Actions } from '../actions';
 
 const Styles = (theme: Theme) => createStyles({
   root: {
@@ -45,7 +45,7 @@ class Tools extends React.Component<Props> {
   }
 
   private handleTypeChange = (ev: React.ChangeEvent<any>) => {
-    this.props.dispatch(Action.changeToolType({ toolType: ev.target.value }));
+    this.props.dispatch(Actions.changeToolType({ toolType: ev.target.value }));
   }
 
   private renderContent(): React.ReactNode {

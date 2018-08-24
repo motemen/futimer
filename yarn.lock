@@ -7371,6 +7371,20 @@ typedarray@^0.0.6:
   version "0.0.6"
   resolved "https://registry.yarnpkg.com/typedarray/-/typedarray-0.0.6.tgz#867ac74e3864187b1d3d47d996a78ec5c8830777"
 
+typescript-fsa-reducers@^0.4.5:
+  version "0.4.5"
+  resolved "https://registry.yarnpkg.com/typescript-fsa-reducers/-/typescript-fsa-reducers-0.4.5.tgz#58fffb2f6eeca6817c2f656b7e7df2cb1c9d1f84"
+  dependencies:
+    typescript-fsa "^2.0.0"
+
+typescript-fsa@^2.0.0:
+  version "2.5.0"
+  resolved "https://registry.yarnpkg.com/typescript-fsa/-/typescript-fsa-2.5.0.tgz#1baec01b5e8f5f34c322679d1327016e9e294faf"
+
+typescript-fsa@^3.0.0-beta-2:
+  version "3.0.0-beta-2"
+  resolved "https://registry.yarnpkg.com/typescript-fsa/-/typescript-fsa-3.0.0-beta-2.tgz#1cc1d0c014c025fd51cba097776033ac4b6b753c"
+
 typescript@^3.0.1:
   version "3.0.1"
   resolved "https://registry.yarnpkg.com/typescript/-/typescript-3.0.1.tgz#43738f29585d3a87575520a4b93ab6026ef11fdb"

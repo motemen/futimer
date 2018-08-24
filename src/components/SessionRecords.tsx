@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 
 import { ClickAwayListener, createStyles, ExpansionPanel, ExpansionPanelDetails, ExpansionPanelSummary, Hidden, Icon, IconButton, Menu, MenuItem, Table, TableBody, TableCell, TableHead, TableRow, Theme, Typography, withStyles, WithStyles } from '@material-ui/core';
 
-import { Action, Dispatch } from '../actions';
+import { Actions, Dispatch } from '../actions';
 import { calcStats, formatDuration, Session, PuzzleConfiguration } from '../models';
 
 interface OwnProps {
@@ -142,7 +142,7 @@ class SessionRecords extends React.Component<OwnProps & { dispatch: Dispatch } &
 
   private handleDeleteRecordClick = () => {
     this.props.dispatch(
-      Action.deleteRecord({
+      Actions.deleteRecord({
         sessionIndex: this.props.resultIndex,
         recordIndex: this.state.activeRecordIndex!,
       }),

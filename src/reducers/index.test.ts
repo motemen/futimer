@@ -1,5 +1,5 @@
 import { reducer } from ".";
-import { Action } from "../actions";
+import { Actions } from "../actions";
 import { StoreState } from "../types";
 import { ToolType } from "../models";
 
@@ -22,7 +22,7 @@ test("createNewSession", () => {
     results: [],
     tool: { selected: ToolType.Stats }
   };
-  state = reducer(state, Action.createNewSession());
+  state = reducer(state, Actions.createNewSession());
   expect(state).toEqual({
     ...state,
     current: {
