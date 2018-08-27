@@ -21,6 +21,8 @@ import registerServiceWorker from './registerServiceWorker';
 import { googleAPI, GoogleAPIEvents } from './gateways/GoogleAPI';
 
 import { createMuiTheme, MuiThemeProvider, Grid, Hidden } from '@material-ui/core';
+import { blue } from '@material-ui/core/colors';
+
 import { SyncRecords } from './services/SyncRecords';
 import Tools from './components/Tools';
 
@@ -59,7 +61,8 @@ const persister = persistStore(store);
 
 const theme = createMuiTheme({
   palette: {
-    primary: { main: '#ef0' }
+    primary: { main: '#ef0' },
+    secondary: { main: blue.A700 },
   },
 });
 
