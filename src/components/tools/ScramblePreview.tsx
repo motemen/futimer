@@ -1,5 +1,5 @@
 import * as React from "react";
-import { connect } from 'react-redux';
+import { connect } from "react-redux";
 
 import { PuzzleType, PuzzleConfiguration, StoreState } from "../../models";
 
@@ -20,7 +20,10 @@ class ScramblePreview extends React.Component<Props> {
   }
 
   public componentWillReceiveProps({ puzzleType, scramble }: Props) {
-    if (this.props.puzzleType === puzzleType && this.props.scramble === scramble) {
+    if (
+      this.props.puzzleType === puzzleType &&
+      this.props.scramble === scramble
+    ) {
       return;
     }
 
@@ -32,25 +35,30 @@ class ScramblePreview extends React.Component<Props> {
   }
 
   private updatePreview({ scramble, puzzleType }: Props) {
-    if (typeof tnoodlejs === 'undefined') {
+    if (typeof tnoodlejs === "undefined") {
       return; // TODO
     }
 
     const svg = tnoodlejs.scrambleToSvg(
       scramble,
-      new puzzle[PuzzleConfiguration[puzzleType].tnoodleImpl](),
+      new puzzle[PuzzleConfiguration[puzzleType].tnoodleImpl]()
     );
     this.ref.current!.innerHTML = svg;
-    this.ref.current!.querySelector('svg')!.style.width = '100%';
-    this.ref.current!.querySelector('svg')!.style.height = 'auto';
+    this.ref.current!.querySelector("svg")!.style.width = "100%";
+    this.ref.current!.querySelector("svg")!.style.height = "auto";
   }
 }
 
-function mapStateToProps({ current: { scramble, session: { puzzleType }}}: StoreState) {
+function mapStateToProps({
+  current: {
+    scramble,
+    session: { puzzleType }
+  }
+}: StoreState) {
   return {
     puzzleType,
-    scramble,
-  }
+    scramble
+  };
 }
 
 export default connect(mapStateToProps)(ScramblePreview);

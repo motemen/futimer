@@ -36,7 +36,7 @@ class VideoRecorder extends React.Component<Props> {
     }
   }
 
-  public componentDidMount() { 
+  public componentDidMount() {
     this.open();
   }
 
@@ -77,16 +77,18 @@ class VideoRecorder extends React.Component<Props> {
   public download() {
     const blob = new Blob(this.chunks);
     const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
+    const a = document.createElement("a");
     a.href = url;
-    a.download = `${this.props.scramble || 'record'}.webm`;
+    a.download = `${this.props.scramble || "record"}.webm`;
     a.click();
   }
 
   public render() {
-    return <div>
-      <video muted ref={this.videoRef} style={{ maxWidth: '100%' }} />
-    </div>
+    return (
+      <div>
+        <video muted ref={this.videoRef} style={{ maxWidth: "100%" }} />
+      </div>
+    );
   }
 }
 

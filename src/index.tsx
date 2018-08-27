@@ -1,58 +1,64 @@
-import * as React from 'react';
-import * as ReactDOM from 'react-dom';
-import { Provider } from 'react-redux';
-import { applyMiddleware, compose, createStore, Reducer } from 'redux';
-import { persistReducer, persistStore } from 'redux-persist'
-import { PersistGate } from 'redux-persist/integration/react'
-import persistStorage from 'redux-persist/lib/storage'
-import thunkMiddleware from 'redux-thunk';
+import * as React from "react";
+import * as ReactDOM from "react-dom";
+import { Provider } from "react-redux";
+import { applyMiddleware, compose, createStore, Reducer } from "redux";
+import { persistReducer, persistStore } from "redux-persist";
+import { PersistGate } from "redux-persist/integration/react";
+import persistStorage from "redux-persist/lib/storage";
+import thunkMiddleware from "redux-thunk";
 
-import { Actions, Action } from './actions';
-import NavBar from './components/NavBar';
-import Measurer from './components/Measurer';
-import Results from './components/Results';
-import { reducer } from './reducers';
-import { StoreState } from './models';
+import { Actions, Action } from "./actions";
+import NavBar from "./components/NavBar";
+import Measurer from "./components/Measurer";
+import Results from "./components/Results";
+import { reducer } from "./reducers";
+import { StoreState } from "./models";
 
-import './App.css';
-import './index.css';
-import registerServiceWorker from './registerServiceWorker';
+import "./App.css";
+import "./index.css";
+import registerServiceWorker from "./registerServiceWorker";
 
-import { googleAPI, GoogleAPIEvents } from './gateways/GoogleAPI';
+import { googleAPI, GoogleAPIEvents } from "./gateways/GoogleAPI";
 
-import { createMuiTheme, MuiThemeProvider, Grid, Hidden } from '@material-ui/core';
-import { blue } from '@material-ui/core/colors';
+import {
+  createMuiTheme,
+  MuiThemeProvider,
+  Grid,
+  Hidden
+} from "@material-ui/core";
+import { blue } from "@material-ui/core/colors";
 
-import { SyncRecords } from './services/SyncRecords';
-import Tools from './components/Tools';
+import { SyncRecords } from "./services/SyncRecords";
+import Tools from "./components/Tools";
 
-googleAPI.on(
-  GoogleAPIEvents.UPDATE_SIGNED_IN, async (signedIn) => {
-    store.dispatch(Actions.updateIsAuthed({ isAuthed: signedIn }))
+googleAPI.on(GoogleAPIEvents.UPDATE_SIGNED_IN, async signedIn => {
+  store.dispatch(Actions.updateIsAuthed({ isAuthed: signedIn }));
 
-    const { sync } = store.getState();
-    if (!sync.spreadsheetId) {
-      const syncRecords = new SyncRecords(googleAPI);
-      const file = await syncRecords.getFile()
-      store.dispatch(Actions.updateSyncSpreadsheetId({ spreadsheetId: file.id! }));
-    }
-  },
-);
+  const { sync } = store.getState();
+  if (!sync.spreadsheetId) {
+    const syncRecords = new SyncRecords(googleAPI);
+    const file = await syncRecords.getFile();
+    store.dispatch(
+      Actions.updateSyncSpreadsheetId({ spreadsheetId: file.id! })
+    );
+  }
+});
 
 const persistConfig = {
-  debug: process.env.NODE_ENV !== 'production',
-  key: 'root',
+  debug: process.env.NODE_ENV !== "production",
+  key: "root",
   storage: persistStorage,
-  transforms: [
-  ],
-  whitelist: [ 'current', 'results', 'tool' ],
+  transforms: [],
+  whitelist: ["current", "results", "tool"]
 };
 
 const rootReducer: Reducer<StoreState> = persistReducer(persistConfig, reducer);
 
 const store = createStore<StoreState, Action, {}, {}>(
   rootReducer,
-  (((window as any).__REDUX_DEVTOOLS_EXTENSION_COMPOSE__) || compose)(applyMiddleware(thunkMiddleware)),
+  ((window as any).__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose)(
+    applyMiddleware(thunkMiddleware)
+  )
 );
 
 const persister = persistStore(store);
@@ -61,9 +67,9 @@ const persister = persistStore(store);
 
 const theme = createMuiTheme({
   palette: {
-    primary: { main: '#ef0' },
-    secondary: { main: blue.A700 },
-  },
+    primary: { main: "#ef0" },
+    secondary: { main: blue.A700 }
+  }
 });
 
 ReactDOM.render(
@@ -85,7 +91,7 @@ ReactDOM.render(
       </PersistGate>
     </Provider>
   </MuiThemeProvider>,
-  document.getElementById('root') as HTMLElement
+  document.getElementById("root") as HTMLElement
 );
 
 registerServiceWorker();
