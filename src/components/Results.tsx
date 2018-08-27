@@ -7,8 +7,7 @@ import { createStyles, Icon, IconButton, Paper, Theme, Toolbar, Typography, with
 import classNames from 'classnames';
 
 import { Actions, AsyncAction, Dispatch } from '../actions';
-import { calcStats, ResultStats, Session } from '../models';
-import { StoreState } from '../types';
+import { calcStats, ResultStats, Session, StoreState } from '../models';
 import SessionRecords from './SessionRecords';
 
 interface OwnProps {

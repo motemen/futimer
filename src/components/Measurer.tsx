@@ -10,8 +10,7 @@ import { green, red } from '@material-ui/core/colors';
 
 import { ButtonBaseActions } from '@material-ui/core/ButtonBase';
 import { Actions, AsyncAction, Dispatch } from '../actions';
-import { formatDuration, Record } from '../models';
-import { StoreState } from '../types';
+import { formatDuration, Record, StoreState } from '../models';
 
 interface OwnProps {
   scramble?: string;

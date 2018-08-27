@@ -1,8 +1,7 @@
 import * as React from "react";
 import { connect } from 'react-redux';
 
-import { PuzzleType, PuzzleConfiguration } from "../../models";
-import { StoreState } from "../../types";
+import { PuzzleType, PuzzleConfiguration, StoreState } from "../../models";
 
 interface Props {
   puzzleType: PuzzleType;

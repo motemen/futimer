@@ -3,8 +3,7 @@ import { connect } from 'react-redux';
 
 import { AppBar, Toolbar, Typography, Select } from '@material-ui/core';
 
-import { PuzzleType, PuzzleConfiguration } from '../models';
-import { StoreState } from '../types';
+import { PuzzleType, PuzzleConfiguration, StoreState } from '../models';
 import { AsyncAction, Dispatch } from '../actions';
 
 import Logo from '../app.png';

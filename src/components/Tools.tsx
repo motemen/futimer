@@ -3,11 +3,10 @@ import { connect } from 'react-redux';
 
 import { Select, Paper, Typography, Toolbar, createStyles, Theme, withStyles, WithStyles } from '@material-ui/core';
 
-import { StoreState } from '../types';
 import VideoRecorder from './tools/VideoRecorder';
 import ScramblePreview from './tools/ScramblePreview';
 import Stats from './tools/Stats';
-import { ToolType } from '../models';
+import { ToolType, StoreState } from '../models';
 import { Dispatch, Actions } from '../actions';
 
 const Styles = (theme: Theme) => createStyles({

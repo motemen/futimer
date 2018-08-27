@@ -129,3 +129,47 @@ export enum ToolType {
   Stats = "stats",
   Preview = "preview"
 }
+
+export interface StoreState {
+  current: {
+    scramble?: string;
+    session: Session;
+  };
+
+  results: Array<{
+    isSynced: boolean;
+    session: Session;
+  }>;
+
+  auth: {
+    isAuthed?: boolean;
+  };
+
+  sync: {
+    isSyncing: boolean;
+    spreadsheetId?: string;
+  };
+
+  tool: {
+    selected: ToolType;
+  };
+
+  isPlaying?: boolean;
+}
+
+export const initialState: StoreState = {
+  current: {
+    session: {
+      puzzleType: "333",
+      records: []
+    }
+  },
+  sync: {
+    isSyncing: false
+  },
+  auth: {},
+  results: [],
+  tool: {
+    selected: ToolType.Stats
+  }
+};

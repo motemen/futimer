@@ -1,10 +1,10 @@
 import { reducer } from ".";
 import { Actions } from "../actions";
-import { StoreState } from "../types";
-import { ToolType } from "../models";
+import { StoreState, initialState } from "../models";
 
 test("createNewSession", () => {
   let state: StoreState = {
+    ...initialState,
     current: {
       session: {
         puzzleType: "333",
@@ -16,11 +16,7 @@ test("createNewSession", () => {
           }
         ]
       }
-    },
-    sync: { isSyncing: false },
-    auth: {},
-    results: [],
-    tool: { selected: ToolType.Stats }
+    }
   };
   state = reducer(state, Actions.createNewSession());
   expect(state).toEqual({

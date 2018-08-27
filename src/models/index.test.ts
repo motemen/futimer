@@ -25,29 +25,33 @@ describe("variousAveragesOf", () => {
 
 describe("averageOf", () => {
   expect(
-    calcStats([
-      1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13
-    ].map((time) => ({ time, scramble: '', timestamp: 0 })))
+    calcStats(
+      [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13].map(time => ({
+        time,
+        scramble: "",
+        timestamp: 0
+      }))
+    )
   ).toEqual({
     averageOf: {
-      '100': null,
-      '12': {
+      "100": null,
+      "12": {
         best: 6.5,
         current: 7.5,
-        worst: 7.5,
+        worst: 7.5
       },
-      '5': {
+      "5": {
         best: 3,
         current: 11,
-        worst: 11,
-      },
+        worst: 11
+      }
     },
     single: {
       best: 1,
       current: 13,
-      worst: 13,
+      worst: 13
     }
-  })
+  });
 });
 
 describe("formatDuration", () => {

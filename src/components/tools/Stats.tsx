@@ -1,8 +1,7 @@
 import * as React from "react";
 import { connect } from 'react-redux';
 
-import { Record, calcStats, formatDuration } from "../../models";
-import { StoreState } from "../../types";
+import { Record, calcStats, formatDuration, StoreState } from "../../models";
 import { Table, TableHead, TableBody, TableRow, TableCell } from "@material-ui/core";
 
 interface Props {

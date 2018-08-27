@@ -3,10 +3,8 @@ import { ThunkAction, ThunkDispatch } from "redux-thunk";
 import actionCreatorFactory from "typescript-fsa";
 
 import { SyncRecords } from "../services/SyncRecords";
-import { StoreState } from "../types";
 import { googleAPI } from "../gateways/GoogleAPI";
-
-import { PuzzleType, Record, ToolType } from "../models";
+import { PuzzleType, Record, ToolType, StoreState } from "../models";
 import { generateScramble } from "../TNoodle";
 
 const createAction = actionCreatorFactory();

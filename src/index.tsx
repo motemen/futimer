@@ -12,7 +12,7 @@ import NavBar from './components/NavBar';
 import Measurer from './components/Measurer';
 import Results from './components/Results';
 import { reducer } from './reducers';
-import { StoreState } from './types';
+import { StoreState } from './models';
 
 import './App.css';
 import './index.css';

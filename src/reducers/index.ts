@@ -6,15 +6,9 @@ import {
 } from "typescript-fsa-reducers";
 
 import { Actions } from "../actions";
-import { StoreState } from "../types";
-import { PuzzleType, Session, ToolType } from "../models";
+import { PuzzleType, Session, StoreState, initialState } from "../models";
 
 import reduceReducers from "reduce-reducers";
-
-const initialSession: Session = {
-  puzzleType: "333",
-  records: []
-};
 
 const deleteRecord = (session: Session, index: number): Session => {
   const records = session.records;
@@ -25,9 +19,9 @@ const deleteRecord = (session: Session, index: number): Session => {
   };
 };
 
-export const current = reducerWithInitialState<StoreState["current"]>({
-  session: initialSession
-})
+export const current = reducerWithInitialState<StoreState["current"]>(
+  initialState.current
+)
   .case(Actions.deleteRecord, (state, { sessionIndex, recordIndex }) => {
     if (sessionIndex === -1) {
       return {
@@ -58,9 +52,9 @@ export const current = reducerWithInitialState<StoreState["current"]>({
     };
   });
 
-export const sync = reducerWithInitialState<StoreState["sync"]>({
-  isSyncing: false
-})
+export const sync = reducerWithInitialState<StoreState["sync"]>(
+  initialState.sync
+)
   .case(Actions.startRecordsUpload, state => {
     return {
       ...state,
@@ -80,7 +74,9 @@ export const sync = reducerWithInitialState<StoreState["sync"]>({
     };
   });
 
-const results = reducerWithInitialState<StoreState["results"]>([])
+const results = reducerWithInitialState<StoreState["results"]>(
+  initialState.results
+)
   .case(Actions.deleteRecord, (state, { sessionIndex, recordIndex }) => {
     return state
       .map((result, i) => {
@@ -110,15 +106,14 @@ const results = reducerWithInitialState<StoreState["results"]>([])
     });
   });
 
-export const auth = reducerWithInitialState<StoreState["auth"]>({}).case(
-  Actions.updateIsAuthed,
-  (state, { isAuthed }) => {
-    return {
-      ...state,
-      isAuthed
-    };
-  }
-);
+export const auth = reducerWithInitialState<StoreState["auth"]>(
+  initialState.auth
+).case(Actions.updateIsAuthed, (state, { isAuthed }) => {
+  return {
+    ...state,
+    isAuthed
+  };
+});
 
 function saveSession(state: StoreState, puzzleType?: PuzzleType): StoreState {
   const currentSession = state.current.session;
@@ -154,9 +149,9 @@ function saveSession(state: StoreState, puzzleType?: PuzzleType): StoreState {
   };
 }
 
-export const tool = reducerWithInitialState<StoreState["tool"]>({
-  selected: ToolType.Stats
-}).case(Actions.changeToolType, (state, { toolType }) => {
+export const tool = reducerWithInitialState<StoreState["tool"]>(
+  initialState.tool
+).case(Actions.changeToolType, (state, { toolType }) => {
   return {
     ...state,
     selected: toolType

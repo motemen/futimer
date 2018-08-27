@@ -1,6 +1,6 @@
 import * as React from "react";
 import { connect } from "react-redux";
-import { StoreState } from "../../types";
+import { StoreState } from "../../models";
 
 interface Props {
   isPlaying?: boolean;
