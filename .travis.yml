@@ -1,4 +1,6 @@
 language: node_js
+node_js:
+  - 9
 cache: yarn
 before_install:
   - 'git config --global url.https://github.com/.insteadOf git@github.com:'
