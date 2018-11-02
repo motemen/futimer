@@ -12,22 +12,17 @@ const createAction = actionCreatorFactory();
 export const Actions = {
   recordAttempt: createAction<{ record: Record }>("RECORD_ATTEMPT"),
   updateScramble: createAction<{ scramble: string }>("UPDATE_SCRAMBLE"),
-  deleteRecord: createAction<{ sessionIndex: number; recordIndex: number }>(
-    "DELETE_RECORD"
-  ),
-  updateSessionIsSynced: createAction<{ index: number; isSynced: boolean }>(
-    "UPDATE_SESSION_IS_SYNCED"
-  ),
-  updateSyncSpreadsheetId: createAction<{ spreadsheetId: string }>(
-    "UPDATE_SYNC_SPREADSHEET_ID"
-  ),
+  deleteRecord: createAction<{ sessionIndex: number; recordIndex: number }>("DELETE_RECORD"),
+  updateSessionIsSynced: createAction<{ index: number; isSynced: boolean }>("UPDATE_SESSION_IS_SYNCED"),
+  updateSyncSpreadsheetId: createAction<{ spreadsheetId: string }>("UPDATE_SYNC_SPREADSHEET_ID"),
   updateIsAuthed: createAction<{ isAuthed: boolean }>("UPDATE_IS_AUTHED"),
   changePuzzleType: createAction<{ puzzle: PuzzleType }>("CHANGE_PUZZLE_TYPE"),
   changeToolType: createAction<{ toolType: ToolType }>("CHANGE_TOOL_TYPE"),
   changeIsPlaying: createAction<{ isPlaying: boolean }>("CHANGE_IS_PLAYING"),
   createNewSession: createAction("CREATE_NEW_SESSION"),
   startRecordsUpload: createAction("START_RECORDS_UPLOAD"),
-  finishRecordsUpload: createAction("FINISH_RECORDS_UPLOAD")
+  finishRecordsUpload: createAction("FINISH_RECORDS_UPLOAD"),
+  deleteAllRecords: createAction("DELETE_ALL_RECORDS")
 };
 
 export const AsyncAction = {
@@ -59,9 +54,7 @@ export const AsyncAction = {
 
     for (const session of sessionsToSync) {
       await service.uploadSession(spreadsheetId, session);
-      dispatch(
-        Actions.updateSessionIsSynced({ index: session.index, isSynced: true })
-      );
+      dispatch(Actions.updateSessionIsSynced({ index: session.index, isSynced: true }));
     }
 
     dispatch(Actions.finishRecordsUpload());
@@ -88,9 +81,7 @@ export const AsyncAction = {
     dispatch(AsyncAction.resetScramble());
   },
 
-  changePuzzleType: (payload: { puzzle: PuzzleType }) => (
-    dispatch: ThunkDispatch<StoreState, never, Action>
-  ) => {
+  changePuzzleType: (payload: { puzzle: PuzzleType }) => (dispatch: ThunkDispatch<StoreState, never, Action>) => {
     dispatch(Actions.changePuzzleType(payload));
     dispatch(AsyncAction.resetScramble());
   }

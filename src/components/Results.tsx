@@ -105,6 +105,13 @@ class Results extends React.Component<Props, State> {
                 </IconButton>
               </Tooltip>
             ) : null}
+            <Tooltip title="Delete records">
+              <div>
+                <IconButton onClick={this.handleDeleteAllRecordsClick} disabled={this.props.results.length === 0}>
+                  <Icon>delete</Icon>
+                </IconButton>
+              </div>
+            </Tooltip>
             <IconButton onClick={this.handleSyncClick}>
               {this.props.isAuthed ? (
                 this.props.syncDone ? (
@@ -161,6 +168,12 @@ class Results extends React.Component<Props, State> {
       this.props.spreadsheetId
     }/edit`;
     window.open(url);
+  };
+
+  private handleDeleteAllRecordsClick = () => {
+    if (confirm('Delete all records?')) {
+      this.props.dispatch(Actions.deleteAllRecords());
+    }
   };
 }
 
