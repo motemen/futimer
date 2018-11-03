@@ -1,9 +1,6 @@
 import { Reducer, combineReducers } from "redux";
 
-import {
-  reducerWithInitialState,
-  reducerWithoutInitialState
-} from "typescript-fsa-reducers";
+import { reducerWithInitialState, reducerWithoutInitialState } from "typescript-fsa-reducers";
 
 import { Actions } from "../actions";
 import { PuzzleType, Session, StoreState, initialState } from "../models";
@@ -19,9 +16,7 @@ const deleteRecord = (session: Session, index: number): Session => {
   };
 };
 
-export const current = reducerWithInitialState<StoreState["current"]>(
-  initialState.current
-)
+export const current = reducerWithInitialState<StoreState["current"]>(initialState.current)
   .case(Actions.deleteRecord, (state, { sessionIndex, recordIndex }) => {
     if (sessionIndex === -1) {
       return {
@@ -52,9 +47,7 @@ export const current = reducerWithInitialState<StoreState["current"]>(
     };
   });
 
-export const sync = reducerWithInitialState<StoreState["sync"]>(
-  initialState.sync
-)
+export const sync = reducerWithInitialState<StoreState["sync"]>(initialState.sync)
   .case(Actions.startRecordsUpload, state => {
     return {
       ...state,
@@ -74,9 +67,7 @@ export const sync = reducerWithInitialState<StoreState["sync"]>(
     };
   });
 
-const results = reducerWithInitialState<StoreState["results"]>(
-  initialState.results
-)
+const results = reducerWithInitialState<StoreState["results"]>(initialState.results)
   .case(Actions.deleteRecord, (state, { sessionIndex, recordIndex }) => {
     return state
       .map((result, i) => {
@@ -104,16 +95,20 @@ const results = reducerWithInitialState<StoreState["results"]>(
 
       return result;
     });
+  })
+  .case(Actions.deleteAllRecords, (state, action) => {
+    return [];
   });
 
-export const auth = reducerWithInitialState<StoreState["auth"]>(
-  initialState.auth
-).case(Actions.updateIsAuthed, (state, { isAuthed }) => {
-  return {
-    ...state,
-    isAuthed
-  };
-});
+export const auth = reducerWithInitialState<StoreState["auth"]>(initialState.auth).case(
+  Actions.updateIsAuthed,
+  (state, { isAuthed }) => {
+    return {
+      ...state,
+      isAuthed
+    };
+  }
+);
 
 function saveSession(state: StoreState, puzzleType?: PuzzleType): StoreState {
   const currentSession = state.current.session;
@@ -123,9 +118,7 @@ function saveSession(state: StoreState, puzzleType?: PuzzleType): StoreState {
     current: {
       ...state.current,
       scramble:
-        (puzzleType || currentSession.puzzleType) === currentSession.puzzleType
-          ? state.current.scramble
-          : undefined,
+        (puzzleType || currentSession.puzzleType) === currentSession.puzzleType ? state.current.scramble : undefined,
       session: {
         puzzleType: puzzleType || currentSession.puzzleType,
         records: []
@@ -139,9 +132,7 @@ function saveSession(state: StoreState, puzzleType?: PuzzleType): StoreState {
               isSynced: false,
               session: {
                 ...currentSession,
-                name: new Date(
-                  currentSession.records[0].timestamp
-                ).toLocaleString()
+                name: new Date(currentSession.records[0].timestamp).toLocaleString()
               }
             },
             ...state.results
@@ -149,14 +140,15 @@ function saveSession(state: StoreState, puzzleType?: PuzzleType): StoreState {
   };
 }
 
-export const tool = reducerWithInitialState<StoreState["tool"]>(
-  initialState.tool
-).case(Actions.changeToolType, (state, { toolType }) => {
-  return {
-    ...state,
-    selected: toolType
-  };
-});
+export const tool = reducerWithInitialState<StoreState["tool"]>(initialState.tool).case(
+  Actions.changeToolType,
+  (state, { toolType }) => {
+    return {
+      ...state,
+      selected: toolType
+    };
+  }
+);
 
 export const root = reducerWithoutInitialState<StoreState>()
   .case(Actions.changeIsPlaying, (state, { isPlaying }) => {
@@ -172,7 +164,6 @@ export const root = reducerWithoutInitialState<StoreState>()
     return saveSession(state, puzzle);
   });
 
-export const reducer = reduceReducers(
-  root,
-  combineReducers({ current, sync, auth, results, tool })
-) as Reducer<StoreState>;
+export const reducer = reduceReducers(root, combineReducers({ current, sync, auth, results, tool })) as Reducer<
+  StoreState
+>;
