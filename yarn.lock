@@ -7199,7 +7199,8 @@ tmpl@1.0.x:
 
 tnoodle@thewca/tnoodle:
   version "0.0.0"
-  resolved "https://codeload.github.com/thewca/tnoodle/tar.gz/9e58918eb148bda519f0fa71d560da276c808acc"
+  uid c613bac1ae7fb86c28d77eaec500750cad07e97d
+  resolved "https://codeload.github.com/thewca/tnoodle/tar.gz/c613bac1ae7fb86c28d77eaec500750cad07e97d"
 
 to-arraybuffer@^1.0.0:
   version "1.0.1"
