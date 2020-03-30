@@ -3,14 +3,14 @@
 
 
 "@types/es6-shim@^0.31.38":
-  version "0.31.38"
-  resolved "https://registry.yarnpkg.com/@types/es6-shim/-/es6-shim-0.31.38.tgz#47a5031158dff8bf166ba4e61de522907faa5bc0"
-  integrity sha512-uyQvkK8q5Ivsnn7TSzdGd3XI+y/y0bchUEwEzYYF7JJtnsXqlniXR8SPfj8DQycsHXQ8SPRjQdyE2zjLwESwwg==
+  version "0.31.39"
+  resolved "https://registry.yarnpkg.com/@types/es6-shim/-/es6-shim-0.31.39.tgz#61de60fac180f967177bcde598a62072a39ea04b"
+  integrity sha512-z2JtmHE1wg75JTdT1qWGvW4eDOk6DUW1Exdzrs+8QTPFttkdTr4pKVzLLCCAOUC8i/KiG+QtkSEteQ5hDxwbpg==
 
-"@types/google-apps-script@^0.0.31":
-  version "0.0.31"
-  resolved "https://registry.yarnpkg.com/@types/google-apps-script/-/google-apps-script-0.0.31.tgz#45ec8084e55d8dd1d252672a5211f030e81571c0"
-  integrity sha512-9XEJYkWMVxNOMK1cQMYJ3MA+6nry+lQ/Jg8kizLr/qMkozfMQmRBNPpIB4F3aBcwFeH9W3iU6nHeZ084URUCPw==
+"@types/google-apps-script@^0.0.38":
+  version "0.0.38"
+  resolved "https://registry.yarnpkg.com/@types/google-apps-script/-/google-apps-script-0.0.38.tgz#3e20fc6b7ed1233e2828d6b39522f284033eb766"
+  integrity sha512-njQkvhJkScHlHEE1TuVCTA44BljwDfCqzCeJ2wmpWM46WW+SjZpCTHYmU+MhnsTFeW0onCemqK0vkWvZseF13w==
 
 "@webassemblyjs/ast@1.7.10":
   version "1.7.10"
@@ -2660,9 +2660,9 @@ typedarray@^0.0.6:
   integrity sha1-hnrHTjhkGHsdPUfZlqeOxciDB3c=
 
 typescript@^3.1.6:
-  version "3.1.6"
-  resolved "https://registry.yarnpkg.com/typescript/-/typescript-3.1.6.tgz#b6543a83cfc8c2befb3f4c8fba6896f5b0c9be68"
-  integrity sha512-tDMYfVtvpb96msS1lDX9MEdHrW4yOuZ4Kdc4Him9oU796XldPYF/t2+uKoX0BBa0hXXwDlqYQbXY5Rzjzc5hBA==
+  version "3.3.3333"
+  resolved "https://registry.yarnpkg.com/typescript/-/typescript-3.3.3333.tgz#171b2c5af66c59e9431199117a3bcadc66fdcfd6"
+  integrity sha512-JjSKsAfuHBE/fB2oZ8NxtRTk5iGcg6hkYXMnZ3Wc+b2RSqejEqTaem11mHASMnFilHrax3sLK0GDzcJrekZYLw==
 
 uglify-es@^3.3.4:
   version "3.3.9"
