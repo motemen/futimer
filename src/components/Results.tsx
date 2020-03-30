@@ -48,7 +48,7 @@ const Styles = (theme: Theme) =>
       to: { transform: "rotate(-360deg)" }
     },
     isSyncing: {
-      animation: "spin-l 1.5s linear infinite"
+      animation: "$spin-l 1.5s linear infinite"
     },
     root: {
       margin: theme.spacing(2),

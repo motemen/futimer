@@ -49,7 +49,7 @@ const Styles = (theme: Theme) =>
       display: "none"
     },
     isHolding: {
-      animation: `${HOLD_DURATION}ms step-end holding-color-change both`
+      animation: `${HOLD_DURATION}ms step-end $holding-color-change both`
     },
     scramble: {
       [theme.breakpoints.down("xs")]: {
