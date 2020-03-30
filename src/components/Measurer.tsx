@@ -52,20 +52,20 @@ const Styles = (theme: Theme) =>
       animation: `${HOLD_DURATION}ms step-end holding-color-change both`
     },
     scramble: {
-      fontSize: theme.typography.headline.fontSize,
-      marginTop: theme.spacing.unit * 3,
-      marginLeft: theme.spacing.unit,
-      marginRight: theme.spacing.unit,
+      [theme.breakpoints.down("xs")]: {
+        fontSize: theme.typography.h4.fontSize
+      },
+      fontSize: theme.typography.h3.fontSize,
+      marginTop: theme.spacing(3),
+      marginLeft: theme.spacing(),
+      marginRight: theme.spacing(),
       textAlign: "center",
       transition: "color 0.5s"
     },
     timer: {
-      [theme.breakpoints.down("xs")]: {
-        fontSize: theme.typography.display3.fontSize
-      },
-      fontSize: theme.typography.display4.fontSize,
-      padding: theme.spacing.unit * 2,
-      margin: `${theme.spacing.unit * 3}px 0`,
+      fontSize: theme.typography.h1.fontSize,
+      padding: theme.spacing(2),
+      margin: `${theme.spacing(3)}px 0`,
       textAlign: "center",
       width: "100%",
       touchAction: "none",

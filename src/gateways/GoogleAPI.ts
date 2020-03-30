@@ -36,10 +36,10 @@ export class GoogleAPI extends EventEmitter {
         await new Promise(resolve => g.load("client:auth2", resolve));
         await g.client.init(this.opts);
         const auth = g.auth2.getAuthInstance();
-        this.emit(GoogleAPIEvents.UPDATE_SIGNED_IN, auth.isSignedIn.get());
-        auth.isSignedIn.listen(signedIn =>
-          this.emit(GoogleAPIEvents.UPDATE_SIGNED_IN, signedIn)
-        );
+        if (auth) {
+          this.emit(GoogleAPIEvents.UPDATE_SIGNED_IN, auth.isSignedIn.get());
+          auth.isSignedIn.listen(signedIn => this.emit(GoogleAPIEvents.UPDATE_SIGNED_IN, signedIn));
+        }
         return g;
       })())
     );

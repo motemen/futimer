@@ -21,10 +21,10 @@ import { Dispatch, Actions } from "../actions";
 const Styles = (theme: Theme) =>
   createStyles({
     root: {
-      marginRight: theme.spacing.unit * 2
+      marginRight: theme.spacing(2)
     },
     content: {
-      padding: theme.spacing.unit
+      padding: theme.spacing()
     }
   });
 
@@ -39,14 +39,8 @@ class Tools extends React.Component<Props> {
     return (
       <Paper elevation={1} className={this.props.classes.root}>
         <Toolbar>
-          <Typography variant="headline" style={{ marginRight: 20 }}>
-            Tools
-          </Typography>
-          <Select
-            native
-            value={this.props.selected}
-            onChange={this.handleTypeChange}
-          >
+          <Typography style={{ marginRight: 20 }}>Tools</Typography>
+          <Select native value={this.props.selected} onChange={this.handleTypeChange}>
             {Object.keys(ToolType)
               .sort()
               .map(key => {

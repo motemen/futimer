@@ -3,7 +3,6 @@ import * as React from "react";
 import { connect } from "react-redux";
 
 import {
-  ClickAwayListener,
   createStyles,
   ExpansionPanel,
   ExpansionPanelDetails,
@@ -149,26 +148,21 @@ class SessionRecords extends React.Component<
                 .slice()
                 .reverse()
                 .map((record, i) => {
-                  const recordIndex =
-                    this.props.session.records.length - (i + 1);
+                  const recordIndex = this.props.session.records.length - (i + 1);
                   return (
                     <TableRow key={recordIndex}>
-                      <TableCell className={this.props.classes.number}>
-                        {recordIndex + 1}
-                      </TableCell>
+                      <TableCell className={this.props.classes.number}>{recordIndex + 1}</TableCell>
                       <TableCell className={this.props.classes.timestamp}>
                         {this.formatTimestamp(record.timestamp)}
                       </TableCell>
                       <TableCell className={this.props.classes.scramble}>
                         <code>{record.scramble}</code>
                       </TableCell>
-                      <TableCell numeric={true}>
+                      <TableCell align="right">
                         <code>{formatDuration(record.time)}</code>
                       </TableCell>
                       <TableCell padding="checkbox">
-                        <IconButton
-                          onClick={this.handleRecordMoreClick(recordIndex)}
-                        >
+                        <IconButton onClick={this.handleRecordMoreClick(recordIndex)}>
                           <Icon>more_vert</Icon>
                         </IconButton>
                       </TableCell>
@@ -177,19 +171,15 @@ class SessionRecords extends React.Component<
                 })}
             </TableBody>
           </Table>
-          <ClickAwayListener onClickAway={this.handleRecordMenuClose}>
-            <div>
-              {/* XXX required for ClickAwayListener to work! */}
-              <Menu
-                anchorEl={this.state.recordMenuAnchor}
-                open={Boolean(this.state.recordMenuAnchor)}
-              >
-                <MenuItem onClick={this.handleDeleteRecordClick}>
-                  Delete
-                </MenuItem>
-              </Menu>
-            </div>
-          </ClickAwayListener>
+          <Menu
+            anchorEl={this.state.recordMenuAnchor}
+            open={Boolean(this.state.recordMenuAnchor)}
+            onClose={this.handleRecordMenuClose}
+          >
+            <MenuItem onClick={this.handleDeleteRecordClick}>
+              Delete
+            </MenuItem>
+          </Menu>
         </ExpansionPanelDetails>
       </ExpansionPanel>
     );
@@ -212,6 +202,7 @@ class SessionRecords extends React.Component<
         recordIndex: this.state.activeRecordIndex!
       })
     );
+    this.handleRecordMenuClose();
   };
 
   private formatTimestamp(t: number) {

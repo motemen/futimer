@@ -20,12 +20,8 @@ import registerServiceWorker from "./registerServiceWorker";
 
 import { googleAPI, GoogleAPIEvents } from "./gateways/GoogleAPI";
 
-import {
-  createMuiTheme,
-  MuiThemeProvider,
-  Grid,
-  Hidden
-} from "@material-ui/core";
+import { createMuiTheme, Grid, Hidden } from "@material-ui/core";
+import { ThemeProvider } from "@material-ui/styles";
 import { blue } from "@material-ui/core/colors";
 
 import { SyncRecords } from "./services/SyncRecords";
@@ -73,7 +69,7 @@ const theme = createMuiTheme({
 });
 
 ReactDOM.render(
-  <MuiThemeProvider theme={theme}>
+  <ThemeProvider theme={theme}>
     <Provider store={store}>
       <PersistGate persistor={persister}>
         <NavBar />
@@ -90,7 +86,7 @@ ReactDOM.render(
         </Grid>
       </PersistGate>
     </Provider>
-  </MuiThemeProvider>,
+  </ThemeProvider>,
   document.getElementById("root") as HTMLElement
 );
 

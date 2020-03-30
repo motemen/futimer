@@ -51,7 +51,7 @@ const Styles = (theme: Theme) =>
       animation: "spin-l 1.5s linear infinite"
     },
     root: {
-      margin: theme.spacing.unit * 2,
+      margin: theme.spacing(2),
       marginTop: 0,
       overflowX: "auto",
       [theme.breakpoints.down("sm")]: {
@@ -96,7 +96,7 @@ class Results extends React.Component<Props, State> {
         </Paper>
         <Paper className={this.props.classes.root} elevation={1}>
           <Toolbar>
-            <Typography variant="headline">History</Typography>
+            <Typography>History</Typography>
             <div className={this.props.classes.spacer} />
             {this.props.isAuthed && this.props.spreadsheetId ? (
               <Tooltip title="Open spreadsheet">

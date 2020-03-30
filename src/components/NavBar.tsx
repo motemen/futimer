@@ -20,7 +20,7 @@ class NavBar extends React.Component<Props> {
       <AppBar position="static" elevation={0}>
         <Toolbar>
           <Typography
-            variant="title"
+            variant="h6"
             color="inherit"
             style={{ textTransform: "uppercase", marginRight: 20 }}
           >
