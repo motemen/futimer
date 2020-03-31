@@ -48,9 +48,9 @@ const persistConfig = {
   whitelist: ["current", "results", "tool"]
 };
 
-const rootReducer: Reducer<StoreState> = persistReducer(persistConfig, reducer);
+const rootReducer = persistReducer(persistConfig, reducer);
 
-const store = createStore<StoreState, Action, {}, {}>(
+const store = createStore(
   rootReducer,
   ((window as any).__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose)(
     applyMiddleware(thunkMiddleware)

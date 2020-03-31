@@ -41,7 +41,7 @@ class Tools extends React.Component<Props> {
         <Toolbar>
           <Typography style={{ marginRight: 20 }}>Tools</Typography>
           <Select native value={this.props.selected} onChange={this.handleTypeChange}>
-            {Object.keys(ToolType)
+            {(Object.keys(ToolType) as [keyof typeof ToolType])
               .sort()
               .map(key => {
                 return (

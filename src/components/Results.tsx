@@ -171,6 +171,7 @@ class Results extends React.Component<Props, State> {
   };
 
   private handleDeleteAllRecordsClick = () => {
+    // eslint-disable-next-line no-restricted-globals
     if (confirm('Delete all records?')) {
       this.props.dispatch(Actions.deleteAllRecords());
     }

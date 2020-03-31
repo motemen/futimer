@@ -2,7 +2,7 @@ import * as React from "react";
 import { SyntheticEvent } from "react";
 import { connect } from "react-redux";
 
-import * as keycode from "keycode";
+import keycode from "keycode";
 import classNames from "classnames";
 
 import {
@@ -84,7 +84,7 @@ class Measurer extends React.Component<Props, State> {
   private animTimer: number | null = null;
   private timerRef: React.RefObject<HTMLPreElement>;
   private prevScramble?: string;
-  private record: Record | null;
+  private record: Record | null = null;
 
   private focusVisible?: () => void;
 

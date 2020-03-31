@@ -32,7 +32,7 @@ class NavBar extends React.Component<Props> {
             value={this.props.puzzleType}
             onChange={this.handlePuzzleTypeChange}
           >
-            {Object.keys(PuzzleConfiguration)
+            {(Object.keys(PuzzleConfiguration) as [keyof typeof PuzzleConfiguration])
               .sort()
               .map(key => {
                 return (
@@ -48,7 +48,7 @@ class NavBar extends React.Component<Props> {
   }
 
   private handlePuzzleTypeChange = (
-    ev: React.ChangeEvent<HTMLSelectElement>
+    ev: React.ChangeEvent<{ value: unknown }>
   ) => {
     this.props.dispatch(
       AsyncAction.changePuzzleType({ puzzle: ev.target.value as PuzzleType })
