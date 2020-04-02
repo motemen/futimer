@@ -20,7 +20,7 @@ import {
   Theme,
   Typography,
   withStyles,
-  WithStyles
+  WithStyles,
 } from "@material-ui/core";
 
 import { Actions, Dispatch } from "../actions";
@@ -28,7 +28,7 @@ import {
   calcStats,
   formatDuration,
   Session,
-  PuzzleConfiguration
+  PuzzleConfiguration,
 } from "../models";
 
 interface OwnProps {
@@ -47,35 +47,35 @@ const Styles = (theme: Theme) =>
   createStyles({
     scramble: {
       [theme.breakpoints.down("xs")]: {
-        display: "none"
-      }
+        display: "none",
+      },
     },
     summary: {
       color: theme.palette.text.secondary,
       overflow: "hidden",
       textOverflow: "ellipsis",
-      whiteSpace: "nowrap"
+      whiteSpace: "nowrap",
     },
     summaryContent: {
       "& > :last-child": {
-        paddingRight: 0
-      }
+        paddingRight: 0,
+      },
     },
     timestamp: {
       [theme.breakpoints.down("xs")]: {
-        display: "none"
-      }
+        display: "none",
+      },
     },
     number: {},
     title: {
-      flexBasis: "20%"
+      flexBasis: "20%",
     },
     root: {
       paddingRight: "16px !important",
       [theme.breakpoints.up("sm")]: {
-        paddingRight: "24px !important"
-      }
-    }
+        paddingRight: "24px !important",
+      },
+    },
   });
 
 class SessionRecords extends React.Component<
@@ -92,7 +92,7 @@ class SessionRecords extends React.Component<
         <ExpansionPanelSummary
           classes={{
             content: this.props.classes.summaryContent,
-            root: this.props.classes.root
+            root: this.props.classes.root,
           }}
         >
           <Hidden xsDown={true}>
@@ -104,7 +104,7 @@ class SessionRecords extends React.Component<
             </Typography>
           </Hidden>
           <Typography className={this.props.classes.summary} component="div">
-            {[100, 12, 5].map(n => {
+            {[100, 12, 5].map((n) => {
               const st = stats.averageOf[n];
               if (!st) {
                 return null;
@@ -148,10 +148,13 @@ class SessionRecords extends React.Component<
                 .slice()
                 .reverse()
                 .map((record, i) => {
-                  const recordIndex = this.props.session.records.length - (i + 1);
+                  const recordIndex =
+                    this.props.session.records.length - (i + 1);
                   return (
                     <TableRow key={recordIndex}>
-                      <TableCell className={this.props.classes.number}>{recordIndex + 1}</TableCell>
+                      <TableCell className={this.props.classes.number}>
+                        {recordIndex + 1}
+                      </TableCell>
                       <TableCell className={this.props.classes.timestamp}>
                         {this.formatTimestamp(record.timestamp)}
                       </TableCell>
@@ -162,7 +165,9 @@ class SessionRecords extends React.Component<
                         <code>{formatDuration(record.time)}</code>
                       </TableCell>
                       <TableCell padding="checkbox">
-                        <IconButton onClick={this.handleRecordMoreClick(recordIndex)}>
+                        <IconButton
+                          onClick={this.handleRecordMoreClick(recordIndex)}
+                        >
                           <Icon>more_vert</Icon>
                         </IconButton>
                       </TableCell>
@@ -176,9 +181,7 @@ class SessionRecords extends React.Component<
             open={Boolean(this.state.recordMenuAnchor)}
             onClose={this.handleRecordMenuClose}
           >
-            <MenuItem onClick={this.handleDeleteRecordClick}>
-              Delete
-            </MenuItem>
+            <MenuItem onClick={this.handleDeleteRecordClick}>Delete</MenuItem>
           </Menu>
         </ExpansionPanelDetails>
       </ExpansionPanel>
@@ -199,7 +202,7 @@ class SessionRecords extends React.Component<
     this.props.dispatch(
       Actions.deleteRecord({
         sessionIndex: this.props.resultIndex,
-        recordIndex: this.state.activeRecordIndex!
+        recordIndex: this.state.activeRecordIndex!,
       })
     );
     this.handleRecordMenuClose();

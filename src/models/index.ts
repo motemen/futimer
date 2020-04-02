@@ -26,11 +26,11 @@ interface ResultStatsEntry {
 export function calcStats(results?: Record[]): ResultStats {
   if (!results || results.length === 0) {
     return {
-      averageOf: {}
+      averageOf: {},
     };
   }
 
-  const scores = results.map(result => result.time);
+  const scores = results.map((result) => result.time);
   return {
     averageOf: [5, 12, 100].reduce((a, n) => {
       const aa = scores.length >= n ? variousAveragesOf(n, scores) : null;
@@ -39,8 +39,8 @@ export function calcStats(results?: Record[]): ResultStats {
     single: {
       best: Math.min(...scores),
       current: scores[scores.length - 1],
-      worst: Math.max(...scores)
-    }
+      worst: Math.max(...scores),
+    },
   };
 }
 
@@ -68,12 +68,12 @@ export function variousAveragesOf(
   }
 
   const { best, worst } = slicesFrom(n, scores)
-    .map(s => averageOf(s))
+    .map((s) => averageOf(s))
     .reduce(
       (curr, v) => {
         return {
           best: Math.min(v, curr.best),
-          worst: Math.max(v, curr.worst)
+          worst: Math.max(v, curr.worst),
         };
       },
       { best: Number.MAX_VALUE, worst: Number.MIN_VALUE }
@@ -82,7 +82,7 @@ export function variousAveragesOf(
   return {
     best,
     current: averageOf(scores.slice(-n)),
-    worst
+    worst,
   };
 }
 
@@ -121,13 +121,13 @@ export const PuzzleConfiguration = {
   minx: { longName: "Megaminx", tnoodleImpl: "MegaminxPuzzle" },
   pyram: { longName: "Pyraminx", tnoodleImpl: "PyraminxPuzzle" },
   skewb: { longName: "Skewb", tnoodleImpl: "SkewbPuzzle" },
-  sq1: { longName: "Square-1", tnoodleImpl: "SquareOnePuzzle" }
+  sq1: { longName: "Square-1", tnoodleImpl: "SquareOnePuzzle" },
 };
 
 export enum ToolType {
   Recorder = "recorder",
   Stats = "stats",
-  Preview = "preview"
+  Preview = "preview",
 }
 
 export interface StoreState {
@@ -161,15 +161,15 @@ export const initialState: StoreState = {
   current: {
     session: {
       puzzleType: "333",
-      records: []
-    }
+      records: [],
+    },
   },
   sync: {
-    isSyncing: false
+    isSyncing: false,
   },
   auth: {},
   results: [],
   tool: {
-    selected: ToolType.Stats
-  }
+    selected: ToolType.Stats,
+  },
 };

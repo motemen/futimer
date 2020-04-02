@@ -12,11 +12,11 @@ test("createNewSession", () => {
           {
             timestamp: 0,
             scramble: "R U R",
-            time: 10.0
-          }
-        ]
-      }
-    }
+            time: 10.0,
+          },
+        ],
+      },
+    },
   };
   state = reducer(state, Actions.createNewSession());
   expect(state).toEqual({
@@ -25,8 +25,8 @@ test("createNewSession", () => {
       scramble: undefined,
       session: {
         puzzleType: "333",
-        records: []
-      }
+        records: [],
+      },
     },
     results: [
       {
@@ -34,9 +34,9 @@ test("createNewSession", () => {
         session: {
           name: new Date(0).toLocaleString(),
           puzzleType: "333",
-          records: [{ scramble: "R U R", time: 10.0, timestamp: 0 }]
-        }
-      }
-    ]
+          records: [{ scramble: "R U R", time: 10.0, timestamp: 0 }],
+        },
+      },
+    ],
   });
 });

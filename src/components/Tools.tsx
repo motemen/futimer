@@ -9,7 +9,7 @@ import {
   createStyles,
   Theme,
   withStyles,
-  WithStyles
+  WithStyles,
 } from "@material-ui/core";
 
 import VideoRecorder from "./tools/VideoRecorder";
@@ -21,11 +21,11 @@ import { Dispatch, Actions } from "../actions";
 const Styles = (theme: Theme) =>
   createStyles({
     root: {
-      marginRight: theme.spacing(2)
+      marginRight: theme.spacing(2),
     },
     content: {
-      padding: theme.spacing()
-    }
+      padding: theme.spacing(),
+    },
   });
 
 interface OwnProps {
@@ -40,10 +40,14 @@ class Tools extends React.Component<Props> {
       <Paper elevation={1} className={this.props.classes.root}>
         <Toolbar>
           <Typography style={{ marginRight: 20 }}>Tools</Typography>
-          <Select native value={this.props.selected} onChange={this.handleTypeChange}>
+          <Select
+            native
+            value={this.props.selected}
+            onChange={this.handleTypeChange}
+          >
             {(Object.keys(ToolType) as [keyof typeof ToolType])
               .sort()
-              .map(key => {
+              .map((key) => {
                 return (
                   <option value={ToolType[key]} key={key}>
                     {key}
@@ -66,7 +70,7 @@ class Tools extends React.Component<Props> {
       {
         [ToolType.Recorder]: () => <VideoRecorder />,
         [ToolType.Stats]: () => <Stats />,
-        [ToolType.Preview]: () => <ScramblePreview />
+        [ToolType.Preview]: () => <ScramblePreview />,
       }[this.props.selected] || (() => <span>stats</span>);
     return builder();
   }

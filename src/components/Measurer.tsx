@@ -10,7 +10,7 @@ import {
   createStyles,
   Theme,
   WithStyles,
-  withStyles
+  withStyles,
 } from "@material-ui/core";
 import { green, red } from "@material-ui/core/colors";
 
@@ -34,33 +34,33 @@ const Styles = (theme: Theme) =>
   createStyles({
     "@keyframes holding-color-change": {
       from: { color: red.A700 },
-      to: { color: green.A700 }
+      to: { color: green.A700 },
     },
     button: {
       color: theme.palette.grey["300"],
       transition: "color 0.25s",
       "&:focus": {
         backgroundColor: "#eee",
-        color: theme.palette.text.primary
-      }
+        color: theme.palette.text.primary,
+      },
     },
     buttonChildPulsate: {
       animation: "none",
-      display: "none"
+      display: "none",
     },
     isHolding: {
-      animation: `${HOLD_DURATION}ms step-end $holding-color-change both`
+      animation: `${HOLD_DURATION}ms step-end $holding-color-change both`,
     },
     scramble: {
       [theme.breakpoints.down("xs")]: {
-        fontSize: theme.typography.h4.fontSize
+        fontSize: theme.typography.h4.fontSize,
       },
       fontSize: theme.typography.h3.fontSize,
       marginTop: theme.spacing(3),
       marginLeft: theme.spacing(),
       marginRight: theme.spacing(),
       textAlign: "center",
-      transition: "color 0.5s"
+      transition: "color 0.5s",
     },
     timer: {
       fontSize: theme.typography.h1.fontSize,
@@ -70,11 +70,11 @@ const Styles = (theme: Theme) =>
       width: "100%",
       touchAction: "none",
       WebkitTouchCallout: "none",
-      userSelect: "none"
+      userSelect: "none",
     },
     isLoading: {
-      color: theme.palette.grey["300"]
-    }
+      color: theme.palette.grey["300"],
+    },
   });
 
 class Measurer extends React.Component<Props, State> {
@@ -119,7 +119,7 @@ class Measurer extends React.Component<Props, State> {
       <div>
         <div
           className={classNames(this.props.classes.scramble, {
-            [this.props.classes.isLoading]: !this.props.scramble
+            [this.props.classes.isLoading]: !this.props.scramble,
           })}
         >
           <code>
@@ -142,14 +142,14 @@ class Measurer extends React.Component<Props, State> {
               this.props.classes.timer,
               {
                 [this.props.classes.isHolding]:
-                  this.state && Boolean(this.state.holdStarted)
+                  this.state && Boolean(this.state.holdStarted),
               }
-            )
+            ),
           }}
           TouchRippleProps={{
             classes: {
-              childPulsate: this.props.classes.buttonChildPulsate
-            }
+              childPulsate: this.props.classes.buttonChildPulsate,
+            },
           }}
           onContextMenuCapture={this.handleTimerContextMenu}
         >
@@ -251,7 +251,7 @@ class Measurer extends React.Component<Props, State> {
     this.record = {
       scramble: this.props.scramble!,
       time: elapsed,
-      timestamp: performance.timing.navigationStart + this.startTime
+      timestamp: performance.timing.navigationStart + this.startTime,
     };
 
     this.animTimer = null;
@@ -263,7 +263,7 @@ class Measurer extends React.Component<Props, State> {
 
 function mapStateToProps({ current: { scramble } }: StoreState) {
   return {
-    scramble
+    scramble,
   };
 }
 

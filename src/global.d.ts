@@ -1,6 +1,4 @@
-declare module "tnoodle/tnoodle" {
-
-}
+declare module "tnoodle/tnoodle" {}
 
 declare var tnoodlejs: any;
 declare var puzzle: any;

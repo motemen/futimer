@@ -15,7 +15,7 @@ export interface GoogleAPIOptions {
 type GAPI = typeof gapi;
 
 export enum GoogleAPIEvents {
-  UPDATE_SIGNED_IN = "updateSignedIn"
+  UPDATE_SIGNED_IN = "updateSignedIn",
 }
 export class GoogleAPI extends EventEmitter {
   private readonly SCRIPT_SOURCE = "https://apis.google.com/js/api.js";
@@ -33,12 +33,14 @@ export class GoogleAPI extends EventEmitter {
       this.loadP ||
       (this.loadP = (async () => {
         const g = await this.loadScript();
-        await new Promise(resolve => g.load("client:auth2", resolve));
+        await new Promise((resolve) => g.load("client:auth2", resolve));
         await g.client.init(this.opts);
         const auth = g.auth2.getAuthInstance();
         if (auth) {
           this.emit(GoogleAPIEvents.UPDATE_SIGNED_IN, auth.isSignedIn.get());
-          auth.isSignedIn.listen(signedIn => this.emit(GoogleAPIEvents.UPDATE_SIGNED_IN, signedIn));
+          auth.isSignedIn.listen((signedIn) =>
+            this.emit(GoogleAPIEvents.UPDATE_SIGNED_IN, signedIn)
+          );
         }
         return g;
       })())
@@ -102,7 +104,7 @@ export const googleAPI = new GoogleAPI({
   clientId: process.env.REACT_APP_GOOGLE_API_CLIENT_ID!,
   discoveryDocs: [
     "https://sheets.googleapis.com/$discovery/rest?version=v4",
-    "https://www.googleapis.com/discovery/v1/apis/drive/v3/rest"
+    "https://www.googleapis.com/discovery/v1/apis/drive/v3/rest",
   ],
-  scope: "https://www.googleapis.com/auth/drive.file"
+  scope: "https://www.googleapis.com/auth/drive.file",
 });

@@ -1,18 +1,17 @@
 import * as React from "react";
 import * as ReactDOM from "react-dom";
 import { Provider } from "react-redux";
-import { applyMiddleware, compose, createStore, Reducer } from "redux";
+import { applyMiddleware, compose, createStore } from "redux";
 import { persistReducer, persistStore } from "redux-persist";
 import { PersistGate } from "redux-persist/integration/react";
 import persistStorage from "redux-persist/lib/storage";
 import thunkMiddleware from "redux-thunk";
 
-import { Actions, Action } from "./actions";
+import { Actions } from "./actions";
 import NavBar from "./components/NavBar";
 import Measurer from "./components/Measurer";
 import Results from "./components/Results";
 import { reducer } from "./reducers";
-import { StoreState } from "./models";
 
 import "./App.css";
 import "./index.css";
@@ -27,7 +26,7 @@ import { blue } from "@material-ui/core/colors";
 import { SyncRecords } from "./services/SyncRecords";
 import Tools from "./components/Tools";
 
-googleAPI.on(GoogleAPIEvents.UPDATE_SIGNED_IN, async signedIn => {
+googleAPI.on(GoogleAPIEvents.UPDATE_SIGNED_IN, async (signedIn) => {
   store.dispatch(Actions.updateIsAuthed({ isAuthed: signedIn }));
 
   const { sync } = store.getState();
@@ -45,7 +44,7 @@ const persistConfig = {
   key: "root",
   storage: persistStorage,
   transforms: [],
-  whitelist: ["current", "results", "tool"]
+  whitelist: ["current", "results", "tool"],
 };
 
 const rootReducer = persistReducer(persistConfig, reducer);
@@ -64,8 +63,8 @@ const persister = persistStore(store);
 const theme = createMuiTheme({
   palette: {
     primary: { main: "#ef0" },
-    secondary: { main: blue.A700 }
-  }
+    secondary: { main: blue.A700 },
+  },
 });
 
 ReactDOM.render(

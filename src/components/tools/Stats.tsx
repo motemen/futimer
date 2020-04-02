@@ -7,7 +7,7 @@ import {
   TableHead,
   TableBody,
   TableRow,
-  TableCell
+  TableCell,
 } from "@material-ui/core";
 
 interface Props {
@@ -28,7 +28,7 @@ class Stats extends React.Component<Props> {
           </TableRow>
         </TableHead>
         <TableBody>
-          {[1, 5, 12, 100].map(n => {
+          {[1, 5, 12, 100].map((n) => {
             const st = n === 1 ? stats.single : stats.averageOf[n];
             if (!st) {
               return null;
@@ -50,11 +50,11 @@ class Stats extends React.Component<Props> {
 
 function mapStateToProps({
   current: {
-    session: { records }
-  }
+    session: { records },
+  },
 }: StoreState) {
   return {
-    records
+    records,
   };
 }
 
