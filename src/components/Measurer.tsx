@@ -52,10 +52,7 @@ const Styles = (theme: Theme) =>
       animation: `${HOLD_DURATION}ms step-end $holding-color-change both`,
     },
     scramble: {
-      [theme.breakpoints.down("xs")]: {
-        fontSize: theme.typography.h4.fontSize,
-      },
-      fontSize: theme.typography.h3.fontSize,
+      fontSize: theme.typography.h5.fontSize,
       marginTop: theme.spacing(3),
       marginLeft: theme.spacing(),
       marginRight: theme.spacing(),
@@ -63,6 +60,9 @@ const Styles = (theme: Theme) =>
       transition: "color 0.5s",
     },
     timer: {
+      [theme.breakpoints.down("xs")]: {
+        fontSize: theme.typography.h2.fontSize,
+      },
       fontSize: theme.typography.h1.fontSize,
       padding: theme.spacing(2),
       margin: `${theme.spacing(3)}px 0`,
