@@ -11,10 +11,6 @@ interface Props {
 class ScramblePreview extends React.Component<Props> {
   private ref: React.RefObject<HTMLDivElement> = React.createRef();
 
-  constructor(props: Props) {
-    super(props);
-  }
-
   public componentDidMount() {
     this.updatePreview(this.props);
   }
@@ -52,12 +48,12 @@ class ScramblePreview extends React.Component<Props> {
 function mapStateToProps({
   current: {
     scramble,
-    session: { puzzleType }
-  }
+    session: { puzzleType },
+  },
 }: StoreState) {
   return {
     puzzleType,
-    scramble
+    scramble,
   };
 }
 

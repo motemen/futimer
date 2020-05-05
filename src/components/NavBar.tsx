@@ -20,11 +20,17 @@ class NavBar extends React.Component<Props> {
       <AppBar position="static" elevation={0}>
         <Toolbar>
           <Typography
-            variant="title"
+            variant="h6"
             color="inherit"
             style={{ textTransform: "uppercase", marginRight: 20 }}
           >
-            <img src={Logo} width="16" height="16" style={{ marginRight: 4 }} />
+            <img
+              alt="fuTimer"
+              src={Logo}
+              width="16"
+              height="16"
+              style={{ marginRight: 4 }}
+            />
             fuTimer
           </Typography>
           <Select
@@ -32,9 +38,11 @@ class NavBar extends React.Component<Props> {
             value={this.props.puzzleType}
             onChange={this.handlePuzzleTypeChange}
           >
-            {Object.keys(PuzzleConfiguration)
+            {(Object.keys(PuzzleConfiguration) as [
+              keyof typeof PuzzleConfiguration
+            ])
               .sort()
-              .map(key => {
+              .map((key) => {
                 return (
                   <option value={key} key={key}>
                     {PuzzleConfiguration[key].longName}
@@ -48,7 +56,7 @@ class NavBar extends React.Component<Props> {
   }
 
   private handlePuzzleTypeChange = (
-    ev: React.ChangeEvent<HTMLSelectElement>
+    ev: React.ChangeEvent<{ value: unknown }>
   ) => {
     this.props.dispatch(
       AsyncAction.changePuzzleType({ puzzle: ev.target.value as PuzzleType })
@@ -58,11 +66,11 @@ class NavBar extends React.Component<Props> {
 
 function mapStateToProps({
   current: {
-    session: { puzzleType }
-  }
+    session: { puzzleType },
+  },
 }: StoreState) {
   return {
-    puzzleType
+    puzzleType,
   };
 }
 

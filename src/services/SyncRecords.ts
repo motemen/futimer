@@ -24,7 +24,7 @@ export class SyncRecords {
       {
         range: `'${gameLongName}'!A1`,
         spreadsheetId,
-        valueInputOption: "USER_ENTERED"
+        valueInputOption: "USER_ENTERED",
       },
       { values }
     );
@@ -38,7 +38,7 @@ export class SyncRecords {
     return (this.getFileP = (async () => {
       const gapi = await this.googleAPI.load();
       const listResp = await gapi.client.drive.files.list({
-        orderBy: "createdTime desc"
+        orderBy: "createdTime desc",
       });
       if (listResp.result.files && listResp.result.files.length > 0) {
         return listResp.result.files[0];
@@ -48,7 +48,7 @@ export class SyncRecords {
         {},
         {
           mimeType: "application/vnd.google-apps.spreadsheet",
-          name: "Speedcubing records"
+          name: "Speedcubing records",
         }
       );
       return createResp.result;
@@ -58,10 +58,10 @@ export class SyncRecords {
   private async ensureSheet(spreadsheetId: string, name: string) {
     const gapi = await this.googleAPI.load();
     const sheetInfo = await gapi.client.sheets.spreadsheets.get({
-      spreadsheetId
+      spreadsheetId,
     });
     if (
-      sheetInfo.result.sheets!.some(sheet => sheet.properties!.title === name)
+      sheetInfo.result.sheets!.some((sheet) => sheet.properties!.title === name)
     ) {
       return;
     }
@@ -69,7 +69,7 @@ export class SyncRecords {
     await (gapi.client.sheets.spreadsheets.batchUpdate as any)(
       { spreadsheetId },
       {
-        requests: [{ addSheet: { properties: { title: name } } }]
+        requests: [{ addSheet: { properties: { title: name } } }],
       }
     );
   }

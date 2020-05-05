@@ -24,5 +24,5 @@ const puzzlesLoaded: Promise<TNoodlePuzzles> = new Promise<TNoodlePuzzles>(
 export function generateScramble(
   puzzleType: keyof TNoodlePuzzles
 ): Promise<string> {
-  return puzzlesLoaded.then(puzzle => puzzle[puzzleType].generateScramble());
+  return puzzlesLoaded.then((puzzle) => puzzle[puzzleType].generateScramble());
 }

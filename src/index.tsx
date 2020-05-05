@@ -1,18 +1,17 @@
 import * as React from "react";
 import * as ReactDOM from "react-dom";
 import { Provider } from "react-redux";
-import { applyMiddleware, compose, createStore, Reducer } from "redux";
+import { applyMiddleware, compose, createStore } from "redux";
 import { persistReducer, persistStore } from "redux-persist";
 import { PersistGate } from "redux-persist/integration/react";
 import persistStorage from "redux-persist/lib/storage";
 import thunkMiddleware from "redux-thunk";
 
-import { Actions, Action } from "./actions";
+import { Actions } from "./actions";
 import NavBar from "./components/NavBar";
 import Measurer from "./components/Measurer";
 import Results from "./components/Results";
 import { reducer } from "./reducers";
-import { StoreState } from "./models";
 
 import "./App.css";
 import "./index.css";
@@ -20,18 +19,14 @@ import registerServiceWorker from "./registerServiceWorker";
 
 import { googleAPI, GoogleAPIEvents } from "./gateways/GoogleAPI";
 
-import {
-  createMuiTheme,
-  MuiThemeProvider,
-  Grid,
-  Hidden
-} from "@material-ui/core";
+import { createMuiTheme, Grid, Hidden } from "@material-ui/core";
+import { ThemeProvider } from "@material-ui/styles";
 import { blue } from "@material-ui/core/colors";
 
 import { SyncRecords } from "./services/SyncRecords";
 import Tools from "./components/Tools";
 
-googleAPI.on(GoogleAPIEvents.UPDATE_SIGNED_IN, async signedIn => {
+googleAPI.on(GoogleAPIEvents.UPDATE_SIGNED_IN, async (signedIn) => {
   store.dispatch(Actions.updateIsAuthed({ isAuthed: signedIn }));
 
   const { sync } = store.getState();
@@ -49,12 +44,12 @@ const persistConfig = {
   key: "root",
   storage: persistStorage,
   transforms: [],
-  whitelist: ["current", "results", "tool"]
+  whitelist: ["current", "results", "tool"],
 };
 
-const rootReducer: Reducer<StoreState> = persistReducer(persistConfig, reducer);
+const rootReducer = persistReducer(persistConfig, reducer);
 
-const store = createStore<StoreState, Action, {}, {}>(
+const store = createStore(
   rootReducer,
   ((window as any).__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose)(
     applyMiddleware(thunkMiddleware)
@@ -68,12 +63,12 @@ const persister = persistStore(store);
 const theme = createMuiTheme({
   palette: {
     primary: { main: "#ef0" },
-    secondary: { main: blue.A700 }
-  }
+    secondary: { main: blue.A700 },
+  },
 });
 
 ReactDOM.render(
-  <MuiThemeProvider theme={theme}>
+  <ThemeProvider theme={theme}>
     <Provider store={store}>
       <PersistGate persistor={persister}>
         <NavBar />
@@ -90,7 +85,7 @@ ReactDOM.render(
         </Grid>
       </PersistGate>
     </Provider>
-  </MuiThemeProvider>,
+  </ThemeProvider>,
   document.getElementById("root") as HTMLElement
 );
 

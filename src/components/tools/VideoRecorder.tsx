@@ -10,7 +10,7 @@ interface Props {
 class VideoRecorder extends React.Component<Props> {
   public open = once(async () => {
     this.stream = await navigator.mediaDevices.getUserMedia({ video: true });
-    this.videoRef.current!.src = URL.createObjectURL(this.stream);
+    this.videoRef.current!.srcObject = this.stream;
     this.videoRef.current!.play();
   });
 

@@ -12,7 +12,7 @@ import {
   Typography,
   withStyles,
   WithStyles,
-  Tooltip
+  Tooltip,
 } from "@material-ui/core";
 
 import classNames from "classnames";
@@ -45,27 +45,27 @@ const Styles = (theme: Theme) =>
   createStyles({
     "@keyframes spin-l": {
       from: { transform: "rotate(0deg)" },
-      to: { transform: "rotate(-360deg)" }
+      to: { transform: "rotate(-360deg)" },
     },
     isSyncing: {
-      animation: "spin-l 1.5s linear infinite"
+      animation: "$spin-l 1.5s linear infinite",
     },
     root: {
-      margin: theme.spacing.unit * 2,
+      margin: theme.spacing(2),
       marginTop: 0,
       overflowX: "auto",
       [theme.breakpoints.down("sm")]: {
         marginLeft: 0,
         marginRight: 0,
-        borderRadius: 0
-      }
+        borderRadius: 0,
+      },
     },
     spacer: {
-      flex: "1"
+      flex: "1",
     },
     title: {
-      flexBasis: "20%"
-    }
+      flexBasis: "20%",
+    },
   });
 
 class Results extends React.Component<Props, State> {
@@ -96,7 +96,7 @@ class Results extends React.Component<Props, State> {
         </Paper>
         <Paper className={this.props.classes.root} elevation={1}>
           <Toolbar>
-            <Typography variant="headline">History</Typography>
+            <Typography>History</Typography>
             <div className={this.props.classes.spacer} />
             {this.props.isAuthed && this.props.spreadsheetId ? (
               <Tooltip title="Open spreadsheet">
@@ -107,7 +107,10 @@ class Results extends React.Component<Props, State> {
             ) : null}
             <Tooltip title="Delete records">
               <div>
-                <IconButton onClick={this.handleDeleteAllRecordsClick} disabled={this.props.results.length === 0}>
+                <IconButton
+                  onClick={this.handleDeleteAllRecordsClick}
+                  disabled={this.props.results.length === 0}
+                >
                   <Icon>delete</Icon>
                 </IconButton>
               </div>
@@ -122,7 +125,7 @@ class Results extends React.Component<Props, State> {
                   <Tooltip title="Sync records">
                     <Icon
                       className={classNames({
-                        [this.props.classes.isSyncing]: this.props.isSyncing
+                        [this.props.classes.isSyncing]: this.props.isSyncing,
                       })}
                     >
                       sync
@@ -164,14 +167,13 @@ class Results extends React.Component<Props, State> {
   };
 
   private handleOpenSheetClick = () => {
-    const url = `https://docs.google.com/spreadsheets/d/${
-      this.props.spreadsheetId
-    }/edit`;
+    const url = `https://docs.google.com/spreadsheets/d/${this.props.spreadsheetId}/edit`;
     window.open(url);
   };
 
   private handleDeleteAllRecordsClick = () => {
-    if (confirm('Delete all records?')) {
+    // eslint-disable-next-line no-restricted-globals
+    if (confirm("Delete all records?")) {
       this.props.dispatch(Actions.deleteAllRecords());
     }
   };
@@ -181,18 +183,18 @@ function mapStateToProps({
   current: { session },
   results,
   auth: { isAuthed },
-  sync: { isSyncing, spreadsheetId }
+  sync: { isSyncing, spreadsheetId },
 }: StoreState) {
   return {
     isAuthed,
     isSyncing,
-    results: results.map(result => ({
+    results: results.map((result) => ({
       ...result,
-      stats: calcStats(result.session.records)
+      stats: calcStats(result.session.records),
     })),
     spreadsheetId,
     syncDone: results.every(({ isSynced }) => isSynced),
-    session
+    session,
   };
 }
 

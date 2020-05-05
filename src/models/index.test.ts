@@ -15,7 +15,7 @@ describe("variousAveragesOf", () => {
       3,
       4,
       100,
-      99
+      99,
     ]);
     expect(best).toEqual(3);
     expect(current).toBeCloseTo(35.333, 3);
@@ -26,10 +26,10 @@ describe("variousAveragesOf", () => {
 describe("averageOf", () => {
   expect(
     calcStats(
-      [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13].map(time => ({
+      [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13].map((time) => ({
         time,
         scramble: "",
-        timestamp: 0
+        timestamp: 0,
       }))
     )
   ).toEqual({
@@ -38,19 +38,19 @@ describe("averageOf", () => {
       "12": {
         best: 6.5,
         current: 7.5,
-        worst: 7.5
+        worst: 7.5,
       },
       "5": {
         best: 3,
         current: 11,
-        worst: 11
-      }
+        worst: 11,
+      },
     },
     single: {
       best: 1,
       current: 13,
-      worst: 13
-    }
+      worst: 13,
+    },
   });
 });
 
@@ -63,7 +63,7 @@ describe("formatDuration", () => {
     [10.234, "10.23"],
     [1.2345, " 1.23"],
     [100.234, "1:40.23"],
-    [61.234, "1:01.23"]
+    [61.234, "1:01.23"],
   ];
 
   tests.forEach(([n, s]: [number, string]) => {
