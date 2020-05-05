@@ -3,7 +3,7 @@
   "license": "MIT",
   "devDependencies": {
     "@types/es6-shim": "0.31.39",
-    "@types/google-apps-script": "0.0.38",
+    "@types/google-apps-script": "0.0.62",
     "gas-webpack-plugin": "0.3.0",
     "ts-loader": "5.3.0",
     "typescript": "3.3.3333",
