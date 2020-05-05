@@ -7,6 +7,12 @@
     {
       "depTypeList": ["devDependencies"],
       "groupName": "devDependencies"
+    },
+    {
+      "groupName": "definitelyTyped",
+      "packagePatterns": [
+        "^@types/"
+      ]
     }
   ]
 }
