@@ -14,10 +14,20 @@ jobs:
       with:
         node-version: 12
 
+    - id: yarn-cache-dir-path
+      run: echo "::set-output name=dir::$(yarn cache dir)"
+
+    - uses: actions/cache@v1
+      with:
+        path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
+        key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+        restore-keys: |
+          ${{ runner.os }}-yarn-
+
     - run: |
         yarn
 
     - run: |
         yarn test --coverage --coverageDirectory=./coverage
-        
-    - uses: codecov/codecov-action@v1.0.6        
+
+    - uses: codecov/codecov-action@v1.0.6
