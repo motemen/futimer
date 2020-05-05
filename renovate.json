@@ -1,0 +1,18 @@
+{
+  "extends": [
+    "config:base",
+    "group:definitelyTyped"
+  ],
+  "packageRules": [
+    {
+      "depTypeList": ["devDependencies"],
+      "groupName": "devDependencies"
+    },
+    {
+      "groupName": "definitelyTyped",
+      "packagePatterns": [
+        "^@types/"
+      ]
+    }
+  ]
+}
