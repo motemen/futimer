@@ -29,6 +29,8 @@ jobs:
     - run: |
         yarn
 
+    - run: yarn build
+
     - run: |
         yarn test --coverage --coverageDirectory=./coverage
 
