@@ -30,14 +30,14 @@
   "devDependencies": {
     "gh-pages": "2.2.0",
     "@types/classnames": "2.2.10",
-    "@types/gapi.auth2": "0.0.51",
-    "@types/gapi.client.drive": "3.0.4",
-    "@types/gapi.client.sheets": "4.0.6",
+    "@types/gapi.auth2": "0.0.52",
+    "@types/gapi.client.drive": "3.0.8",
+    "@types/gapi.client.sheets": "4.0.9",
     "@types/jest": "24.9.1",
-    "@types/node": "12.12.38",
-    "@types/react": "16.9.35",
+    "@types/node": "12.12.54",
+    "@types/react": "16.9.46",
     "@types/react-dom": "16.9.8",
-    "@types/react-redux": "7.1.8",
+    "@types/react-redux": "7.1.9",
     "@types/reduce-reducers": "0.3.0",
     "@types/redux-actions": "2.6.1",
     "eslint-config-prettier": "6.11.0",
@@ -47,7 +47,7 @@
     "typescript": "3.9.6"
   },
   "resolutions": {
-    "@types/react": "16.9.35"
+    "@types/react": "16.9.46"
   },
   "browserslist": {
     "production": [
