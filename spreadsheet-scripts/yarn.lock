@@ -2,10 +2,10 @@
 # yarn lockfile v1
 
 
-"@types/es6-shim@0.31.39":
-  version "0.31.39"
-  resolved "https://registry.yarnpkg.com/@types/es6-shim/-/es6-shim-0.31.39.tgz#61de60fac180f967177bcde598a62072a39ea04b"
-  integrity sha512-z2JtmHE1wg75JTdT1qWGvW4eDOk6DUW1Exdzrs+8QTPFttkdTr4pKVzLLCCAOUC8i/KiG+QtkSEteQ5hDxwbpg==
+"@types/es6-shim@0.31.40":
+  version "0.31.40"
+  resolved "https://registry.yarnpkg.com/@types/es6-shim/-/es6-shim-0.31.40.tgz#e6b74cfe8054d30d42611e019642960ea4830d88"
+  integrity sha512-biQI9Rm+vNEZM+0r/OUEfN87eBC8y45mUGuI3yOpMaTFpn6MIedJrKhle9lQPrVnuDtswqN65lxujS+kuMMWDQ==
 
 "@types/google-apps-script@0.0.62":
   version "0.0.62"
