@@ -11,7 +11,7 @@
     "webpack-cli": "3.3.12"
   },
   "dependencies": {
-    "es6-shim": "0.35.4"
+    "es6-shim": "0.35.5"
   },
   "scripts": {
     "build": "webpack"
