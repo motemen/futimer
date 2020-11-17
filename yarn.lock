@@ -1229,6 +1229,20 @@
     prop-types "^15.7.2"
     react-is "^16.8.0"
 
+"@maxim_mazurok/gapi.client.drive@latest":
+  version "3.0.20201108"
+  resolved "https://registry.yarnpkg.com/@maxim_mazurok/gapi.client.drive/-/gapi.client.drive-3.0.20201108.tgz#609055c2cc02f74c625d2e14669851a0d40ebb59"
+  integrity sha512-oEszAmauc434vB72TcUrB2i676wyOMFFisK7WlY9JxsUU7L4n9OSCTAOP4h3+rUtsCoqhWgTv7NmduXQab6UMg==
+  dependencies:
+    "@types/gapi.client" "*"
+
+"@maxim_mazurok/gapi.client.sheets@latest":
+  version "4.0.20201111"
+  resolved "https://registry.yarnpkg.com/@maxim_mazurok/gapi.client.sheets/-/gapi.client.sheets-4.0.20201111.tgz#2edd0b50b02de0448d19d7a2489c7c1ded130eed"
+  integrity sha512-997uwKBj5O5foTC0FWa5UT4ovjuBLozLK2Msnlf92pVUcpYnzzv/oUBntOsFbqoIcvyivJ01+Y6xbpcjlmgCJQ==
+  dependencies:
+    "@types/gapi.client" "*"
+
 "@mrmlnc/readdir-enhanced@^2.2.1":
   version "2.2.1"
   resolved "https://registry.yarnpkg.com/@mrmlnc/readdir-enhanced/-/readdir-enhanced-2.2.1.tgz#524af240d1a360527b730475ecfa1344aa540dde"
@@ -1378,10 +1392,10 @@
   dependencies:
     "@babel/types" "^7.3.0"
 
-"@types/classnames@2.2.10":
-  version "2.2.10"
-  resolved "https://registry.yarnpkg.com/@types/classnames/-/classnames-2.2.10.tgz#cc658ca319b6355399efc1f5b9e818f1a24bf999"
-  integrity sha512-1UzDldn9GfYYEsWWnn/P4wkTlkZDH7lDb0wBMGbtIQc9zXEQq7FlKBdZUn6OBqD8sKZZ2RQO2mAjGpXiDGoRmQ==
+"@types/classnames@2.2.11":
+  version "2.2.11"
+  resolved "https://registry.yarnpkg.com/@types/classnames/-/classnames-2.2.11.tgz#2521cc86f69d15c5b90664e4829d84566052c1cf"
+  integrity sha512-2koNhpWm3DgWRp5tpkiJ8JGc1xTn2q0l+jUNUE7oMKXUf5NpI9AIdC4kbjGNFBdHtcxBD18LAksoudAVhFKCjw==
 
 "@types/color-name@^1.1.1":
   version "1.1.1"
@@ -1405,19 +1419,19 @@
   dependencies:
     "@types/gapi" "*"
 
-"@types/gapi.client.drive@3.0.8":
-  version "3.0.8"
-  resolved "https://registry.yarnpkg.com/@types/gapi.client.drive/-/gapi.client.drive-3.0.8.tgz#7c91b21a8dcc526a366844f56814de7cf4566329"
-  integrity sha512-VKnITcwgEozkqbFE6kyu6fjTM046ikzBiHvmApl3c+naFvDQI5/5ikSIGCMyLRJAr9+5ZGiQL/cvNCT5gMs31A==
+"@types/gapi.client.drive@3.0.13":
+  version "3.0.13"
+  resolved "https://registry.yarnpkg.com/@types/gapi.client.drive/-/gapi.client.drive-3.0.13.tgz#5cdb97952890be17785dff7514b4c6b89df05313"
+  integrity sha512-JFkHqQj9RA8MpvfvwdX8VU0Sbu7FMGqBR9dAmkocekWdD/y5Z/a/A6Y37EEqKW/dT8t7F3RpgUDUPlhp3snAlw==
   dependencies:
-    "@types/gapi.client" "*"
+    "@maxim_mazurok/gapi.client.drive" latest
 
-"@types/gapi.client.sheets@4.0.9":
-  version "4.0.9"
-  resolved "https://registry.yarnpkg.com/@types/gapi.client.sheets/-/gapi.client.sheets-4.0.9.tgz#70dd9dd1efaa2b9d4326ac0eed2532b38bacfae6"
-  integrity sha512-y2RzlXk1SDNGJFAXs5otUN4KXlrJ1W8hNLcb01qvTCcx2pQ+1+3JCHplxkAnxVbEQLJvF/W8edHqqpyWGL83zw==
+"@types/gapi.client.sheets@4.0.20201029":
+  version "4.0.20201029"
+  resolved "https://registry.yarnpkg.com/@types/gapi.client.sheets/-/gapi.client.sheets-4.0.20201029.tgz#f56daa6851c695473514e64c7c0dc4fd8096a463"
+  integrity sha512-Om2t05O59QnaPTJZdx6UQvejn6tV55qKebnxcpRx0wXWiDpf5ZZ3GSRGzqXXZt0ggkRkyErLdLLy4LPVgqGlTw==
   dependencies:
-    "@types/gapi.client" "*"
+    "@maxim_mazurok/gapi.client.sheets" latest
 
 "@types/gapi.client@*":
   version "1.0.0"
@@ -1491,10 +1505,10 @@
   resolved "https://registry.yarnpkg.com/@types/node/-/node-13.9.5.tgz#59738bf30b31aea1faa2df7f4a5f55613750cf00"
   integrity sha512-hkzMMD3xu6BrJpGVLeQ3htQQNAcOrJjX7WFmtK8zWQpz2UJf13LCFF2ALA7c9OVdvc2vQJeDdjfR35M0sBCxvw==
 
-"@types/node@12.12.54":
-  version "12.12.54"
-  resolved "https://registry.yarnpkg.com/@types/node/-/node-12.12.54.tgz#a4b58d8df3a4677b6c08bfbc94b7ad7a7a5f82d1"
-  integrity sha512-ge4xZ3vSBornVYlDnk7yZ0gK6ChHf/CHB7Gl1I0Jhah8DDnEQqBzgohYG4FX4p81TNirSETOiSyn+y1r9/IR6w==
+"@types/node@12.19.4":
+  version "12.19.4"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-12.19.4.tgz#cdfbb62e26c7435ed9aab9c941393cc3598e9b46"
+  integrity sha512-o3oj1bETk8kBwzz1WlO6JWL/AfAA3Vm6J1B3C9CsdxHYp7XgPiH7OEXPUbZTndHlRaIElrANkQfe6ZmfJb3H2w==
 
 "@types/parse-json@^4.0.0":
   version "4.0.0"
@@ -1512,17 +1526,17 @@
   resolved "https://registry.yarnpkg.com/@types/q/-/q-1.5.2.tgz#690a1475b84f2a884fd07cd797c00f5f31356ea8"
   integrity sha512-ce5d3q03Ex0sy4R14722Rmt6MT07Ua+k4FwDfdcToYJcMKNtRVQvJ6JCAPdAmAnbRb6CsX6aYb9m96NGod9uTw==
 
-"@types/react-dom@16.9.8":
-  version "16.9.8"
-  resolved "https://registry.yarnpkg.com/@types/react-dom/-/react-dom-16.9.8.tgz#fe4c1e11dfc67155733dfa6aa65108b4971cb423"
-  integrity sha512-ykkPQ+5nFknnlU6lDd947WbQ6TE3NNzbQAkInC2EKY1qeYdTKp7onFusmYZb+ityzx2YviqT6BXSu+LyWWJwcA==
+"@types/react-dom@16.9.9":
+  version "16.9.9"
+  resolved "https://registry.yarnpkg.com/@types/react-dom/-/react-dom-16.9.9.tgz#d2d0a6f720a0206369ccbefff752ba37b9583136"
+  integrity sha512-jE16FNWO3Logq/Lf+yvEAjKzhpST/Eac8EMd1i4dgZdMczfgqC8EjpxwNgEe3SExHYLliabXDh9DEhhqnlXJhg==
   dependencies:
     "@types/react" "*"
 
-"@types/react-redux@7.1.9":
-  version "7.1.9"
-  resolved "https://registry.yarnpkg.com/@types/react-redux/-/react-redux-7.1.9.tgz#280c13565c9f13ceb727ec21e767abe0e9b4aec3"
-  integrity sha512-mpC0jqxhP4mhmOl3P4ipRsgTgbNofMRXJb08Ms6gekViLj61v1hOZEKWDCyWsdONr6EjEA6ZHXC446wdywDe0w==
+"@types/react-redux@7.1.11":
+  version "7.1.11"
+  resolved "https://registry.yarnpkg.com/@types/react-redux/-/react-redux-7.1.11.tgz#a18e8ab3651e8e8cc94798934927937c66021217"
+  integrity sha512-OjaFlmqy0CRbYKBoaWF84dub3impqnLJUrz4u8PRjDzaa4n1A2cVmjMV81shwXyAD5x767efhA8STFGJz/r1Zg==
   dependencies:
     "@types/hoist-non-react-statics" "^3.3.0"
     "@types/react" "*"
@@ -1536,10 +1550,10 @@
   dependencies:
     "@types/react" "*"
 
-"@types/react@*", "@types/react@16.9.46":
-  version "16.9.46"
-  resolved "https://registry.yarnpkg.com/@types/react/-/react-16.9.46.tgz#f0326cd7adceda74148baa9bff6e918632f5069e"
-  integrity sha512-dbHzO3aAq1lB3jRQuNpuZ/mnu+CdD3H0WVaaBQA8LTT3S33xhVBUj232T8M3tAhSWJs/D/UqORYUlJNl/8VQZg==
+"@types/react@*", "@types/react@16.9.56":
+  version "16.9.56"
+  resolved "https://registry.yarnpkg.com/@types/react/-/react-16.9.56.tgz#ea25847b53c5bec064933095fc366b1462e2adf0"
+  integrity sha512-gIkl4J44G/qxbuC6r2Xh+D3CGZpJ+NdWTItAPmZbR5mUS+JQ8Zvzpl0ea5qT/ZT3ZNTUcDKUVqV3xBE8wv/DyQ==
   dependencies:
     "@types/prop-types" "*"
     csstype "^3.0.2"
