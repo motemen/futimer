@@ -7,7 +7,7 @@
     "gas-webpack-plugin": "0.3.0",
     "ts-loader": "5.4.5",
     "typescript": "3.9.7",
-    "webpack": "4.44.1",
+    "webpack": "4.44.2",
     "webpack-cli": "3.3.12"
   },
   "dependencies": {
