@@ -34,7 +34,7 @@ jobs:
     - run: |
         yarn test --coverage --coverageDirectory=./coverage
 
-    - uses: codecov/codecov-action@v1.0.6
+    - uses: codecov/codecov-action@v1.0.14
 
     - if: ${{ github.ref == 'master' }}
       run: |
