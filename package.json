@@ -6,7 +6,7 @@
   "dependencies": {
     "@material-ui/core": "4.11.0",
     "classnames": "2.2.6",
-    "googleapis": "40.0.1",
+    "googleapis": "65.0.0",
     "keycode": "2.2.0",
     "react": "16.14.0",
     "react-dom": "16.14.0",
