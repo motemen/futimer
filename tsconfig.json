@@ -1,11 +1,9 @@
 {
   "compilerOptions": {
+    // https://stackoverflow.com/a/64115885
+    "noFallthroughCasesInSwitch": true,
     "target": "es5",
-    "lib": [
-      "dom",
-      "dom.iterable",
-      "esnext"
-    ],
+    "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,
     "skipLibCheck": true,
     "esModuleInterop": true,
@@ -29,7 +27,5 @@
     "src/setupTests.ts",
     "spreadsheet-scripts"
   ],
-  "include": [
-    "src"
-  ]
+  "include": ["src"]
 }
