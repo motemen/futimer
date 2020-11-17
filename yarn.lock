@@ -10983,9 +10983,10 @@ tmpl@1.0.x:
   resolved "https://registry.yarnpkg.com/tmpl/-/tmpl-1.0.4.tgz#23640dd7b42d00433911140820e5cf440e521dd1"
   integrity sha1-I2QN17QtAEM5ERQIIOXPRA5SHdE=
 
-tnoodle@thewca/tnoodle#v0.14.0:
+tnoodle@thewca/tnoodle#v1.0.3:
   version "0.0.0"
-  resolved "https://codeload.github.com/thewca/tnoodle/tar.gz/7ed429c25795f830cd2f8333c9609b758f6acaed"
+  uid cf0d9f037a6b4ede87d0c7609ff62fe39f8c0115
+  resolved "https://codeload.github.com/thewca/tnoodle/tar.gz/cf0d9f037a6b4ede87d0c7609ff62fe39f8c0115"
 
 to-arraybuffer@^1.0.0:
   version "1.0.1"
