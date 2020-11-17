@@ -1,4 +1,4 @@
-import { ThunkAction, ThunkDispatch } from "redux-thunk";
+import { ThunkDispatch } from "redux-thunk";
 
 import actionCreatorFactory from "typescript-fsa";
 
@@ -98,7 +98,5 @@ export const AsyncAction = {
 };
 
 export type Action = ReturnType<typeof Actions[keyof typeof Actions]>;
-
-export type AsyncAction = ThunkAction<void, StoreState, never, Action>;
 
 export type Dispatch = ThunkDispatch<StoreState, never, Action>;
