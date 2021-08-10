@@ -122,11 +122,12 @@ class Measurer extends React.Component<Props, State> {
             [this.props.classes.isLoading]: !this.props.scramble,
           })}
         >
-          <code>
+          <code data-testid="scramble">
             {this.props.scramble || this.prevScramble || "Generating…"}
           </code>
         </div>
         <ButtonBase
+          data-testid="timerButton"
           action={this.handleButtonMount}
           onTouchStart={this.handleHoldStart}
           onTouchEnd={this.handleHoldEnd}

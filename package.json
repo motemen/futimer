@@ -25,15 +25,16 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "test:e2e": "jest -c ./e2e/jest.config.js --detectOpenHandles"
   },
   "devDependencies": {
-    "gh-pages": "3.1.0",
     "@types/classnames": "2.2.11",
     "@types/gapi.auth2": "0.0.52",
     "@types/gapi.client.drive": "3.0.13",
     "@types/gapi.client.sheets": "4.0.20201029",
     "@types/jest": "24.9.1",
+    "@types/jest-environment-puppeteer": "^4.4.1",
     "@types/node": "12.19.9",
     "@types/react": "16.14.2",
     "@types/react-dom": "16.9.10",
@@ -42,8 +43,14 @@
     "@types/redux-actions": "2.6.1",
     "eslint-config-prettier": "7.1.0",
     "eslint-plugin-prettier": "3.1.4",
+    "express": "^4.17.1",
+    "gh-pages": "3.1.0",
+    "jest-environment-puppeteer": "^5.0.4",
+    "jest-puppeteer": "^5.0.4",
     "prettier": "2.1.2",
+    "puppeteer": "<10",
     "react-scripts": "4.0.0",
+    "ts-jest": "^26",
     "typescript": "4.0.5"
   },
   "resolutions": {
@@ -66,5 +73,10 @@
       "react-app",
       "plugin:prettier/recommended"
     ]
+  },
+  "jest": {
+    "transform": {
+      ".tsx?$": "ts-jest"
+    }
   }
 }
