@@ -25,7 +25,7 @@ export class GoogleAPI extends EventEmitter {
 
   constructor(private readonly opts: GoogleAPIOptions) {
     super();
-    // this.load(); // XXX with this line crashes puppeteer
+    this.load();
   }
 
   public load(): Promise<GAPI> {
