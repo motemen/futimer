@@ -1,4 +1,18 @@
+import * as path from "path";
+
 jest.setTimeout(5 * 60 * 1000);
+
+const screenshotPath = process.env["TEST_SCREENSHOT_PATH"];
+
+const maySaveScreenshot = async (filename: string): Promise<void> => {
+  if (screenshotPath) {
+    await page.screenshot({
+      path: path.join(screenshotPath, filename),
+      fullPage: true,
+    });
+  }
+};
+
 
 describe("fuTimer", () => {
   beforeEach(async () => {
@@ -8,41 +22,22 @@ describe("fuTimer", () => {
   });
 
   it("should render", async () => {
-    // await new Promise((resolve) => setTimeout(resolve, 2000 * 10 * 10));
-    console.log(1);
-
     await page.waitForTimeout(2000);
 
-    const title = await page.title();
-    console.log(title);
-
     await expect(page.title()).resolves.toMatch("fuTimer");
-
-    /*
-    await page.screenshot({
-      fullPage: true,
-      path: "index.png",
-    });
-    */
 
     await expect(
       page.$eval("[data-testid=scramble]", (el) => el.textContent)
     ).resolves.toMatch(/[UBRLFB' ]+/);
 
-    await page.screenshot({
-      fullPage: true,
-      path: "index-b.png",
-    });
+    await maySaveScreenshot("01-loaded.png");
 
-    await page.click("[data-testid=timerButton]", { delay: 500 });
+    await page.click("[data-testid=timerButton]", { delay: 1000 });
 
     await new Promise((resolve) => setTimeout(resolve, 2000));
 
-    /*
-    await page.screenshot({
-      fullPage: true,
-      path: "index-2.png",
-    });
-    */
+    await expect(page.$eval("[data-testid=timerButton]", (el) => parseFloat(el.textContent || ""))).resolves.toBeGreaterThan(2.0);
+
+    await maySaveScreenshot("02-timer-running.png");
   });
 });

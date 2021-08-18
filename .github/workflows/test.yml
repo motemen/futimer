@@ -34,6 +34,10 @@ jobs:
     - run: |
         yarn test --coverage --coverageDirectory=./coverage
 
+    - run: |
+        mkdir __screenshots__
+        TEST_SCREENSHOT_PATH=__screenshots__ yarn test:e2e
+
     - uses: codecov/codecov-action@v1.1.1
 
     - if: ${{ github.ref == 'master' }}
