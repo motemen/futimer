@@ -2,7 +2,7 @@
   "name": "futimer-spreadsheet-scripts",
   "license": "MIT",
   "devDependencies": {
-    "@types/es6-shim": "0.31.41",
+    "@types/es6-shim": "0.31.42",
     "@types/google-apps-script": "0.0.62",
     "gas-webpack-plugin": "1.2.0",
     "ts-loader": "8.0.11",

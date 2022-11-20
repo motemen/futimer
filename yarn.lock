@@ -1367,19 +1367,29 @@
     prop-types "^15.7.2"
     react-is "^16.8.0"
 
-"@maxim_mazurok/gapi.client.drive@latest":
-  version "3.0.20201108"
-  resolved "https://registry.yarnpkg.com/@maxim_mazurok/gapi.client.drive/-/gapi.client.drive-3.0.20201108.tgz#609055c2cc02f74c625d2e14669851a0d40ebb59"
-  integrity sha512-oEszAmauc434vB72TcUrB2i676wyOMFFisK7WlY9JxsUU7L4n9OSCTAOP4h3+rUtsCoqhWgTv7NmduXQab6UMg==
+"@maxim_mazurok/gapi.client.discovery-v1@latest":
+  version "0.0.20200806"
+  resolved "https://registry.yarnpkg.com/@maxim_mazurok/gapi.client.discovery-v1/-/gapi.client.discovery-v1-0.0.20200806.tgz#c257738ef5bbf9fefa5b10b0decd444a5f3328b4"
+  integrity sha512-0pZtrElj8bc0YROIo7nH8VVvks/iww/L68l7r74oC9+ksSVO3Lum1zUR8dXTvJ7TqLGaNYiiNaUZianK6doh/w==
   dependencies:
     "@types/gapi.client" "*"
+    "@types/gapi.client.discovery" "*"
 
-"@maxim_mazurok/gapi.client.sheets@latest":
-  version "4.0.20201111"
-  resolved "https://registry.yarnpkg.com/@maxim_mazurok/gapi.client.sheets/-/gapi.client.sheets-4.0.20201111.tgz#2edd0b50b02de0448d19d7a2489c7c1ded130eed"
-  integrity sha512-997uwKBj5O5foTC0FWa5UT4ovjuBLozLK2Msnlf92pVUcpYnzzv/oUBntOsFbqoIcvyivJ01+Y6xbpcjlmgCJQ==
+"@maxim_mazurok/gapi.client.drive-v3@latest":
+  version "0.0.20221113"
+  resolved "https://registry.yarnpkg.com/@maxim_mazurok/gapi.client.drive-v3/-/gapi.client.drive-v3-0.0.20221113.tgz#14e444c7cb519f1f269152e490990ef39d975ef8"
+  integrity sha512-T+bmQf8RJggtPs6lj4EYW2j9uFf/R+hy6gJYbP7wwR9cvC25yS2UwiQgabWCJWCgVD6nsYW31ZGalJp1RQ88UA==
   dependencies:
     "@types/gapi.client" "*"
+    "@types/gapi.client.discovery" "*"
+
+"@maxim_mazurok/gapi.client.sheets-v4@latest":
+  version "0.0.20221108"
+  resolved "https://registry.yarnpkg.com/@maxim_mazurok/gapi.client.sheets-v4/-/gapi.client.sheets-v4-0.0.20221108.tgz#a9e405a91a284b634b564c044af32b1ed7b03009"
+  integrity sha512-cDgoDR9P5clnN6whr3W7D2kRm2RljLNondS4mejxroD31bEULElt6H9XhRcl7F2m3SUJRr26VfDhwt1iokyBqQ==
+  dependencies:
+    "@types/gapi.client" "*"
+    "@types/gapi.client.discovery" "*"
 
 "@nodelib/fs.scandir@2.1.3":
   version "2.1.3"
@@ -1612,10 +1622,12 @@
   dependencies:
     "@babel/types" "^7.3.0"
 
-"@types/classnames@2.2.11":
-  version "2.2.11"
-  resolved "https://registry.yarnpkg.com/@types/classnames/-/classnames-2.2.11.tgz#2521cc86f69d15c5b90664e4829d84566052c1cf"
-  integrity sha512-2koNhpWm3DgWRp5tpkiJ8JGc1xTn2q0l+jUNUE7oMKXUf5NpI9AIdC4kbjGNFBdHtcxBD18LAksoudAVhFKCjw==
+"@types/classnames@2.3.0":
+  version "2.3.0"
+  resolved "https://registry.yarnpkg.com/@types/classnames/-/classnames-2.3.0.tgz#681b6bacf918e00c1836ad286a872e0a90aada87"
+  integrity sha512-3GsbOoDYteFShlrBTKzI2Eii4vPg/jAf7LXRIn0WQePKlmhpkV0KoTMuawA7gZJkrbPrZGwv9IEAfIWaOaQK8w==
+  dependencies:
+    classnames "*"
 
 "@types/eslint@^7.2.4":
   version "7.2.5"
@@ -1635,26 +1647,33 @@
   resolved "https://registry.yarnpkg.com/@types/estree/-/estree-0.0.39.tgz#e177e699ee1b8c22d23174caaa7422644389509f"
   integrity sha512-EYNwp3bU+98cpU4lAWYYL7Zz+2gryWH1qbdDTidVd6hkiR6weksdbMadyXKXNPEkQFhXM+hVO9ZygomHXp+AIw==
 
-"@types/gapi.auth2@0.0.52":
-  version "0.0.52"
-  resolved "https://registry.yarnpkg.com/@types/gapi.auth2/-/gapi.auth2-0.0.52.tgz#da859ac501e48f97f212ee4782840e8c9adc5082"
-  integrity sha512-Q9OEsiLXQ3fWv93voIDr4tXpiO0zNFx2RPK+9wj21LY3ydyx/CtoXQgbf+6iNSTuyHUDF4J/c74maKghtPbbaA==
+"@types/gapi.auth2@0.0.56":
+  version "0.0.56"
+  resolved "https://registry.yarnpkg.com/@types/gapi.auth2/-/gapi.auth2-0.0.56.tgz#2f7031f79390b8401e7950d8277ada874fd2731c"
+  integrity sha512-kGaBtGVCqGS3Y05L56dGVlBpJflxLfwA0zpMQnQgGRFk1tsMPbQnogG51UQjt1vCuYfRO0Jd9/K5KDtzjAbMkA==
   dependencies:
     "@types/gapi" "*"
 
-"@types/gapi.client.drive@3.0.13":
-  version "3.0.13"
-  resolved "https://registry.yarnpkg.com/@types/gapi.client.drive/-/gapi.client.drive-3.0.13.tgz#5cdb97952890be17785dff7514b4c6b89df05313"
-  integrity sha512-JFkHqQj9RA8MpvfvwdX8VU0Sbu7FMGqBR9dAmkocekWdD/y5Z/a/A6Y37EEqKW/dT8t7F3RpgUDUPlhp3snAlw==
+"@types/gapi.client.discovery@*":
+  version "1.0.8"
+  resolved "https://registry.yarnpkg.com/@types/gapi.client.discovery/-/gapi.client.discovery-1.0.8.tgz#8a52ea339546c73054ef1b3d90fbf007a4191651"
+  integrity sha512-cYVp7ISY2oqH/cHIfLVjppJo7xmMiY/RhMVN0O/6Z+X3grwojmuDIHcUw/C1F31/zFpFWDSjaPkwNP0aKIbbcw==
   dependencies:
-    "@maxim_mazurok/gapi.client.drive" latest
+    "@maxim_mazurok/gapi.client.discovery-v1" latest
 
-"@types/gapi.client.sheets@4.0.20201029":
-  version "4.0.20201029"
-  resolved "https://registry.yarnpkg.com/@types/gapi.client.sheets/-/gapi.client.sheets-4.0.20201029.tgz#f56daa6851c695473514e64c7c0dc4fd8096a463"
-  integrity sha512-Om2t05O59QnaPTJZdx6UQvejn6tV55qKebnxcpRx0wXWiDpf5ZZ3GSRGzqXXZt0ggkRkyErLdLLy4LPVgqGlTw==
+"@types/gapi.client.drive@3.0.14":
+  version "3.0.14"
+  resolved "https://registry.yarnpkg.com/@types/gapi.client.drive/-/gapi.client.drive-3.0.14.tgz#cebbe86ac341770605f665f38f5338b25c516c3e"
+  integrity sha512-q16KCwZsxYsPz43lhFYoFwjwELj+BmIS2HVs8upwlXhiLMEVnC957hYT7rKCYi8YyarKLoLBHshsMIpC//CT7Q==
   dependencies:
-    "@maxim_mazurok/gapi.client.sheets" latest
+    "@maxim_mazurok/gapi.client.drive-v3" latest
+
+"@types/gapi.client.sheets@4.0.20201030":
+  version "4.0.20201030"
+  resolved "https://registry.yarnpkg.com/@types/gapi.client.sheets/-/gapi.client.sheets-4.0.20201030.tgz#792160242b06441962de017f33c58b3413832a0a"
+  integrity sha512-U6sBNFNbIV8Z18jKDpK3m5ehyHXbAJKfT3kM84hb57/tkcWvfXFu84xg4PFKHHxTSUlL0arF1ikesNdM3hRrjw==
+  dependencies:
+    "@maxim_mazurok/gapi.client.sheets-v4" latest
 
 "@types/gapi.client@*":
   version "1.0.3"
@@ -1748,10 +1767,10 @@
   resolved "https://registry.yarnpkg.com/@types/node/-/node-14.14.7.tgz#8ea1e8f8eae2430cf440564b98c6dfce1ec5945d"
   integrity sha512-Zw1vhUSQZYw+7u5dAwNbIA9TuTotpzY/OF7sJM9FqPOF3SPjKnxrjoTktXDZgUjybf4cWVBP7O8wvKdSaGHweg==
 
-"@types/node@12.19.9":
-  version "12.19.9"
-  resolved "https://registry.yarnpkg.com/@types/node/-/node-12.19.9.tgz#990ad687ad8b26ef6dcc34a4f69c33d40c95b679"
-  integrity sha512-yj0DOaQeUrk3nJ0bd3Y5PeDRJ6W0r+kilosLA+dzF3dola/o9hxhMSg2sFvVcA2UHS5JSOsZp4S0c1OEXc4m1Q==
+"@types/node@12.20.55":
+  version "12.20.55"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-12.20.55.tgz#c329cbd434c42164f846b909bd6f85b5537f6240"
+  integrity sha512-J8xLz7q2OFulZ2cyGTLE1TbbZcjpno7FaN6zdJNrgAdrJ+DZzh/uFR6YrTb4C+nXakvud8Q4+rbhoIWlYQbUFQ==
 
 "@types/normalize-package-data@^2.4.0":
   version "2.4.0"
@@ -1778,17 +1797,17 @@
   resolved "https://registry.yarnpkg.com/@types/q/-/q-1.5.4.tgz#15925414e0ad2cd765bfef58842f7e26a7accb24"
   integrity sha512-1HcDas8SEj4z1Wc696tH56G8OlRaH/sqZOynNNB+HF0WOeXPaxTtbYzJY2oEfiUxjSKjhCKr+MvR7dCHcEelug==
 
-"@types/react-dom@16.9.10":
-  version "16.9.10"
-  resolved "https://registry.yarnpkg.com/@types/react-dom/-/react-dom-16.9.10.tgz#4485b0bec3d41f856181b717f45fd7831101156f"
-  integrity sha512-ItatOrnXDMAYpv6G8UCk2VhbYVTjZT9aorLtA/OzDN9XJ2GKcfam68jutoAcILdRjsRUO8qb7AmyObF77Q8QFw==
+"@types/react-dom@16.9.17":
+  version "16.9.17"
+  resolved "https://registry.yarnpkg.com/@types/react-dom/-/react-dom-16.9.17.tgz#29100cbcc422d7b7dba7de24bb906de56680dd34"
+  integrity sha512-qSRyxEsrm5btPXnowDOs5jSkgT8ldAA0j6Qp+otHUh+xHzy3sXmgNfyhucZjAjkgpdAUw9rJe0QRtX/l+yaS4g==
   dependencies:
     "@types/react" "^16"
 
-"@types/react-redux@7.1.12":
-  version "7.1.12"
-  resolved "https://registry.yarnpkg.com/@types/react-redux/-/react-redux-7.1.12.tgz#148f2c768687346b556e29a322ca44cfa28cc3ac"
-  integrity sha512-xZj4/8oRZP5RlJPlC5XPnawPtMn+T2bV4Hxi38AcuoZzXlN/Il/ZPfgXuIq3WG37wVL6FP7suVfmE4BopuqtTg==
+"@types/react-redux@7.1.24":
+  version "7.1.24"
+  resolved "https://registry.yarnpkg.com/@types/react-redux/-/react-redux-7.1.24.tgz#6caaff1603aba17b27d20f8ad073e4c077e975c0"
+  integrity sha512-7FkurKcS1k0FHZEtdbbgN8Oc6b+stGSfZYjQGicofJ0j4U0qIn/jaSvnP2pLwZKiai3/17xqqxkkrxTgN8UNbQ==
   dependencies:
     "@types/hoist-non-react-statics" "^3.3.0"
     "@types/react" "*"
@@ -1802,12 +1821,13 @@
   dependencies:
     "@types/react" "*"
 
-"@types/react@*", "@types/react@16.14.2", "@types/react@^16":
-  version "16.14.2"
-  resolved "https://registry.yarnpkg.com/@types/react/-/react-16.14.2.tgz#85dcc0947d0645349923c04ccef6018a1ab7538c"
-  integrity sha512-BzzcAlyDxXl2nANlabtT4thtvbbnhee8hMmH/CcJrISDBVcJS1iOsP1f0OAgSdGE0MsY9tqcrb9YoZcOFv9dbQ==
+"@types/react@*", "@types/react@16.14.34", "@types/react@^16":
+  version "16.14.34"
+  resolved "https://registry.yarnpkg.com/@types/react/-/react-16.14.34.tgz#d129324ffda312044e1c47aab18696e4ed493282"
+  integrity sha512-b99nWeGGReLh6aKBppghVqp93dFJtgtDOzc8NXM6hewD8PQ2zZG5kBLgbx+VJr7Q7WBMjHxaIl3dwpwwPIUgyA==
   dependencies:
     "@types/prop-types" "*"
+    "@types/scheduler" "*"
     csstype "^3.0.2"
 
 "@types/reduce-reducers@0.3.0":
@@ -1817,10 +1837,10 @@
   dependencies:
     redux "^4.0.0"
 
-"@types/redux-actions@2.6.1":
-  version "2.6.1"
-  resolved "https://registry.yarnpkg.com/@types/redux-actions/-/redux-actions-2.6.1.tgz#0940e97fa35ad3004316bddb391d8e01d2efa605"
-  integrity sha512-zKgK+ATp3sswXs6sOYo1tk8xdXTy4CTaeeYrVQlClCjeOpag5vzPo0ASWiiBJ7vsiQRAdb3VkuFLnDoBimF67g==
+"@types/redux-actions@2.6.2":
+  version "2.6.2"
+  resolved "https://registry.yarnpkg.com/@types/redux-actions/-/redux-actions-2.6.2.tgz#5956d9e7b9a644358e2c0610f47b1fa3060edc21"
+  integrity sha512-TvcINy8rWFANcpc3EiEQX9Yv3owM3d3KIrqr2ryUIOhYIYzXA/bhDZeGSSSuai62iVR2qMZUgz9tQ5kr0Kl+Tg==
 
 "@types/resolve@0.0.8":
   version "0.0.8"
@@ -1828,6 +1848,11 @@
   integrity sha512-auApPaJf3NPfe18hSoJkp8EbZzer2ISk7o8mCC3M9he/a04+gbMF97NkpD2S8riMGvm4BMRI59/SZQSaLTKpsQ==
   dependencies:
     "@types/node" "*"
+
+"@types/scheduler@*":
+  version "0.16.2"
+  resolved "https://registry.yarnpkg.com/@types/scheduler/-/scheduler-0.16.2.tgz#1a62f89525723dde24ba1b01b092bf5df8ad4d39"
+  integrity sha512-hppQEBDmlwhFAXKJX2KnWLYu5yMfi91yazPb2l+lbJiwW+wdo1gNeRA+3RgNSO39WYX2euey41KEwnqesU2Jew==
 
 "@types/source-list-map@*":
   version "0.1.2"
@@ -3253,6 +3278,11 @@ class-utils@^0.3.5:
     define-property "^0.2.5"
     isobject "^3.0.0"
     static-extend "^0.1.1"
+
+classnames@*:
+  version "2.3.2"
+  resolved "https://registry.yarnpkg.com/classnames/-/classnames-2.3.2.tgz#351d813bf0137fcc6a76a16b88208d2560a0d924"
+  integrity sha512-CSbhY4cFEJRe6/GQzIk5qXZ4Jeg5pcsP7b5peFSDpffpe1cqjASH/n9UTjBwOp6XpMSTwQ8Za2K5V02ueA7Tmw==
 
 classnames@2.2.6:
   version "2.2.6"
