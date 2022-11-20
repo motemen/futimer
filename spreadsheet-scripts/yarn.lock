@@ -28,10 +28,10 @@
   resolved "https://registry.yarnpkg.com/@types/estree/-/estree-0.0.45.tgz#e9387572998e5ecdac221950dab3e8c3b16af884"
   integrity sha512-jnqIUKDUqJbDIUxm0Uj7bnlMnRm1T/eZ9N+AVMqhPgzrba2GhGG5o/jCTwmdPK709nEZsGoMzXEDUjcXHa3W0g==
 
-"@types/google-apps-script@0.0.62":
-  version "0.0.62"
-  resolved "https://registry.yarnpkg.com/@types/google-apps-script/-/google-apps-script-0.0.62.tgz#9f631be0c3edca807698f9430cf0c9b603fad6ad"
-  integrity sha512-KFgKLEBLKOgstMjDIEADFFBKkwywcRShtWpNMHADbWmYRLgRYvtVpNCkwcGi/QRua0iYUByLy3UBiazd57o8Dg==
+"@types/google-apps-script@1.0.56":
+  version "1.0.56"
+  resolved "https://registry.yarnpkg.com/@types/google-apps-script/-/google-apps-script-1.0.56.tgz#5d0930bf6c224913532da4c63bede1df2d17afe2"
+  integrity sha512-3YGOtRlnWPSARl/n2BKt0qiIA6Y3/5BLC2zH9s/jcu+1rpxR07noLCFxTZ2BQBIfDl6+Vs9iKjLTgdbbL8q/mg==
 
 "@types/json-schema@*", "@types/json-schema@^7.0.6":
   version "7.0.6"
